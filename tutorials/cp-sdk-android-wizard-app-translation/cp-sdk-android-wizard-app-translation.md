@@ -72,14 +72,6 @@ When the app is restarted, it now shows strings in the preferred language if tha
 
 !![French Welcome Screen](welcome-french-screen.png)
 
-For additional information, see:
-
-- [Localize your app](https://developer.android.com/guide/topics/resources/localization)
-
-- [Support different languages and cultures](https://developer.android.com/training/basics/supporting-devices/languages)
-
-- [Localize the UI with Translations Editor](https://developer.android.com/studio/write/translations-editor)
-
 [VALIDATE_1]
 [ACCORDION-END]
 

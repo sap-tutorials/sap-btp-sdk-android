@@ -12,7 +12,7 @@ time: 30
 ## Prerequisites
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services.
     - **SAP Mobile Services**
-- Installed [Android Studio 4.2.x](https://developer.android.com/studio/archive). Please use the specified version.
+- Installed Android Studio 4.2.x or higher.
 - [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 3.4.x of the SAP BTP SDK for Android.
 - Created a Google account.
 
@@ -140,7 +140,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
     !![Project created](project-created.png)
 
 2.  Choose an emulator for running the app.
-    >If you enabled push service, please make sure you install an emulator with **Target** labeled as **Google Play**. For more information on creating virtual devices that run in the Android Emulator, see [Create and manage virtual devices](https://developer.android.com/studio/run/managing-avds) in the Android Studio User Guide.
+    >If you enabled push service, please make sure you install an emulator with **Target** labeled as **Google Play**.
 
     !![Deployment target](choose-emulator.png)
 

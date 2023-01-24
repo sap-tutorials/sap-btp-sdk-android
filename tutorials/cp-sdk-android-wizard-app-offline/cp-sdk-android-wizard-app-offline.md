@@ -60,7 +60,7 @@ time: 30
 
     When the sync completes, the change you made will have been applied to the back end.
 
-[VALIDATE_3]
+[VALIDATE_1]
 [ACCORDION-END]
 
 [ACCORDION-BEGIN [Step 2: ](Examine the encryption key)]
@@ -171,12 +171,12 @@ Defining queries tell the `OfflineODataProvider` (the class that manages the off
 
 >With an offline-enabled app, requests made against the entity sets that are included in the defining requests will always be fulfilled from the local offline store.
 
-[VALIDATE_1]
+[VALIDATE_3]
 [ACCORDION-END]
 
 [ACCORDION-BEGIN [Step 4: ](Examine the offline service and service manager)]
 
-The application allows users to make changes against a local offline store and synchronize manually at any time. The sync operation is performed by a [worker](https://developer.android.com/topic/libraries/architecture/workmanager/basics). There are three operations that must be implemented in order to use the offline store functionality: `open`, `download`, and `upload`. As their names suggest, the operations open the offline store, download server changes, and upload user changes, respectively. In the wizard-generated application, `OfflineOpenWorker` implements `open` during initialization and `OfflineSyncWorker` implements a sync operation, which requires `download` first, and then `upload`.
+The application allows users to make changes against a local offline store and synchronize manually at any time. The sync operation is performed by a worker. There are three operations that must be implemented in order to use the offline store functionality: `open`, `download`, and `upload`. As their names suggest, the operations open the offline store, download server changes, and upload user changes, respectively. In the wizard-generated application, `OfflineOpenWorker` implements `open` during initialization and `OfflineSyncWorker` implements a sync operation, which requires `download` first, and then `upload`.
 
 [OPTION BEGIN [Java]]
 
@@ -236,7 +236,7 @@ The application allows users to make changes against a local offline store and s
 
 For more information about how the offline store works, see the [Working With Offline Stores](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/working-with-offline-stores.html).
 
-[VALIDATE_2]
+[VALIDATE_4]
 [ACCORDION-END]
 
 [ACCORDION-BEGIN [Step 5: ](Introduce a synchronization error)]
