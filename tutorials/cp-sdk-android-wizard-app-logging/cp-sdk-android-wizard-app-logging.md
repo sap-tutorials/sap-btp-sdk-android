@@ -150,7 +150,7 @@ The SDK libraries also log output based on the app's log level.
 
     !![View logs in emulator](local_log_location.png)
 
-6.  You can manage the initial log level of the application and the ability for mobile services to accept logs on the **Configuration** page, as shown below.
+6.  You can manage the initial log level of the application and the ability for mobile services to accept logs on the **Configuration** page, as shown below. 
 
     !![Log Policy](client_policies.png)
 
