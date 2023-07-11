@@ -21,7 +21,7 @@ time: 30
 ### Generate and run an offline app
 
 
-1.  Follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and select **Offline** for the OData option on the **Project Features** tab. The push feature is not needed for this application.
+1.  Follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and select **Offline** for the **OData** option on the **Project Features** tab. The push feature is not needed for this application.
 
     <!-- border -->![Choose Offline OData](choosing_offline_odata.png)
 
@@ -132,7 +132,7 @@ When syncing changes made while offline, conflicts can occur. One example might 
 
 1.  Update a **SalesOrderItem** and change its quantity to be zero and save it. Update a second item and change its quantity to a different non-zero number and save it.
 
-    <!-- border -->![Create SalesOrderItem Button](create_sales_order_item.png)
+    <!-- border -->![Select first SalesOrderItem](select_first_sales_order_item.png)
 
     <!-- border -->![Edit SalesOrderItem Button](edit_sales_order.png)
 
@@ -165,7 +165,7 @@ In this section we will create an **Error Information** screen that displays the
     <string name="request_url">Request URL</string>
     ```
 
-3.  Create a new activity in the `app/java/com.sap.wizapp/mdui` folder by right-clicking, then selecting **New** > **Activity** > **Empty Activity**. Name the new activity **`ErrorActivity`**.
+3.  Create a new activity in the `app/java/com.sap.wizapp/mdui` folder by right-clicking, then selecting **New** > **Activity** > **Empty Views Activity**. Name the new activity **`ErrorActivity`**.
 
 4.  Press **`Shift`** twice and type **`activity_error`** to open `res/layout/activity_error.xml`.
 
@@ -389,9 +389,7 @@ In this section we will create an **Error Information** screen that displays the
 
 7.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`EntitySetListActivity`** to open `EntitySetListActivity.kt`.
 
-8.  In the `updateProgressForSync` method, find the line `this.visibility = View.INVISIBLE`.
-
-9.  Right after the `this.visibility = View.INVISIBLE` line, in the `WorkInfo.State.SUCCEEDED` block, add the following code, which queries the error archive and displays information to the user about the first error encountered:
+8.  In the `updateProgressForSync` method, in the `WorkInfo.State.SUCCEEDED` block, add the following code, which queries the error archive and displays information to the user about the first error encountered:
 
     ```Kotlin
     val provider = OfflineWorkerUtil.offlineODataProvider
@@ -420,8 +418,13 @@ In this section we will create an **Error Information** screen that displays the
             errorIntent.putExtra("ERROR_BODY", body)
 
             try {
-                val jsonObj = JSONObject(message)
-                errorIntent.putExtra("ERROR_MESSAGE", jsonObj.getJSONObject("error").getString("message"))
+                val jsonObj = message?.let { JSONObject(it) }
+                jsonObj?.let {
+                    errorIntent.putExtra(
+                        "ERROR_MESSAGE",
+                        jsonObj.getJSONObject("error").getString("message")
+                    )
+                }
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -470,8 +473,13 @@ In this section we will create an **Error Information** screen that displays the
                 errorIntent.putExtra("ERROR_BODY", body)
 
                 try {
-                    val jsonObj = JSONObject(message)
-                    errorIntent.putExtra("ERROR_MESSAGE", jsonObj.getJSONObject("error").getString("message"))
+                    val jsonObj = message?.let { JSONObject(it) }
+                    jsonObj?.let {
+                        errorIntent.putExtra(
+                            "ERROR_MESSAGE",
+                            jsonObj.getJSONObject("error").getString("message")
+                        )
+                    }
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -491,7 +499,7 @@ In this section we will create an **Error Information** screen that displays the
     ```
 
 
-10.  Run the app again, and re-attempt the sync. When the sync fails, you should see the following error screen.
+9.  Run the app again, and re-attempt the sync. When the sync fails, you should see the following error screen.
 
     <!-- border -->![Error screen](error_screen.png)
 

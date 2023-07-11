@@ -51,11 +51,13 @@ time: 20
 
     - <!-- border -->![Project settings](firebase-project-settings.png)
 
-5. Select the **Cloud Messaging** tab and copy the **Server Key** and **Sender ID** values from Firebase to the SAP Mobile Services **Mobile Push Notification** settings screen. Click **Save** to save changes.
+5. Select the **Service accounts** tab and click **Generate new private key** button. Then click **Generate key** in the pop-up window and store the downloaded private key file securely because the key cannot be recovered if lost.
 
-    - <!-- border -->![Server key and Sender ID](serverkey-and-senderid.png)
+    <!-- border -->![Generate private key](generate-private-key.png)
 
-    - <!-- border -->![Push notification android](push-notification-android.png)
+6. In the SAP Mobile Services **Mobile Push Notification** settings screen, click **Browse...** to load the downloaded private key file. After that, click **Save** to save changes.
+
+    <!-- border -->![Push notification android](push-notification-android.png)
 
 
 ### Send a notification
