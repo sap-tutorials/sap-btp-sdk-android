@@ -42,25 +42,12 @@ Strings used within the app are read from the appropriate version of the `string
 
 <!-- border -->![Translations Editor](translations-editor.png)
 
-The following code in the `WelcomeActivity` class, in the `onCreate` method, is an example of the code used to read from a strings file.
-
-[OPTION BEGIN [Java]]
-
-```Java
-new LaunchScreenSettings.Builder()
-                .setHeaderLineLabel(getString(R.string.welcome_screen_headline_label))
-```
-
-[OPTION END]
-
-[OPTION BEGIN [Kotlin]]
+The following code in the `WelcomeStepFragment` class, in the `onCreateView` method, is an example of the code used to read from a strings file.
 
 ```Kotlin
 LaunchScreenSettings.Builder()
                 .setHeaderLineLabel(getString(R.string.welcome_screen_headline_label))
 ```
-
-[OPTION END]
 
 The `getString` method determines what the current local language is on the device or emulator and then reads from the matching strings file.
 
@@ -97,39 +84,44 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
 
 >If you have enabled SAP Translation Hub service and the service URL is still available, then you can follow the steps to complete this part.
 
-1. Right-click on a file in the **Project Explorer** and choose **Translate Resources with SAP Translation Hub**.
+1.  Right-click on a file in the **Project Explorer** and choose **Translate Resources with SAP Translation Hub**.
 
     <!-- border -->![Translation wizard Context Menu](translation-wizard-context-menu.png)
 
-2. Fill in the necessary information:
+2.  Fill in the necessary information:
 
     - **Account Name** – (optional) To save your settings for reuse, provide a name for this profile and select the **Save Account Information** check box. This name is used to identify the profile in the **Accounts List** available from **Accounts**.
 
-    - **URL** – The URL of the SAP Translation Hub service.
+    - **URL** – The URL of the SAP Translation Hub service. Enter the URL using the following table as guidance:
+
+      | Global Account | URL | Sample URL |
+      |:----|:----|:----|
+      | Trial | `https://saptranslation-<subaccountname>.hanatrial.ondemand.com` | https://saptranslation-s0001001002trial.hanatrial.ondemand.com |
+      | Enterprise | `https://sap<provider subaccount name>-<subscription subaccount name>.<region host>` | https://sapa7d6108fa-c77539gg5d.hana.ondemand.com |
 
     - **Username** and **Password** – The credentials of your SAP BTP account.
 
     <!-- border -->![Translation Wizard Page 1](wiz-page1.png)
 
-3. Click **Next** and choose **Create New SAP Translation Hub project**.
+3.  Click **Next** and choose **Create New SAP Translation Hub project**.
 
     <!-- border -->![Translation Wizard Page 2](wiz-page2.png)
 
-4. Choose the **Domain** of the application, specify the **Source Language** as English, and select the target language to add (in this case, Catalan).
+4.  Choose the **Domain** of the application, specify the **Source Language** as English, and select the target language to add (in this case, Catalan).
 
     <!-- border -->![Translation Wizard Page 2](wiz-page3.png)
 
-5. Select the source file to be used for the translation, either `strings.xml` or `strings_localized.xml`.
+5.  Select the source file to be used for the translation, either `strings.xml` or `strings_localized.xml`.
 
     <!-- border -->![Translation Wizard Page 2](wiz-page3b.png)
 
-6. Press **Finish** and wait for a few moments. The **Event Log** should print `Success: Project translated successfully`.
+6.  Press **Finish** and wait for a few moments. The **Event Log** should print `Success: Project translated successfully`.
 
     There should now be two additional files, `strings_localized.xml(ca)` and `strings.xml(ca)`.
 
     <!-- border -->![Translation Result](translation-result.png)
 
-7. In the emulator or device, set the preferred language to be Catalan, then run the app and notice that the app now displays Catalan strings.
+7.  In the emulator or device, set the preferred language to be Catalan, then run the app and notice that the app now displays Catalan strings.
 
     <!-- border -->![Translation Result in App](translation-result-in-app.png)
 

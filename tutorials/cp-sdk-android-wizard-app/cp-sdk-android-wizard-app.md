@@ -17,7 +17,7 @@ time: 30
     - **Mobile Services**
 - Make sure you can [Access SAP Mobile Services](fiori-ios-hcpms-setup).
 - Installed [Android Studio Flamingo 2022.2.1](https://developer.android.com/studio/archive). Please use the specified version.
-- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 7.x or higher of the SAP BTP SDK for Android.
+- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 7.0.x or higher of the SAP BTP SDK for Android.
 - Created a Google account.
 
 ## You will learn
@@ -72,7 +72,7 @@ time: 30
     |:----|:----|
     | Project Name | **`Wiz App`** |
     | Project Namespace | **`com.sap.wizapp`** |
-    | Target Language | **`Kotlin`** |
+    | UI Framework | **`View-based UI`** / **`Jetpack Compose-based UI`** |
 
     <!-- border -->![Project configuration](project-configuration.png)
 
@@ -131,7 +131,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     >You can add push configuration on the server as in the [Send Notifications to Your Android Application](cp-sdk-android-wizard-app-push) tutorial.
 
-7.  Click **Finish** and proceed to **Step 3**.
+7.  Click **Create** and proceed to **Step 3**.
 
 
 
@@ -141,6 +141,12 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 1.  Wait for the build to finish.
 
     <!-- border -->![Project created](project-created.png)
+
+    >You may have a build error similar to: "Could not resolve all files for configuration ':classpath'......", open **Preferences** (Windows: **Settings**, Mac: **Android Studio > Settings...**) to change gradle jdk to 11.
+    <!-- border -->![Set gradle jdk to 11](gradle-jdk.png)
+
+    >Finally, sync the project with the gradle files.
+    <!-- border -->![Sync project with gradle files](sync-gradle.png)
 
 2.  Choose an emulator for running the app.
     >If you enabled push service, please make sure you install an emulator with **Target** labeled as **Google Play**. For more information on creating virtual devices that run in the Android Emulator, see [Create and manage virtual devices](https://developer.android.com/studio/run/managing-avds) in the Android Studio User Guide.
@@ -155,15 +161,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     <!-- border -->![Welcome screen](welcome-screen.png)
 
-4.  Click **Get Started** and the license agreement screen is displayed.
-
-    <!-- border -->![License agreement screen](license-agreement.png)
-
-    Read it and click **Agree**, you will see the **Sign-In** screen of the app. If you select **Disagree**, you will be asked to confirm whether to terminate onboarding. If you confirm, you will return to the **Welcome** screen. Otherwise, you can still select **Agree** to complete onboarding and start to use the app.
-
-    <!-- border -->![License agreement disagree](license-agreement-disagree.png)
-
-5.  Log in with your username and password.
+4.  Check the agreement, click **Get Started**, and the sign-in screen is displayed. Log in with your username and password.
 
     <!-- border -->![Authentication screen](authentication-screen.png)
 
@@ -173,19 +171,21 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     <!-- border -->![Passcode screen](create-passcode.png)
 
-6.  You can modify the passcode policy in the [Mobile Service Cockpit](https://mobile-service-cockpit-web.cfapps.eu10.hana.ondemand.com/) under **Client Configuration** in **Mobile Settings Exchange** page. The passcode screen will not be displayed if the **Enable Passcode Policy** is not checked.
+5.  You can modify the passcode policy in the [Mobile Service Cockpit](https://mobile-service-cockpit-web.cfapps.eu10.hana.ondemand.com/) under **Client Configuration** in **Mobile Settings Exchange** page. The passcode screen will not be displayed if the **Enable Passcode Policy** is not checked.
 
     <!-- border -->![Mobile Settings Exchange page access](access-mobile-settings-exchange.png)
 
     <!-- border -->![Passcode Policy](passcode-policy.png)
 
-7.  Because **Enable Usage Reporting** is checked, this screen can be used to show details of how the collected data will be used. For now, select either **Allow** or **Deny**. **Usage Reporting** is covered in a later tutorial in this mission.
+6.  Because **Enable Usage Reporting** is checked, this screen can be used to show details of how the collected data will be used. For now, select either **Allow** or **Deny**. **Usage Reporting** is covered in a later tutorial in this mission.
 
     <!-- border -->![Usage Reporting Consent Screen](usage-reporting-consent-screen.png)
 
-8.  Just like usage reporting, since **Enable Crash Reporting** is checked as well, this screen will be used to display details of how the collected information will be used. Select either **Allow** or **Deny**. If you select **Deny**, the crash information will only be stored locally.
+7.  Just like usage reporting, since **Enable Crash Reporting** is checked as well, this screen will be used to display details of how the collected information will be used. Select either **Allow** or **Deny**. If you select **Deny**, the crash information will only be stored locally.
 
     <!-- border -->![Crash Reporting Consent Screen](crash-reporting-consent-screen.png)
+
+8.  Click **Next** button on **Allow Notifications** screen to select either **Allow** or **Don't allow** to indicate whether you want app to send you notifications.
 
 9.  The first screen of the app shows the different entities that are in the sample OData service.
 

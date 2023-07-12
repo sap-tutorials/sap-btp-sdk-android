@@ -169,12 +169,12 @@ The following steps record how often users start adding or updating products but
 
     This generates a usage event record for when a user taps the **Add** or **Edit** icon within **Products**.
 
-5. On Windows, press **Ctrl+F12**, or, on a Mac, press **command+F12** and type **`onOptionsItemSelected`**, to move to the `onOptionsItemSelected` method. Add the following code segment before the `else` case in the same file:
+5. On Windows, press **Ctrl+F12**, or, on a Mac, press **command+F12** and type **`onMenuItemSelected`**, to move to the `onMenuItemSelected` method. Add the following code segment before the `else` case in the same file:
 
     ```Kotlin
     android.R.id.home -> {
         SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ProductsCreateFragment::class.java.simpleName, "elementId", "onBackPressed", "Create or Edit Product Cancelled")
-        super.onOptionsItemSelected(item)
+        super.onMenuItemSelected(menuItem)
     }
     ```
 
@@ -212,7 +212,7 @@ The following steps record how often users start adding or updating products but
 
     <!-- border -->![New Entries in the Client Upload csv](new_client_upload_example.png)
 
-16.  In four empty cells that are not in the `R` ( `I_ACTION` ) column on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create or Edit`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
+16. In the four empty cells that are not in the `R` ( `I_ACTION` ) column on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create or Edit`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
 
     ```Excel
     =COUNTIF(R:R, "*createOrEditProductClicked*")
@@ -234,13 +234,13 @@ The following steps record how often users start adding or updating products but
 
 Mobile Services provides a **Client Usage Configuration** under **Mobile Client Usage and User Feedback** specifying whether uploads to Mobile Services are allowed and how often they should occur. The following instructions demonstrate how to modify the app to read and store the configuration (same as the concept of the following `policy`) and upload the usage data to Mobile Services using the specified interval.
 
-1. Input the number of days after which a report should automatically be uploaded and click **Save**. For the purposes of this tutorial, use the value **`1`** to simplify testing later on.
+1.  Input the number of days after which a report should automatically be uploaded and click **Save**. For the purposes of this tutorial, use the value **`1`** to simplify testing later on.
 
     <!-- border -->![Set Auto Upload of Usage Report](automatic_upload.png)
 
 2.  In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
 
-3. Near the end of the class, add the following companion objects:
+3.  Near the end of the class, add the following companion objects:
 
     ```Kotlin
     private var isUsageEnabled: Boolean = false

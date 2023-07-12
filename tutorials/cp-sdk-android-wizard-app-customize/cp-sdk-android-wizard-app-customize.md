@@ -88,28 +88,29 @@ In this section, you will configure the object cell to display a product's name,
 
 4.  On Windows press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onViewStateRestored`** to move to the `onViewStateRestored` method.
 
-5.  Replace `(currentActivity.findViewById<RecyclerView>(R.id.item_list))?.let` block with the following code, which adds a divider between product items.
+5.  Replace `fragmentBinding.itemList?.let` block with the following code, which adds a divider between product items.
 
     ```Kotlin
-    (currentActivity.findViewById<RecyclerView>(R.id.item_list))?.let {
-      val linearLayoutManager = LinearLayoutManager(currentActivity)
-      val dividerItemDecoration = DividerItemDecoration(it.context, linearLayoutManager.orientation)
-      it.addItemDecoration(dividerItemDecoration)
-      it.layoutManager = linearLayoutManager
-      this.adapter = ProductListAdapter(currentActivity, it)
-      it.adapter = this.adapter
-    } ?: throw AssertionError()
+    fragmentBinding.itemList.let {
+        val linearLayoutManager = LinearLayoutManager(currentActivity)
+        val dividerItemDecoration =
+            DividerItemDecoration(it.context, linearLayoutManager.orientation)
+        it.addItemDecoration(dividerItemDecoration)
+        it.layoutManager = linearLayoutManager
+        this.adapter = ProductListAdapter(currentActivity, it)
+        it.adapter = this.adapter
+    }
     ```
 
     If classes `LinearLayoutManager` and `DividerItemDecoration` appear red, this indicates that Android Studio could not locate the classes. Select each class and on Windows press **`Alt+Enter`**, or, on a Mac, press **`option+return`** to make use of Android Studio quick fix to add the missing imports.
 
-    An alternate option is to enable the below setting. (Windows: **Settings**, Mac: **Android Studio > Preferences...**)
+    An alternate option is to enable the below setting. (Windows: **Settings**, Mac: **Android Studio > Settings...**)
 
     <!-- border -->![Add unambiguous imports on the fly](auto-import-kotlin.png)
 
 6.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`Repository`** to open `Repository.kt`.
 
-7.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`initialRead`** to move to the `initialRead` method.
+7.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`read`** to move to the `read()` method.
 
 8.  Replace `if (orderByProperty != null)` block with the following code to specify that the sort order be by category and then by name for products.
 
@@ -156,17 +157,18 @@ In this section, you will update the screen's title, configure the object cell t
     currentActivity.title = resources.getString(R.string.product_categories_title)
     ```
 
-7.  Still in this method, replace the `(currentActivity.findViewById<RecyclerView>(R.id.item_list))?.let` block with the following code, which adds a divider between categories:
+7.  Still in this method, replace the `fragmentBinding.itemList?.let` block with the following code, which adds a divider between categories:
 
     ```Kotlin
-    (currentActivity.findViewById<RecyclerView>(R.id.item_list))?.let {
-      val linearLayoutManager = LinearLayoutManager(currentActivity)
-      val dividerItemDecoration = DividerItemDecoration(it.context, linearLayoutManager.orientation)
-      it.addItemDecoration(dividerItemDecoration)
-      it.layoutManager = linearLayoutManager
-      this.adapter = ProductCategoryListAdapter(currentActivity, it)
-      it.adapter = this.adapter
-    } ?: throw AssertionError()
+    fragmentBinding.itemList.let {
+        val linearLayoutManager = LinearLayoutManager(currentActivity)
+        val dividerItemDecoration =
+            DividerItemDecoration(it.context, linearLayoutManager.orientation)
+        it.addItemDecoration(dividerItemDecoration)
+        it.layoutManager = linearLayoutManager
+        this.adapter = ProductCategoryListAdapter(currentActivity, it)
+        it.adapter = this.adapter
+    }
     ```
 
 8.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`populateObjectCell`**, to move to the `populateObjectCell` method.
@@ -224,35 +226,27 @@ In this section, you will modify the app to initially show the **Product Categor
 
 6.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onViewStateRestored`** to move to the `onViewStateRestored` method.
 
-7.  Replace the `(currentActivity.findViewById<FloatingActionButton>(R.id.fab))?.let` block with the following code:
+7.  Replace the `fragmentBinding.fab?.let` block with the following code:
 
     ```Kotlin
-    (currentActivity.findViewById<FloatingActionButton>(R.id.fab))?.hide()
+    fragmentBinding.fab.hide()
     ```
 
-8.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreateOptionsMenu`**, to move to the `onCreateOptionsMenu` method.
+8.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`setOnClickListener`**, to move to the `setOnClickListener` method.
 
-9.  Add the following line below the `inflater.inflate` call, which will remove the **Home** menu from the **Product Categories** screen, which is now the home screen of the app.
-
-    ```Kotlin
-    menu.removeItem(R.id.menu_home)
-    ```
-
-10.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`setOnClickListener`**, to move to the `setOnClickListener` method.
-
-11.  Replace the code with the following, which will enable the navigation from the Category list screen to the Product list screen.
+9.  Replace the code with the following, which will enable the navigation from the Category list screen to the Product list screen.
 
     ```Kotlin
-    holder.view.setOnClickListener { view ->
+    holder.itemView.setOnClickListener { view ->
         val productsIntent = Intent(currentActivity, ProductsActivity::class.java)
         productsIntent.putExtra("category", productCategoryEntity.categoryName)
         view.context.startActivity(productsIntent)
     }
     ```
 
-12.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductsListFragment`**, to open `ProductsListFragment.kt`.
+10.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductsListFragment`**, to open `ProductsListFragment.kt`.
 
-13.  On Windows, press **`Ctrl+F`**, or, on a Mac, press **`command+F`**, and search for `listAdapter.setItems(entityList)`. Replace that line with the following code, which will filter the products list to only show products for a selected category.
+11.  On Windows, press **`Ctrl+F`**, or, on a Mac, press **`command+F`**, and search for `listAdapter.setItems(entityList)`. Replace that line with the following code, which will filter the products list to only show products for a selected category.
 
     ```Kotlin
     currentActivity.intent.getStringExtra("category")?.let { category ->
@@ -268,7 +262,7 @@ In this section, you will modify the app to initially show the **Product Categor
     } ?: listAdapter.setItems(entityList)
     ```
 
-14.  Run the app again and notice that the **Product Categories** screen is now the first screen shown, that the **Home** menu is no longer shown, and that selecting a category shows the products list screen, which now displays only products for the selected category.
+12.  Run the app again and notice that the **Product Categories** screen is now the first screen shown, that the **Home** menu is no longer shown, and that selecting a category shows the products list screen, which now displays only products for the selected category.
 
     <!-- border -->![Product category list screen](reformatted-product-category-list2.png)
 
@@ -344,50 +338,55 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
     }
     ```
 
-7.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreateOptionsMenu`**, to move to the `onCreateOptionsMenu` method.
+7.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onMenuItemSelected`**, to move to the `onMenuItemSelected` method.
 
-8.  Replace the contents of the method with the following code, which uses the new `product_categories_menu` and sets a listener that will filter the list of categories in the list when text is entered in the search view. (Make sure to import all the un-imported classes with **`alt+Enter`** on Windows or **`option+Enter`** on Macs.)
+8.  After the `R.id.menu_refresh` block, right before `else` block, add the following code, which uses the new `product_categories_menu` and sets a listener that will filter the list of categories in the list when text is entered in the search view. (Make sure to import all the un-imported classes with **`alt+Enter`** on Windows or **`option+Enter`** on Macs.)
 
     ```Kotlin
-    inflater.inflate(R.menu.product_categories_menu, menu)
-    val searchView = menu.findItem(R.id.action_search).actionView as FioriSearchView
-    searchView.setBackgroundResource(R.color.transparent)
-    // make sure to import androidx.appcompat.widget.SearchView
-    searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-      override fun onQueryTextSubmit(s: String): Boolean {
-          return false
-      }
+    R.id.action_search -> {
+        val searchView = menuItem.actionView as FioriSearchView
+        searchView.setBackgroundResource(R.color.transparent)
+        // make sure to import androidx.appcompat.widget.SearchView.OnQueryTextListener
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                return false
+            }
 
-      override fun onQueryTextChange(newText: String): Boolean {
-          adapter?.let { adapter ->
-            val filteredCategoriesList = mutableListOf<ProductCategory>()
-            if (newText.trim().isNotEmpty()) {
-                for (i in adapter.allProductCategories.indices) {
-                    val pc = adapter.allProductCategories[i]
-                    pc.categoryName?.let {
-                      if (it.lowercase().contains(newText.lowercase())) {
-                          filteredCategoriesList.add(pc)
-                      }
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter?.let { adapter ->
+                    val filteredCategoriesList = mutableListOf<ProductCategory>()
+                    if (newText.trim().isNotEmpty()) {
+                        for (i in adapter.allProductCategories.indices) {
+                            val pc = adapter.allProductCategories[i]
+                            pc.categoryName?.let {
+                                if (it.lowercase().contains(newText.lowercase())) {
+                                    filteredCategoriesList.add(pc)
+                                }
+                            }
+                        }
+                    } else {
+                        for (i in adapter.allProductCategories.indices) {
+                            filteredCategoriesList.add(adapter.allProductCategories[i])
+                        }
                     }
-                }
+                    adapter.setProductCategories(filteredCategoriesList)
+                    return false
+                } ?: return false
             }
-            else {
-                for (i in adapter.allProductCategories.indices) {
-                    filteredCategoriesList.add(adapter.allProductCategories[i])
-                }
-            }
-            adapter.setProductCategories(filteredCategoriesList)
-            return false
-          } ?: return false
-      }
-    })
+        })
+        true
+    }
     ```
 
-9.  Run the app again and notice that there is now a search toolbar item.
+9.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreate`**, to move to the `onCreate` method.
+
+10.  Change the code line `menu = R.menu.itemlist_menu` to `menu = R.menu.product_categories_menu`.
+
+11.  Run the app again and notice that there is now a search toolbar item.
 
     <!-- border -->![Filter Categories in action 1](search-view.png)
 
-10.  Try it out: click the **search** item, enter some text, press **`Enter`**, and notice that the product categories that are displayed in the list are now filtered.
+12.  Try it out: click the **search** item, enter some text, press **`Enter`**, and notice that the product categories that are displayed in the list are now filtered.
 
     <!-- border -->![Filter Categories in action 2](filter-in-action.png)
 
@@ -652,7 +651,7 @@ First, we'll generate additional sales data in the sample OData service.
 
 13.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`prepareViewModel`**, to move to the `prepareViewModel` method.
 
-14.  Replace the `ViewModelProvider(currentActivity).get(ProductViewModel::class.java).also {` block of the first "else"-block of the method with the following code:
+14.  Replace the `ViewModelProvider(currentActivity).get(ProductViewModel::class.java)` line of the method with the following code:
 
     ```Kotlin
     ViewModelProvider(currentActivity).get(ProductViewModel::class.java).also {
