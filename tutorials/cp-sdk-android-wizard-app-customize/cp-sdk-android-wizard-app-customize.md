@@ -204,17 +204,17 @@ In this section, you will update the screen's title, configure the object cell t
 
 In this section, you will modify the app to initially show the **Product Categories** screen when opened. Selecting a category will navigate to a **Products** screen for the selected category. The floating action button on the **Categories** screen will be removed.
 
-1.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`MainBusinessActivity`**, to open `MainBusinessActivity.kt`.
+1. On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`MainBusinessActivity`**, to open `MainBusinessActivity.kt`.
 
-2.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startEntitySetListActivity`**, to move to the `startEntitySetListActivity` method.
+2. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startEntitySetListActivity`**, to move to the `startEntitySetListActivity` method.
 
-3.  Add the following line below the other Intent declaration:
+3. Add the following line below the other Intent declaration:
 
     ```Kotlin
     val pcIntent = Intent(this, ProductCategoriesActivity::class.java)
     ```
 
-4.  After the call to `startActivity(intent)`, add the following line:
+4. After the call to `startActivity(intent)`, add the following line:
 
     ```Kotlin
     startActivity(pcIntent)
@@ -222,19 +222,28 @@ In this section, you will modify the app to initially show the **Product Categor
 
     This will cause the **Product Categories** screen to be the first screen seen when opening the app, but because the **EntityList** screen is opened first, it can be navigated to by pressing the **Back** button. The **EntityList** screen contains the **Settings** menu so, to simplify things, this screen is still displayed.
 
-5.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductCategoriesListFragment`**, to open `ProductCategoriesListFragment.kt`.
+5. On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductCategoriesListFragment`**, to open `ProductCategoriesListFragment.kt`.
 
-6.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onViewStateRestored`** to move to the `onViewStateRestored` method.
+6. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onViewStateRestored`** to move to the `onViewStateRestored` method.
 
-7.  Replace the `fragmentBinding.fab?.let` block with the following code:
+7. Replace the `fragmentBinding.fab?.let` block with the following code:
 
     ```Kotlin
     fragmentBinding.fab.hide()
     ```
 
-8.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`setOnClickListener`**, to move to the `setOnClickListener` method.
+8. Add the `onCreateMenu` method into the class right after the `onCreateView` method.
+   
+   ```Kotlin
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        super.onCreateMenu(menu, menuInflater)
+        menu.removeItem(R.id.menu_home)
+    }
+   ```
 
-9.  Replace the code with the following, which will enable the navigation from the Category list screen to the Product list screen.
+9. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`setOnClickListener`**, to move to the `setOnClickListener` method.
+
+10. Replace the code with the following, which will enable the navigation from the Category list screen to the Product list screen.
 
     ```Kotlin
     holder.itemView.setOnClickListener { view ->
@@ -244,9 +253,9 @@ In this section, you will modify the app to initially show the **Product Categor
     }
     ```
 
-10.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductsListFragment`**, to open `ProductsListFragment.kt`.
+11. On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`ProductsListFragment`**, to open `ProductsListFragment.kt`.
 
-11.  On Windows, press **`Ctrl+F`**, or, on a Mac, press **`command+F`**, and search for `listAdapter.setItems(entityList)`. Replace that line with the following code, which will filter the products list to only show products for a selected category.
+12. On Windows, press **`Ctrl+F`**, or, on a Mac, press **`command+F`**, and search for `listAdapter.setItems(entityList)`. Replace that line with the following code, which will filter the products list to only show products for a selected category.
 
     ```Kotlin
     currentActivity.intent.getStringExtra("category")?.let { category ->
@@ -262,7 +271,7 @@ In this section, you will modify the app to initially show the **Product Categor
     } ?: listAdapter.setItems(entityList)
     ```
 
-12.  Run the app again and notice that the **Product Categories** screen is now the first screen shown, that the **Home** menu is no longer shown, and that selecting a category shows the products list screen, which now displays only products for the selected category.
+13. Run the app again and notice that the **Product Categories** screen is now the first screen shown, that the **Home** menu is no longer shown, and that selecting a category shows the products list screen, which now displays only products for the selected category.
 
     <!-- border -->![Product category list screen](reformatted-product-category-list2.png)
 
@@ -338,55 +347,50 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
     }
     ```
 
-7.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onMenuItemSelected`**, to move to the `onMenuItemSelected` method.
+7. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreateMenu`**, to move to the `onCreateMenu` method.
 
-8.  After the `R.id.menu_refresh` block, right before `else` block, add the following code, which uses the new `product_categories_menu` and sets a listener that will filter the list of categories in the list when text is entered in the search view. (Make sure to import all the un-imported classes with **`alt+Enter`** on Windows or **`option+Enter`** on Macs.)
+8. Replace the contents of the method with the following code, which uses the new `product_categories_menu` and sets a listener that will filter the list of categories in the list when text is entered in the search view. (Make sure to import all the un-imported classes with **`alt+Enter`** on Windows or **`option+Enter`** on Macs.)
 
     ```Kotlin
-    R.id.action_search -> {
-        val searchView = menuItem.actionView as FioriSearchView
-        searchView.setBackgroundResource(R.color.transparent)
-        // make sure to import androidx.appcompat.widget.SearchView.OnQueryTextListener
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(s: String): Boolean {
-                return false
-            }
+    menuInflater.inflate(R.menu.product_categories_menu, menu)
+    val searchView = menu.findItem(R.id.action_search).actionView as FioriSearchView
+    searchView.setBackgroundResource(R.color.transparent)
+    // make sure to import androidx.appcompat.widget.SearchView
+    searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(s: String): Boolean {
+            return false
+        }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                adapter?.let { adapter ->
-                    val filteredCategoriesList = mutableListOf<ProductCategory>()
-                    if (newText.trim().isNotEmpty()) {
-                        for (i in adapter.allProductCategories.indices) {
-                            val pc = adapter.allProductCategories[i]
-                            pc.categoryName?.let {
-                                if (it.lowercase().contains(newText.lowercase())) {
-                                    filteredCategoriesList.add(pc)
-                                }
+        override fun onQueryTextChange(newText: String): Boolean {
+            adapter?.let { adapter ->
+                val filteredCategoriesList = mutableListOf<ProductCategory>()
+                if (newText.trim().isNotEmpty()) {
+                    for (i in adapter.allProductCategories.indices) {
+                        val pc = adapter.allProductCategories[i]
+                        pc.categoryName?.let {
+                            if (it.lowercase().contains(newText.lowercase())) {
+                                filteredCategoriesList.add(pc)
                             }
                         }
-                    } else {
-                        for (i in adapter.allProductCategories.indices) {
-                            filteredCategoriesList.add(adapter.allProductCategories[i])
-                        }
                     }
-                    adapter.setProductCategories(filteredCategoriesList)
-                    return false
-                } ?: return false
-            }
-        })
-        true
-    }
+                }
+                else {
+                    for (i in adapter.allProductCategories.indices) {
+                        filteredCategoriesList.add(adapter.allProductCategories[i])
+                    }
+                }
+                adapter.setProductCategories(filteredCategoriesList)
+                return false
+            } ?: return false
+        }
+    })
     ```
 
-9.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreate`**, to move to the `onCreate` method.
-
-10.  Change the code line `menu = R.menu.itemlist_menu` to `menu = R.menu.product_categories_menu`.
-
-11.  Run the app again and notice that there is now a search toolbar item.
+9.   Run the app again and notice that there is now a search toolbar item.
 
     <!-- border -->![Filter Categories in action 1](search-view.png)
 
-12.  Try it out: click the **search** item, enter some text, press **`Enter`**, and notice that the product categories that are displayed in the list are now filtered.
+10.  Try it out: click the **search** item, enter some text, press **`Enter`**, and notice that the product categories that are displayed in the list are now filtered.
 
     <!-- border -->![Filter Categories in action 2](filter-in-action.png)
 
