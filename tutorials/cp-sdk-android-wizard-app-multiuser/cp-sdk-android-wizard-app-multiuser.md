@@ -55,7 +55,7 @@ The following cases are not supported in multi-user mode:
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.kt`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. For the **`FlowContext`** instance, change the parameter of the **`setMultipleUserMode`** method from **`false`** to **`true`**:
+3. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startOnboarding`** to move to the `startOnboarding` method. For the **`FlowContext`** instance, change the parameter of the **`setMultipleUserMode`** method from **`false`** to **`true`**:
 
     ```Kotlin
     val flowContext =
