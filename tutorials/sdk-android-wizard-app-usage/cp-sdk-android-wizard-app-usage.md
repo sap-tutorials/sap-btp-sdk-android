@@ -13,7 +13,7 @@ keywords: sdkforandroid
 <!-- description --> See how the Usage Reporting feature can help provide information on how your app is being used.
 
 ## Prerequisites
-- You completed [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app).
+- You completed [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
 
 ## You will learn
 - How the Usage Reporting feature works
@@ -26,7 +26,7 @@ keywords: sdkforandroid
 ### Manual upload of usage data
 
 
-As shown in the tutorial, [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app), ensure that **Enable Usage Reporting** is checked when creating the app.
+As shown in the tutorial, [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app), ensure that **Enable Usage Reporting** is checked when creating the app.
 
 <!-- border -->![Enable Usage when Creating App](creating_with_usage.png)
 

@@ -12,9 +12,9 @@ primary_tag: products>sap-btp-sdk-for-android
 ## Prerequisites
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services.
     - **SAP Mobile Services**
-- You completed [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app).
-- You completed [Get Familiar with the Flows Component by a Wizard Generated Application](cp-sdk-android-flows-wizard).
-- You completed [Customize the Onboarding Flow](cp-sdk-android-flows-onboarding).
+- You completed [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
+- You completed [Get Familiar with the Flows Component by a Wizard Generated Application](sdk-android-flows-wizard).
+- You completed [Customize the Onboarding Flow](sdk-android-flows-onboarding).
 
 ## Details
 ### You will learn
@@ -33,15 +33,15 @@ The flows component will automatically determine whether to use the onboarding o
 
 [OPTION BEGIN [Java]]
 
-1.  Open the project you [previously created](cp-sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
+1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.java`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. As we mentioned in [Get Familiar with the Flows Component by a Wizard Generated Application](cp-sdk-android-flows-wizard), this method starts an onboarding flow. After onboarding, the next time the app starts, the same method is called and the Flows component detects that the user is already onboarded and starts the restore flow. The client code does not need handle the logic to explicitly start a restore flow.
+3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. As we mentioned in [Get Familiar with the Flows Component by a Wizard Generated Application](sdk-android-flows-wizard), this method starts an onboarding flow. After onboarding, the next time the app starts, the same method is called and the Flows component detects that the user is already onboarded and starts the restore flow. The client code does not need handle the logic to explicitly start a restore flow.
 
     !![Flow restore starting method](flow-restore-java.png)
 
-4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Onboarding Flow](cp-sdk-android-flows-onboarding) explains the events notified in the onboarding flow.
+4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Onboarding Flow](sdk-android-flows-onboarding) explains the events notified in the onboarding flow.
 
 5.  When the app is put to background, the Flows component will monitor whether the passcode is timed out based on the "Lock Timeout" value defined in the passcode policy. When the passcode is timed out and the app is put to foreground again, a timeout unlock flow will be started. This is the `FlowType.TIMEOUT_UNLOCK` flow type, which is used internally by the Flows component for the passcode timeout scenario. This flow's function is exactly the same as that of the restore flow.
 
@@ -49,15 +49,15 @@ The flows component will automatically determine whether to use the onboarding o
 
 [OPTION BEGIN [Kotlin]]
 
-1.  Open the project you [previously created](cp-sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
+1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.kt`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. As we mentioned in [Get Familiar with the Flows Component by a Wizard Generated Application](cp-sdk-android-flows-wizard), this method starts an onboarding flow. After onboarding, the next time the app starts, the same method is called and the Flows component detects that the user is already onboarded and starts the restore flow. The client code does not need handle the logic to explicitly start a restore flow.
+3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. As we mentioned in [Get Familiar with the Flows Component by a Wizard Generated Application](sdk-android-flows-wizard), this method starts an onboarding flow. After onboarding, the next time the app starts, the same method is called and the Flows component detects that the user is already onboarded and starts the restore flow. The client code does not need handle the logic to explicitly start a restore flow.
 
     !![Flow restore starting method](flow-restore-kotlin.png)
 
-4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Onboarding Flow](cp-sdk-android-flows-onboarding) explains the events notified in the onboarding flow.
+4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Onboarding Flow](sdk-android-flows-onboarding) explains the events notified in the onboarding flow.
 
 5.  When the app is put to background, the Flows component will monitor whether the passcode is timed out based on the "Lock Timeout" value defined in the passcode policy. When the passcode is timed out and the app is put to foreground again, a timeout unlock flow will be started. This is the `FlowType.TIMEOUT_UNLOCK` flow type, which is used internally by the Flows component for the passcode timeout scenario. This flow's function is exactly the same as that of the restore flow.
 
@@ -72,7 +72,7 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
 [OPTION BEGIN [Java]]
 
-1.  Open the project you [previously created](cp-sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
+1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`SettingsFragment`** to open `SettingsFragment.java`.
 
@@ -107,7 +107,7 @@ There may be occasions when the user wants to reset the app to initial state. Th
 [OPTION END]
 
 [OPTION BEGIN [Kotlin]]
-1.  Open the project you [previously created](cp-sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
+1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`SettingsFragment`** to open `SettingsFragment.kt`.
 

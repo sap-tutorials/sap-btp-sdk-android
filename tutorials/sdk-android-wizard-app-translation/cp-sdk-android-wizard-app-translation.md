@@ -13,7 +13,7 @@ keywords: sdkforandroid
 <!-- description --> See how the SAP Translation Hub can be used to quickly add support for a new language to your app.
 
 ## Prerequisites
-- You completed [Try Out SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app).
+- You completed [Try Out SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
 
 
 ## You will learn

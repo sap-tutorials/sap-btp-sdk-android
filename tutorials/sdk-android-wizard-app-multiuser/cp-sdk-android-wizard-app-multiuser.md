@@ -15,8 +15,8 @@ keywords: sdkforandroid
 ## Prerequisites
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services.
     - **SAP Mobile Services**
-- You completed [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app).
-- You completed [Offline-Enable Your Android Application](cp-sdk-android-wizard-app-offline).
+- You completed [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
+- You completed [Offline-Enable Your Android Application](sdk-android-wizard-app-offline).
 
 ## You will learn
   - How the Android SDK supports multi-user mode
@@ -35,7 +35,7 @@ The Flows component of the SAP BTP SDK for Android provides the following functi
 
 - Handle user information and user data management.
 
-- To enable multi-user for an application developed using Flows component, you only need follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and check **Enable Multiple Users** for the **Multiple Users** on the **Project Features** tab. Or you can follow **Step 2** and **3** to enable multi-user mode for online and offline, respectively.
+- To enable multi-user for an application developed using Flows component, you only need follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and check **Enable Multiple Users** for the **Multiple Users** on the **Project Features** tab. Or you can follow **Step 2** and **3** to enable multi-user mode for online and offline, respectively.
 
   <!-- border -->![Enable multi-user mode](enable_multiuser_mode.png)
 

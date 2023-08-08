@@ -14,7 +14,7 @@ time: 20
 <!-- description --> Add foreground and background notifications to your application using Google Firebase.
 
 ## Prerequisites
-- You completed [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app).
+- You completed [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
 
 ## You will learn
 - How to configure SAP BTP for push

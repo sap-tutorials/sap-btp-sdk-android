@@ -129,7 +129,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     <!-- border -->![Add google-services.json file to wizard](wizard-google-services-added.png)
 
-    >You can add push configuration on the server as in the [Send Notifications to Your Android Application](cp-sdk-android-wizard-app-push) tutorial.
+    >You can add push configuration on the server as in the [Send Notifications to Your Android Application](sdk-android-wizard-app-push) tutorial.
 
 7.  Click **Create** and proceed to **Step 3**.
 

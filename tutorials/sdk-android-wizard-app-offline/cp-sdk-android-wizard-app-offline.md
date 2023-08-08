@@ -21,7 +21,7 @@ time: 30
 ### Generate and run an offline app
 
 
-1.  Follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](cp-sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and select **Offline** for the **OData** option on the **Project Features** tab. The push feature is not needed for this application.
+1.  Follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and select **Offline** for the **OData** option on the **Project Features** tab. The push feature is not needed for this application.
 
     <!-- border -->![Choose Offline OData](choosing_offline_odata.png)
 
@@ -75,7 +75,7 @@ To protect the data in offline store, you must enable offline store encryption b
 
     <!-- border -->![Parameter setting Java](offline-key-kotlin.png)
 
->For additional information about multiple user mode, see [Enable Multi-User Mode for Your Android Application](cp-sdk-android-wizard-app-multiuser).
+>For additional information about multiple user mode, see [Enable Multi-User Mode for Your Android Application](sdk-android-wizard-app-multiuser).
 
 
 ### Examine the defining queries
