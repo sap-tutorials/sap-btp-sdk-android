@@ -73,6 +73,8 @@ As you primarily use the mobile application, you want to click on the link to op
     | Path - `pathPrefix` | `/data` | You can add any prefix |
     | Activity | `.ui.WelcomeActivity` | You can select any activity. The application in the tutorial has been created using `Jetpack Compose-based UI` ![Jetpack Compose UI App Option](img-3-8-4.png) |
 
+    ![Server URL on Mobile Services](img-3-8.png)
+
     > The required code is added to the `AndroidManfifest.xml` file.
 
 9. Paste the following URLs in the **Check URL Mapping** input field to test if the URL will be handled by the app.
@@ -123,6 +125,8 @@ As you primarily use the mobile application, you want to click on the link to op
             }
     }
     ```
+
+    > Ensure that the necessary libraries are imported.
 
 [DONE]
 [ACCORDION-END]
