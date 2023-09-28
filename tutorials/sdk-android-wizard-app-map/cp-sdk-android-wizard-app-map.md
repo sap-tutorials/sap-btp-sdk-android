@@ -14,14 +14,10 @@ keywords: sdkforandroid
 
 ## Prerequisites
 You have:
-
 1. [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services.
-      - **SAP Mobile Services**
-
+    - **SAP Mobile Services**
 2. [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 7.0.2 or higher of the SAP BTP SDK for Android.
-
 3. Completed [Try Out SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
-
 
 ## You will learn
   - How to add a Google Map to the wizard-generated app and display customer locations
