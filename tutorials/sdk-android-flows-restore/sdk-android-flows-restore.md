@@ -150,7 +150,7 @@ Congratulations! You now have learned how to restore and reset application using
 
 [ACCORDION-BEGIN [Step 3: ](Application logout)]
 
-The logout flow will try to logout the current user if network is available, then remove the OAuth2 token of the currenet user if the app is authenticated with OAuth2. No matter the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
+The logout flow will try to logout the current user if network is available, then remove the OAuth2 token of the current user if the app is authenticated with OAuth2. No matter the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
 
 1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
