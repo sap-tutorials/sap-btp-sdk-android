@@ -61,7 +61,7 @@ The [Flows](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-U
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.kt`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startFlow` method. To start the onboarding process, firstly create a **`FlowContext`** instance that contains the information required by the flow, such as the application information, the status of multi-user mode, the flow state listener, etc. Then call the `start` method of the `Flow` class to start the onboarding flow, allowing the entire onboarding process to be handled automatically.
+3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startFlow`** to move to the `startOnboarding` method. To start the onboarding process, firstly create a **`FlowContext`** instance that contains the information required by the flow, such as the application information, the status of multi-user mode, the flow state listener, etc. Then call the `start` method of the `Flow` class to start the onboarding flow, allowing the entire onboarding process to be handled automatically.
 
     !![Flow starting method](flow-starting-kotlin.png)
 
