@@ -290,9 +290,9 @@ Client code may use its own screens in onboarding process or implement customize
 
 >Please see [Flows Theme and Style](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/onboarding/android/newflows/FlowStyles.html) for more information on UI customization.
 
->For Android API Level 30 or above, we recommend you to use the theme download feature, which will apply the theme to the client application. Please see [How to Use an Application Theme From a Client Application](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/application-themes/android/use-theme-from-client-app.html) for the theme download feature.
+>For Android API Level 30 or above, we recommend that you use the theme download feature, which will apply the theme to the client application. Please see [How to Use an Application Theme From a Client Application](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/application-themes/android/use-theme-from-client-app.html) for the theme download feature.
 
-Congratulations! You now have learned how to customize the styles and themes for the UI screens of Flows component!
+Congratulations! You now have learned how to customize the styles and themes of the UI screens of Flows component!
 
 [VALIDATE_1]
 [ACCORDION-END]

@@ -78,7 +78,7 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`SettingsFragment`** to open `SettingsFragment.kt`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startResetFlow`** to move to the `startResetFlow` method. To start the flow to reset application, set the flow type to **`FlowType.RESET`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. The entire process to reset application will be handled automatically.
+3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startResetFlow`** to move to the `startResetFlow` method. To start the flow to reset application, set the flow type to **`FlowType.RESET`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. The entire process to reset the application will be handled automatically.
 
     !![App reset flow](reset-app-kotlin.png)
 
@@ -99,7 +99,7 @@ There may be occasions when the user wants to reset the app to initial state. Th
     Flow.start(this, flowContext)
     ```
 
-5.  Before removing all the data managed by the Flows component, the reset flow will notify the `ApplicationReset` event. You can use the `onApplicationReset` callback of the `FlowStateListener` instance to insert its own logic for application reset, for example to clear the data managed by the client code and un-register the push token.
+5.  Before removing all the data managed by the Flows component, the reset flow will notify the `ApplicationReset` event. You can use the `onApplicationReset` callback of the `FlowStateListener` instance to insert its own logic for application reset, for example to clear the data managed by the client code and unregister the push token.
 
     In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onApplicationReset`** to move to the `onApplicationReset` method.
 
@@ -143,20 +143,18 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
 [OPTION END]
 
-Congratulations! You now have learned how to restore and reset application using the Flows component!
-
 [VALIDATE_2]
 [ACCORDION-END]
 
 [ACCORDION-BEGIN [Step 3: ](Application logout)]
 
-The logout flow will try to logout the current user if network is available, then remove the OAuth2 token of the current user if the app is authenticated with OAuth2. No matter the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
+The logout flow will try to logout the current user if the network is available, then remove the OAuth2 token of the current user if the app is authenticated with OAuth2. No matter whether the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
 
 1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`EntitySetListActivity`** to open `EntitySetListActivity.kt`.
 
-3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onOptionsItemSelected`** to move to the `onOptionsItemSelected` method. To start the flow to logout the application, set the flow type to **`FlowType.LOGOUT`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. 
+3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onOptionsItemSelected`** to move to the `onOptionsItemSelected` method. To start the flow to logout of the application, set the flow type to **`FlowType.LOGOUT`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. 
 
     !![Flow logout starting method](flow-logout-kotlin.png)
 
@@ -177,7 +175,7 @@ The logout flow will try to logout the current user if network is available, the
     Flow.start(this, flowContext)
     ```
 
-5.  Logout flow will not automatically remove the push registration. Client code can implement the callback function **`FlowActivityResultCallback`** to delete the firebase push token if it does not want to receive push after logout. Logout flow will trigger the callback function after a successful logout.
+5.  Logout flow will not automatically remove the push registration. Client code can implement the callback function **`FlowActivityResultCallback`** to delete the Firebase push token if it does not want to receive push notifications after logout. The logout flow will trigger the callback function after a successful logout.
 
     ```Kotlin
     Flow.start(
@@ -204,7 +202,7 @@ The logout flow will try to logout the current user if network is available, the
         }
     ```
 
-Congratulations! You now have learned how to restore, reset and logout application using the Flows component!
+Congratulations! You now have learned how to restore, reset and logout an application using the Flows component!
 
 [VALIDATE_3]
 [ACCORDION-END]
