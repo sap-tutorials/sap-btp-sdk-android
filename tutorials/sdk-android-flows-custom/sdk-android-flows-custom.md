@@ -464,7 +464,7 @@ Your own flow class must extend the **`com.sap.cloud.mobile.flowv2.core.Flow`** 
 
 Congratulations! You now have learned how to create your own flow using the Flows component!
 
-[VALIDATE_1]
+[VALIDATE_2]
 [ACCORDION-END]
 
 ---

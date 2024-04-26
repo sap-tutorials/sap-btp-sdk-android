@@ -20,7 +20,7 @@ primary_tag: products>sap-btp-sdk-for-android
 ### You will learn
   - How to handle application restore and passcode timeouts using the Flows component
   - How to reset an application using the Flows component
-  - How to logout an application using the Flows component
+  - How to logout of an application using the Flows component
 
 ---
 
@@ -148,7 +148,7 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
 [ACCORDION-BEGIN [Step 3: ](Application logout)]
 
-The logout flow will try to logout the current user if the network is available, then remove the OAuth2 token of the current user if the app is authenticated with OAuth2. No matter whether the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
+The logout flow will try to logout the current user if network is available, then remove the OAuth2 token of the current user if the app is authenticated with OAuth2. No matter the network is available or not, after the flow, the user needs to be authenticated again when making an API call to the server.
 
 1.  Open the project you [previously created](sdk-android-wizard-app) using the SAP BTP SDK Wizard for Android.
 
