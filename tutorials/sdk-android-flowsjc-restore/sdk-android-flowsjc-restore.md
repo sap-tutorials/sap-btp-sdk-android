@@ -41,6 +41,26 @@ The flows component will automatically determine whether to use the onboarding o
 
     !![Flow restore starting method](flowjc-restore-kotlin.png)
 
+    ```Kotlin
+    fun startOnboarding(context: Context, appConfig: AppConfig) {
+        TimeoutLockService.updateApplicationLockState(true)
+        WelcomeActivity.logger.debug("Before starting flow, lock state: {}", ApplicationStates.applicationLocked)
+        FlowUtil.startFlow(
+            context,
+            flowContext = getOnboardingFlowContext(context, appConfig)
+        ) { resultCode, data ->
+            if (resultCode == Activity.RESULT_OK) {
+                onlineInitializationAfterOnboarding(context) {
+                    launchMainBusinessActivity(context)
+                }
+                WelcomeActivity.logger.debug("After flow, lock state: {}",  ApplicationStates.applicationLocked)
+            } else {
+                startOnboarding(context, appConfig)
+            }
+        }
+    }
+    ```
+
 4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Jetpack Compose Onboarding Flow](sdk-android-flowsjc-onboarding) explains the events notified in the onboarding flow.
 
 5.  When the app is put to background, the Flows component will monitor whether the passcode is timed out based on the "Lock Timeout" value defined in the passcode policy. When the passcode is timed out and the app is put to foreground again, a timeout unlock flow will be started. This is the `FlowType.TimeoutUnlock` flow type, which is used internally by the Flows component for the passcode timeout scenario. This flow's function is exactly the same as that of the restore flow.
@@ -58,6 +78,21 @@ There may be occasions when the user wants to reset the app to its initial state
 3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startResetAppFlow`** to move to the `startResetAppFlow` method. To start the flow to reset the application, set the flow type to **`FlowType.Reset`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. The entire process to reset the application will be handled automatically.
 
     !![App reset flow](app-reset-kotlin.png)
+
+    ```Kotlin
+    private fun startResetAppFlow(context: Context) {
+        FlowUtil.startFlow(
+            context = context,
+            flowContext = FlowContextRegistry.flowContext.copy(
+                flowType = FlowType.Reset, flow = null
+            )
+        ) { resultCode, _ ->
+            if (resultCode == Activity.RESULT_OK) {
+                launchWelcomeActivity(context)
+            }
+        }
+    }
+    ```
 
 4.  When the reset flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 
@@ -89,6 +124,12 @@ There may be occasions when the user wants to reset the app to its initial state
 
     !![App reset listener](app-reset-listener.png)
 
+    ```Kotlin
+    override suspend fun onApplicationReset() {
+        this.application.resetApplication()
+    }
+    ```
+
 [ACCORDION-END]
 
 [ACCORDION-BEGIN [Step 3: ](Application logout)]
@@ -102,6 +143,22 @@ The logout flow will try to log out the current user if the network is available
 3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`StartLogoutFlow`** to move to the `StartLogoutFlow` method. To start the flow to log out of the application, set the flow type to **`FlowType.Logout`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. 
 
     !![Flow logout starting method](flow-logout-kotlin.png)
+
+    ```Kotlin
+    fun StartLogoutFlow() {
+        val context = LocalContext.current
+        FlowUtil.startFlow(
+            context = context,
+            flowContext = FlowContextRegistry.flowContext.copy(
+                flowType = FlowType.Logout, flow = null
+            )
+        ) { resultCode, _ ->
+            if (resultCode == Activity.RESULT_OK) {
+                launchWelcomeActivity(context)
+            }
+        }
+    }
+    ```
 
 4.  When the logout flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 
@@ -155,6 +212,22 @@ The delete registration flow will delete the registration of the current user on
 3.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startDeleteRegFlow`** to move to the `startDeleteRegFlow` method. To start the flow to log out of the application, set the flow type to **`FlowType.DeleteRegistration`** for the **`FlowContext`** instance, and then start the flow with this **`FlowContext`** instance. 
 
     !![Flow delete registration starting method](flow-delreg-kotlin.png)
+
+    ```Kotlin
+    private fun startDeleteRegFlow(context: Context, finishCallback: (Int)-> Unit = {}) {
+        FlowUtil.startFlow(
+            context = context,
+            flowContext = FlowContextRegistry.flowContext.copy(
+                flowType = FlowType.DeleteRegistration, flow = null
+            )
+        ) { resultCode, _ ->
+            finishCallback(resultCode)
+            if (resultCode == Activity.RESULT_OK) {
+            launchWelcomeActivity(context)
+            }
+        }
+    }
+    ```
 
 4.  When the delete registration flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 

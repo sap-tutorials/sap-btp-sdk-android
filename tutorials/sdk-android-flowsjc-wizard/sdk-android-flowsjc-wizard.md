@@ -46,6 +46,26 @@ The [Jetpack Compose Flows](https://help.sap.com/doc/f53c64b93e5140918d676b927a3
 
     !![JC Flow starting method](flow-starting-JC.png)
 
+    ```Kotlin
+    fun startOnboarding(context: Context, appConfig: AppConfig) {
+        TimeoutLockService.updateApplicationLockState(true)
+        WelcomeActivity.logger.debug("Before starting flow, lock state: {}", ApplicationStates.applicationLocked)
+        FlowUtil.startFlow(
+            context,
+            flowContext = getOnboardingFlowContext(context, appConfig)
+        ) { resultCode, data ->
+            if (resultCode == Activity.RESULT_OK) {
+                onlineInitializationAfterOnboarding(context) {
+                    launchMainBusinessActivity(context)
+                }
+                WelcomeActivity.logger.debug("After flow, lock state: {}",  ApplicationStates.applicationLocked)
+            } else {
+                startOnboarding(context, appConfig)
+            }
+        }
+    }
+    ```
+
     Notice that by default, the type of a flow is **`FlowType.ONBOARDING`**. To start a different type of flow, such as a `Change Passcode` flow, the client code must specify the flow type in the **`FlowContext`** instance. Besides the parameters specified above, there are also many other parameters in the **`FlowContext`** class that can be modified to allow the client code to customize a flow. When the values of the parameters are not specified in the client code, the default values will be used. The details of all parameters in the **`FlowContext`** class will be explained in subsequent tutorials.
 
 4.  **`FlowStateListener`** is a parameter in the **`FlowContext`** class. In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`. This class is a sample implementation for the callbacks defined in the **`FlowStateListener`** class. The callback functions in 'FlowStateListener' and the execution sequences are the same as in view-based Flows, but all of them are marked 'suspend' in the Compose version of Flows. This will make the client code easier to execute logic in different Dispatchers, and also make the execution sequence easier to manage. The details of **`FlowState`** and **`FlowStateListener`** will be explained in subsequent tutorials.

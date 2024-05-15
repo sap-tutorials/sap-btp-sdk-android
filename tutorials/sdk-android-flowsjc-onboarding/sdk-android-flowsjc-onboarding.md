@@ -112,17 +112,82 @@ In this section, we explain the onboarding-related callbacks in **`FlowStateList
 
     !![App Ready](app-ready-kotlin.png)
 
+    ```Kotlin
+    override suspend fun onAppConfigRetrieved(appConfig: AppConfig) {
+        logger.debug("onAppConfigRetrieved: {}", appConfig)
+        SAPServiceManager.initSAPServiceManager(appConfig)
+    }
+    ```
+
 4.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onApplicationReset`** to move to the `onApplicationReset` method. The event is notified when reset the application by starting the `reset` flow.
 
     !![App Ready](app-reset-kotlin.png)
+
+    ```Kotlin
+    override suspend fun onApplicationReset() {
+        this.application.resetApplication()
+    }
+    ```
 
 5.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onClientPolicyRetrieved`** to move to the `onClientPolicyRetrieved` method. After authentication is completed, the onboarding flow will get the client policies from the mobile server and then notify this event. The client code can then create the UI to display the settings.
 
     !![Policy Ready](policy-ready-kotlin.png)
 
+    ```Kotlin
+    override suspend fun onClientPolicyRetrieved(policies: ClientPolicies) {
+        policies.logPolicy?.also { logSettings ->
+            val preferenceRepository = SharedPreferenceRepository(application)
+            val currentSettings =
+                preferenceRepository.userPreferencesFlow.first().logSetting
+
+            if (currentSettings.logLevel != logSettings.logLevel) {
+                preferenceRepository.updateLogLevel(LogPolicy.getLogLevel(logSettings))
+
+                val logString = when (LogPolicy.getLogLevel(logSettings)) {
+                    Level.ALL -> application.getString(R.string.log_level_path)
+                    Level.INFO -> application.getString(R.string.log_level_info)
+                    Level.WARN -> application.getString(R.string.log_level_warning)
+                    Level.ERROR -> application.getString(R.string.log_level_error)
+                    Level.OFF -> application.getString(R.string.log_level_none)
+                    else -> application.getString(R.string.log_level_debug)
+                }
+
+                logger.info(
+                    String.format(
+                        application.getString(R.string.log_level_changed),
+                        logString
+                    )
+                )
+
+                MainScope().launch {
+                    Toast.makeText(
+                        application,
+                        String.format(
+                            application.getString(R.string.log_level_changed),
+                            logString
+                        ),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    ```
+
 6.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onFlowFinishedWithData`** to move to the `onFlowFinishedWithData` method. The flows framework will send this event to the client code when a flow finishes successfully and the flow activity is removed from the back stack. Notice that this callback will only be invoked when the flow is successfully completed. If at any time the flow is canceled, this callback will not be invoked.
 
     !![Flow Finish](flow-finish-kotlin.png)
+
+    ```Kotlin
+    override suspend fun onFlowFinishedWithData(flowName: String?, data: Intent?) {
+        when (flowName) {
+            FlowType.Reset.name, FlowType.Logout.name -> launchWelcomeActivity(application)
+            FlowType.DeleteRegistration.name -> {
+                launchWelcomeActivity(application)
+            }
+        }
+    }
+    ```
 
 7.  Besides the callbacks implemented in the **`WizardFlowStateListener`** class, the **`OkHttpClientReady`** method is also useful if you want to add an HTTP header into the **`onOkHttpClient`** instance. Before authentication, the **`OkHttpClient`** instance will be ready and sent to the client code using `onOkHttpClientReady`. To add your own HTTP header, override the **`OkHttpClientReady`** method in your flow state listener.
 
