@@ -194,7 +194,7 @@ The logout flow will try to log out the current user if the network is available
         )
     ) { resultCode, _ ->
         if (resultCode == Activity.RESULT_OK) {
-            SDKInitializer.getService(FirebasePushService::class)?.reset()
+            SDKInitializer.getService(FirebasePushService::class)?.stopPush()
         }
     }
     ```
