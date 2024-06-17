@@ -23,43 +23,43 @@ time: 30
 
 1.  Follow the instructions at [Try Out the SAP BTP SDK Wizard for Android](sdk-android-wizard-app) to create a new application using the SAP BTP SDK Wizard for Android and select **Offline** for the **OData** option on the **Project Features** tab. The push feature is not needed for this application.
 
-    <!-- border -->![Choose Offline OData](choosing_offline_odata.png)
+    ![Choose Offline OData](choosing_offline_odata.png)
 
 2.  Run the app. After the login process, a screen is displayed explaining that the offline store is opening. As the screen suggests, opening the offline store for the first time can take up to a few minutes. One technique to decrease this initial time is to only download data that is relevant to the user, such as customers that belong in their sales region.
 
-    <!-- border -->![Offline store opening](opening_offline_store.png)
+    ![Offline store opening](opening_offline_store.png)
 
 3.  When you get to the app's home page, turn on **airplane mode** on your device, or disable Wi-Fi and data.
 
-    <!-- border -->![Turn on Airplane mode](turn_on_airplane_mode.png)
+    ![Turn on Airplane mode](turn_on_airplane_mode.png)
 
 4.  The entity list screen is populated based on the `metadata.xml` file retrieved when the application was created. Tap the **Products** list item.
 
-    <!-- border -->![Entity list screen](entities_screen.png)
+    ![Entity list screen](entities_screen.png)
 
     The **Products** screen makes a data request to display the available products. Notice that it succeeds without a working network connection. The data request is fulfilled from the offline store that was previously created and populated on the device. Tap the **Accessories** item to display the detail screen.
 
-    <!-- border -->![Select the first product](select_first_product.png)
+    ![Select the first product](select_first_product.png)
 
 5.  On the detail screen, tap the edit toolbar icon.
 
-    <!-- border -->![Select product edit button](select_product_edit_button.png)
+    ![Select product edit button](select_product_edit_button.png)
 
 6.  Make a change to the currency code and tap the save toolbar icon.
 
-    <!-- border -->![Change currency code](change_currency_code.png)
+    ![Change currency code](change_currency_code.png)
 
 7.  Navigate back to the app's **Home** screen and tap **Synchronize** using the three-dot-menu in the top right of the title bar.
 
-    <!-- border -->![Attempt a sync](attempt_sync_with_no_wifi.png)
+    ![Attempt a sync](attempt_sync_with_no_wifi.png)
 
     The sync should fail because you haven't turned airplane mode off yet.
 
-    <!-- border -->![Sync fails](sync_failed_no_wifi.png)
+    ![Sync fails](sync_failed_no_wifi.png)
 
 8.  Turn off airplane mode or re-enable Wi-Fi/data and attempt a sync again. You will see a notification that describes the sync action.
 
-    <!-- border -->![Syncing notification](syncing_data_notification.png)
+    ![Syncing notification](syncing_data_notification.png)
 
     When the sync completes, the change you made will have been applied to the back end.
 
@@ -73,7 +73,7 @@ To protect the data in offline store, you must enable offline store encryption b
 
 2.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`initializeOffline`**, to move to the `initializeOffline` method. Call the `setStoreEncryptionKey` method of the `OfflineODataParameters` instance to encrypt the offline store. In single user mode, before you can get the encryption key using `UserSecureStoreDelegate`, you must generate and save an encryption key to `UserSecureStore` first.
 
-    <!-- border -->![Parameter setting Java](offline-key-kotlin.png)
+    ![Parameter setting Java](offline-key-kotlin.png)
 
 >For additional information about multiple user mode, see [Enable Multi-User Mode for Your Android Application](sdk-android-wizard-app-multiuser).
 
@@ -100,27 +100,27 @@ The application allows users to make changes against a local offline store and s
 
 1.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`OfflineOpenWorker`** to open `OfflineOpenWorker.kt` and examine the `open` method.
 
-    <!-- border -->![Open method](opening_offline_store_method_kotlin.png)
+    ![Open method](opening_offline_store_method_kotlin.png)
 
     The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
 
     The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `MainBusinessActivity` when the user logs in to the application.
 
-    <!-- border -->![Open method calls OfflineOpenWorker](method_calls_offline_open_worker_kotlin.png)
+    ![Open method calls OfflineOpenWorker](method_calls_offline_open_worker_kotlin.png)
 
-    <!-- border -->![WizardFlowStateListener calls open](logon_calls_open_kotlin.png)
+    ![WizardFlowStateListener calls open](logon_calls_open_kotlin.png)
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`OfflineSyncWorker`** to open `OfflineSyncWorker.kt` and examine the `download` and `upload` methods.
 
-    <!-- border -->![Sync method](syncing_offline_store_worker_kotlin.png)
+    ![Sync method](syncing_offline_store_worker_kotlin.png)
 
     The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation and pass the given callbacks through.
 
     The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetListActivity` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
 
-    <!-- border -->![Sync method calls OfflineSyncWorker](method_calls_offline_sync_worker_kotlin.png)
+    ![Sync method calls OfflineSyncWorker](method_calls_offline_sync_worker_kotlin.png)
 
-    <!-- border -->![EntitySetListActivity performs sync](entity_set_list_activity_performs_sync_kotlin.png)
+    ![EntitySetListActivity performs sync](entity_set_list_activity_performs_sync_kotlin.png)
 
 For more information about how the offline store works, see the [Working With Offline Stores](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/working-with-offline-stores.html).
 
@@ -132,19 +132,19 @@ When syncing changes made while offline, conflicts can occur. One example might 
 
 1.  Update a **SalesOrderItem** and change its quantity to be zero and save it. Update a second item and change its quantity to a different non-zero number and save it.
 
-    <!-- border -->![Select first SalesOrderItem](select_first_sales_order_item.png)
+    ![Select first SalesOrderItem](select_first_sales_order_item.png)
 
-    <!-- border -->![Edit SalesOrderItem Button](edit_sales_order.png)
+    ![Edit SalesOrderItem Button](edit_sales_order.png)
 
-    <!-- border -->![Create with zero quantity](create_with_zero_quantity.png)
+    ![Create with zero quantity](create_with_zero_quantity.png)
 
     Notice that the items are now marked with a yellow indicator to indicate that an item has been locally modified but not yet synced.
 
-    <!-- border -->![Modified but not yet synced](modified.png)
+    ![Modified but not yet synced](modified.png)
 
 2.  Attempt a sync, and you'll notice that the sync completes, but if you examine the **SalesOrderItems** list, one item has a red mark beside it, indicating it is in an error state. This is because the back end has a check that **SalesOrderItems** cannot have zero for their quantity. This check does not exist in the local offline store, so the update succeeds locally but fails when the offline store is synced.
 
-    <!-- border -->![Sync Error](sync_error.png)
+    ![Sync Error](sync_error.png)
 
 
 ### Display `ErrorArchive` details
@@ -501,7 +501,7 @@ In this section we will create an **Error Information** screen that displays the
 
 9.  Run the app again, and re-attempt the sync. When the sync fails, you should see the following error screen.
 
-    <!-- border -->![Error screen](error_screen.png)
+    ![Error screen](error_screen.png)
 
     You can see that the HTTP status code, method, and message are included. When the application attempted a sync, the entity being updated didn't pass the backend checks and produced a `DataServiceException` and is now in the error state. All entities that did not produce errors are successfully synced. One way to correct the exception would be to change the quantity from 0 to a valid positive number. Another would be to delete the `ErrorArchive` entry, reverting the entity to its previous state. For more information on error handling, see [Handling Errors and Conflicts](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-errors-and-conflicts/handling-errors-and-conflicts.html) and [Handling Failed Requests](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/handling-failed-requests.html).
 
