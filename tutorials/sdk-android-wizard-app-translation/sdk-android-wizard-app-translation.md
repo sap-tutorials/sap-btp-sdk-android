@@ -32,7 +32,7 @@ The SAP Translation Hub is currently not available on SAP Cloud Foundry. So if y
 
 The wizard generates an Android app that contains translated strings for multiple languages as shown below.
 
-<!-- border -->![Languages Localized](localized-strings.png)
+![Languages Localized](localized-strings.png)
 
 The language codes (ar, cs, da, de, en, es, etc.) can be looked up at [Codes for the Representation of Names of Languages](http://www.loc.gov/standards/iso639-2/php/code_list.php).
 
@@ -40,7 +40,7 @@ Strings used within the app are read from the appropriate version of the `string
 
 >Notice in the screenshot below that the resources that are from the `strings.xml` file, such as **Suppliers**, are not translated. These will get translated in Step 3.
 
-<!-- border -->![Translations Editor](translations-editor.png)
+![Translations Editor](translations-editor.png)
 
 The following code in the `WelcomeStepFragment` class, in the `onCreateView` method, is an example of the code used to read from a strings file.
 
@@ -53,15 +53,15 @@ The `getString` method determines what the current local language is on the devi
 
 You can set the language on an Android device or emulator using **Settings > System > Languages & input > Languages**. A second language, such as French, can also be added.
 
-<!-- border -->![Additional Languages](additional-languages.png)
+![Additional Languages](additional-languages.png)
 
  Select the default language by long pressing on a language and dragging it to the top of the list.
 
- <!-- border -->![Default Language](default-language.png)
+ ![Default Language](default-language.png)
 
 When the app is restarted, it now shows strings in the preferred language if that language is supported by the app. If the language is not currently supported, the strings will be in English by default.
 
-<!-- border -->![French Welcome Screen](welcome-french-screen.png)
+![French Welcome Screen](welcome-french-screen.png)
 
 For additional information, see:
 
@@ -86,7 +86,7 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
 
 1.  Right-click on a file in the **Project Explorer** and choose **Translate Resources with SAP Translation Hub**.
 
-    <!-- border -->![Translation wizard Context Menu](translation-wizard-context-menu.png)
+    ![Translation wizard Context Menu](translation-wizard-context-menu.png)
 
 2.  Fill in the necessary information:
 
@@ -101,29 +101,29 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
 
     - **Username** and **Password** – The credentials of your SAP BTP account.
 
-    <!-- border -->![Translation Wizard Page 1](wiz-page1.png)
+    ![Translation Wizard Page 1](wiz-page1.png)
 
 3.  Click **Next** and choose **Create New SAP Translation Hub project**.
 
-    <!-- border -->![Translation Wizard Page 2](wiz-page2.png)
+    ![Translation Wizard Page 2](wiz-page2.png)
 
 4.  Choose the **Domain** of the application, specify the **Source Language** as English, and select the target language to add (in this case, Catalan).
 
-    <!-- border -->![Translation Wizard Page 2](wiz-page3.png)
+    ![Translation Wizard Page 2](wiz-page3.png)
 
 5.  Select the source file to be used for the translation, either `strings.xml` or `strings_localized.xml`.
 
-    <!-- border -->![Translation Wizard Page 2](wiz-page3b.png)
+    ![Translation Wizard Page 2](wiz-page3b.png)
 
 6.  Press **Finish** and wait for a few moments. The **Event Log** should print `Success: Project translated successfully`.
 
     There should now be two additional files, `strings_localized.xml(ca)` and `strings.xml(ca)`.
 
-    <!-- border -->![Translation Result](translation-result.png)
+    ![Translation Result](translation-result.png)
 
 7.  In the emulator or device, set the preferred language to be Catalan, then run the app and notice that the app now displays Catalan strings.
 
-    <!-- border -->![Translation Result in App](translation-result-in-app.png)
+    ![Translation Result in App](translation-result-in-app.png)
 
 >Some of the strings in the app are part of the foundation or Fiori library and their strings are not easily accessible to be localized.  A couple of examples are the basic authentication screen and the passcode screen.
 

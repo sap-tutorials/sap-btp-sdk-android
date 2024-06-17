@@ -29,35 +29,35 @@ time: 20
 
 1. Go to [SAP Mobile Services Cockpit](https://mobile-service-cockpit-web.cfapps.us10.hana.ondemand.com/), select the **com.sap.wizapp** application.
 
-    <!-- border -->![Application page in CF cockpit](cf-trial-application-page.png)
+    ![Application page in CF cockpit](cf-trial-application-page.png)
 
 2. Select **Mobile Push Notification**.
 
-    <!-- border -->![Mobile Push Notification](push-notification.png)
+    ![Mobile Push Notification](push-notification.png)
 
     >If you don't see the option, follow the screenshots to add this feature:
     >
-    > - <!-- border -->![Add assigned features](add-assigned-features.png)
-    > - <!-- border -->![Add push notification](add-push-notification.png)
-    > - <!-- border -->![Confirm save](confirm-change.png)
+    > - ![Add assigned features](add-assigned-features.png)
+    > - ![Add push notification](add-push-notification.png)
+    > - ![Confirm save](confirm-change.png)
 
 3. The **Mobile Push Notification** screen requires information from [Firebase](https://firebase.google.com/).
 
-    <!-- border -->![Push notification](push-notification-blank.png)
+    ![Push notification](push-notification-blank.png)
 
 4. In the [Firebase console](https://console.firebase.google.com/), select project **Wiz App**, and then go to **Project settings**.
 
-    - <!-- border -->![Firebase console page](firebase-console-page.png)
+    - ![Firebase console page](firebase-console-page.png)
 
-    - <!-- border -->![Project settings](firebase-project-settings.png)
+    - ![Project settings](firebase-project-settings.png)
 
 5. Select the **Service accounts** tab and click **Generate new private key** button. Then click **Generate key** in the pop-up window and store the downloaded private key file securely because the key cannot be recovered if lost.
 
-    <!-- border -->![Generate private key](generate-private-key.png)
+    ![Generate private key](generate-private-key.png)
 
 6. In the SAP Mobile Services **Mobile Push Notification** settings screen, click **Browse...** to load the downloaded private key file. After that, click **Save** to save changes.
 
-    <!-- border -->![Push notification android](push-notification-android.png)
+    ![Push notification android](push-notification-android.png)
 
 
 ### Send a notification
@@ -65,11 +65,11 @@ time: 20
 
 1. Switch to **Push Registrations** on the **Mobile Push Notification** settings page.
 
-    <!-- border -->![Push registrations page](push-registrations.png)
+    ![Push registrations page](push-registrations.png)
 
 2. Select certain registration to send notifications.
 
-    <!-- border -->![Send notification](send-notification.png)
+    ![Send notification](send-notification.png)
 
     >It may be difficult to tell which registration to choose. The last field on the page shows the last time a given registration made a request. If you are unsure which registration to choose, navigate through a few screens in the application and then press the **GO** button to refresh the display, or select all of them and send a greeting to all the registrations.
 
@@ -77,7 +77,7 @@ time: 20
 
 3. Specify the notification text to send to the app.
 
-    <!-- border -->![Send notification](send-notification2.png)
+    ![Send notification](send-notification2.png)
 
 
 ### Foreground notification
@@ -85,11 +85,11 @@ time: 20
 
 Notice that the notification displayed at the top of the screen.
 
-<!-- border -->![Notification pop up](pop-up-notification.png)
+![Notification pop up](pop-up-notification.png)
 
 Tap the notification and you can see the app displays the notification.
 
-<!-- border -->![Receive notification](receive-notification.png)
+![Receive notification](receive-notification.png)
 
 
 ### Background notification
@@ -99,11 +99,11 @@ Tap the notification and you can see the app displays the notification.
 
 2. If you now send another notification, you will notice that because the app is in the background, or not running, a notification is placed in the notification drawer.
 
-    <!-- border -->![Receive Notification Background](receive-notification-background.png)
+    ![Receive Notification Background](receive-notification-background.png)
 
 3. Tapping the notification will bring the app to the foreground or open the app.
 
-    <!-- border -->![Receive Notification from Background](receive-notification.png)
+    ![Receive Notification from Background](receive-notification.png)
 
     >If the app was not running when the notification was tapped, due to a change made in the previous tutorial, you can view it by pressing **Back** and navigating from the **Categories** screen to the **Entity** list screen.
 
@@ -111,7 +111,7 @@ Currently, the message is displayed in a dialog with cancel action.
 
 You can add custom logic to the app to decide on the action to take, such as displaying the new Office Furniture category.
 
-<!-- border -->![Show Notification Code](show-notification-code-kotlin.png)
+![Show Notification Code](show-notification-code-kotlin.png)
 
 >For further information on push, see [Push Notifications](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/push/android/push.html), [Push API Notification Scenarios](https://help.sap.com/viewer/38dbd9fbb49240f3b4d954e92335e670/Cloud/en-US/aaec2dbe78ec4fc08ef0a605a899e3dd.html), and [About FCM Messages](https://firebase.google.com/docs/cloud-messaging/concept-options).
 

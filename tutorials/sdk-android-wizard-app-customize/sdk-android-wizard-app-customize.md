@@ -34,19 +34,19 @@ time: 60
 
 2.  Tap the **Products** entity.
 
-    <!-- border -->![Entities screen](entities-screen.png)
+    ![Entities screen](entities-screen.png)
 
     Notice that it displays the category name rather than the product name.
 
-    <!-- border -->![Original Products Screen](original-products.png)
+    ![Original Products Screen](original-products.png)
 
     The category name is displayed (rather than the product name) because the app was generated from the OData service's metadata, which does not indicate which of the many fields from the product entity to display. When creating the sample user interface, the SDK wizard uses the first property found as the value to display. To view the complete metadata document, open the `res/raw/com_sap_edm_sampleservice_v2.xml` file.
 
-    <!-- border -->![Product metadata](product-metadata.png)
+    ![Product metadata](product-metadata.png)
 
     Each product is displayed in an [object cell](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/fiori-ui/android/object-cell.html), which is one of the Fiori UI for Android controls.
 
-    <!-- border -->![object cell](object-cell.png)
+    ![object cell](object-cell.png)
 
     As seen above, an object cell is used to display information about an entity.
 
@@ -106,7 +106,7 @@ In this section, you will configure the object cell to display a product's name,
 
     An alternate option is to enable the below setting. (Windows: **Settings**, Mac: **Android Studio > Settings...**)
 
-    <!-- border -->![Add unambiguous imports on the fly](auto-import-kotlin.png)
+    ![Add unambiguous imports on the fly](auto-import-kotlin.png)
 
 6.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`Repository`** to open `Repository.kt`.
 
@@ -125,7 +125,7 @@ In this section, you will configure the object cell to display a product's name,
 
 9.  Re-run (quit first) the app and notice that the **Products** screen has been formatted to show the product's name, category, description, and price and the entries are now sorted by category and then name.
 
-    <!-- border -->![Nicely formatted product list](reformatted-product-list.png)
+    ![Nicely formatted product list](reformatted-product-list.png)
 
 
 ### Customize the `ProductCategories` screen
@@ -133,7 +133,7 @@ In this section, you will configure the object cell to display a product's name,
 
 Examine the **`ProductCategories`** screen.
 
-<!-- border -->![Original product categories screen](original-product-categories.png)
+![Original product categories screen](original-product-categories.png)
 
 In this section, you will update the screen's title, configure the object cell to show the category name, main category name, add the number of products in a category, and add a separator decoration between cells.
 
@@ -196,7 +196,7 @@ In this section, you will update the screen's title, configure the object cell t
 
 10.  Run the app again and notice that the **title**, **subheadline**, and **status** are now displayed and the **icon** and **footnote** are no longer shown.
 
-    <!-- border -->![Modified ProductCategories Screen](modified-product-categories.png)
+    ![Modified ProductCategories Screen](modified-product-categories.png)
 
 
 ### Customize the navigation
@@ -273,7 +273,7 @@ In this section, you will modify the app to initially show the **Product Categor
 
 13. Run the app again and notice that the **Product Categories** screen is now the first screen shown, that the **Home** menu is no longer shown, and that selecting a category shows the products list screen, which now displays only products for the selected category.
 
-    <!-- border -->![Product category list screen](reformatted-product-category-list2.png)
+    ![Product category list screen](reformatted-product-category-list2.png)
 
 
 ### Add category filtering with a `FioriSearchView`
@@ -283,7 +283,7 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
 
 1.  First, right-click the `res/drawable` folder to create a new **Drawable Resource File** **`ic_search_icon.xml`**, and use the following XML content.
 
-    <!-- border -->![Create a new Drawable Resource File](create-new-drawable-resource-file.png)
+    ![Create a new Drawable Resource File](create-new-drawable-resource-file.png)
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -302,7 +302,7 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
 
 2.  Right-click the `res/menu` folder to add a new **Menu Resource File** named **`product_categories_menu.xml`**, and use the following XML for its contents.
 
-    <!-- border -->![Add a new Menu Resource File](add-new-menu-resource-file.png)
+    ![Add a new Menu Resource File](add-new-menu-resource-file.png)
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -388,11 +388,11 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
 
 9.   Run the app again and notice that there is now a search toolbar item.
 
-    <!-- border -->![Filter Categories in action 1](search-view.png)
+    ![Filter Categories in action 1](search-view.png)
 
 10.  Try it out: click the **search** item, enter some text, press **`Enter`**, and notice that the product categories that are displayed in the list are now filtered.
 
-    <!-- border -->![Filter Categories in action 2](filter-in-action.png)
+    ![Filter Categories in action 2](filter-in-action.png)
 
 >Further information on the Fiori search UI can be found at [SAP Fiori for Android Design Guidelines](https://experience.sap.com/fiori-design-android/search-2/) and [Fiori Search User Interface](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/fiori-ui/android/fiori-search-ui.html).
 
@@ -402,17 +402,17 @@ In this section you will add a search field to `ProductCategoriesListActivity`, 
 
 In this section, you will add a Top Products section to the **Products** screen, which displays the products that have the most sales, as shown below.
 
-<!-- border -->![Collection View on Products Screen](collection-view.png)
+![Collection View on Products Screen](collection-view.png)
 
 First, we'll generate additional sales data in the sample OData service.
 
 1.  In **SAP Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/Hybrid** > **com.sap.wizapp** and go to **Mobile Sample OData ESPM**.
 
-    <!-- border -->![Sample OData feature on Mobile Services](sample-odata-feature.png)
+    ![Sample OData feature on Mobile Services](sample-odata-feature.png)
 
 2.  Change the **Entity Sets** dropdown to **`SalesOrderItems`** and then click the **generate sample sales orders** icon five times. This will create additional sales order items, which we can use to base our top products on, based on the quantity sold.
 
-    <!-- border -->![Generating Sample Sales Orders on Mobile Services](generate-sample-sales.png)
+    ![Generating Sample Sales Orders on Mobile Services](generate-sample-sales.png)
 
 3.  In Android Studio, on Windows, press **`Ctrl+Shift+N`**, or, on a Mac, press **`command+Shift+O`**, and type **`fragment_entityitem_list`**, to open `fragment_entityitem_list.xml`.
 
@@ -699,7 +699,7 @@ First, we'll generate additional sales data in the sample OData service.
 
 17.  Run the app and notice that the **Products** screen now has a component at the top of the screen that allows horizontal scrolling to view the top products. Tap a product to see more details. Alternatively, tap **SEE ALL** to see all the products.
 
-    <!-- border -->![Collection View on Products Screen](collection-view.png)
+    ![Collection View on Products Screen](collection-view.png)
 
     >For more details, see [Collection View in SAP Fiori for Android Design Guidelines](https://experience.sap.com/fiori-design-android/collection-view/) and [Collection View](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/fiori-ui/android/collection-view.html)
 

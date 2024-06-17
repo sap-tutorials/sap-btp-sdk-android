@@ -37,11 +37,11 @@ In this section you will create a new activity to display a map.
 
 2. Right-click and choose **`New > Activity > Gallery... > Google Maps Views Activity`**.
 
-    <!-- border -->![Adding Google Map from gallery](add-maps-activity.png)
+    ![Adding Google Map from gallery](add-maps-activity.png)
 
 3. Set **Activity Name** to be **`CustomersMapActivity`**.
 
-    <!-- border -->![Creating map activity](map-create-dialog-kotlin.png)
+    ![Creating map activity](map-create-dialog-kotlin.png)
 
 4. Click **Finish**.
 
@@ -83,21 +83,21 @@ In this section you will create a new activity to display a map.
 
 16. Access **Project settings** for the project.
 
-    <!-- border -->![Project Settings](project-settings.png)
+    ![Project Settings](project-settings.png)
 
 17. Scroll down to download **google-services.json**.
 
-    <!-- border -->![Download google-services.json](download-google-services.png)
+    ![Download google-services.json](download-google-services.png)
 
 18. Save the json file to the **WizApp/app** folder.
 
 19. Run the app. Select **Customers**.
 
-    <!-- border -->![Entities screen](tap-on-customers.png)
+    ![Entities screen](tap-on-customers.png)
 
     Instead of a customer list, a map is now displayed.
 
-    <!-- border -->![Map screen](empty-map-screen.png)
+    ![Map screen](empty-map-screen.png)
 
     >If a message appears that says **Wiz App** is having trouble with **Google Play services**, try running the app on an Android emulator that includes the **Google Play Store** app.
 
@@ -203,11 +203,11 @@ In this section, you will add code to place a marker on the map for each custome
 
 7. Select **Customers** and notice that a map is displayed that contains a marker for every customer.
 
-    <!-- border -->![Map screen with markers](map-screen-with-markers.png)
+    ![Map screen with markers](map-screen-with-markers.png)
 
     If a marker is tapped, an info marker is displayed with additional customer details.
 
-    <!-- border -->![Map screen with info markers](map-screen-with-info-markers.png)
+    ![Map screen with info markers](map-screen-with-info-markers.png)
 
 
 ### Implement navigation to the customer details screen
@@ -292,11 +292,11 @@ In this section, you will add code to display the customer detail screen when th
 
 13. Run the app. Select **Customers**, and tap on a marker. Then tap on the info marker.
 
-    <!-- border -->![Map screen with info markers](map-screen-with-info-markers2.png)
+    ![Map screen with info markers](map-screen-with-info-markers2.png)
 
     This sequence displays the customer details page.
 
-    <!-- border -->![Customer details screen](customer-details-screen.png)
+    ![Customer details screen](customer-details-screen.png)
 
 
 ### Enhance the app to use the Fiori Map control
@@ -323,11 +323,11 @@ In this section, you will create a new activity that uses the Fiori Map control.
     implementation group: 'com.sap.cloud.android', name: 'google-maps', version: sdkVersion
     ```
 
-    <!-- border -->![Add Map Dependency](app-build-gradle-kotlin.png)
+    ![Add Map Dependency](app-build-gradle-kotlin.png)
 
 4. Create a new **Layout Resource File** in `res/layout` called **`detail_panel.xml`** and replace its contents with the following code.
 
-    <!-- border -->![Create new Layout Resource File](create-new-layout-resource-file.png)
+    ![Create new Layout Resource File](create-new-layout-resource-file.png)
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -371,7 +371,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
 
 9. Click **Finish**.
 
-    <!-- border -->![Dialog to create Fiori map activity](create-fiori-map-activity-kotlin.png)
+    ![Dialog to create Fiori map activity](create-fiori-map-activity-kotlin.png)
 
 10. Replace the file contents in the newly created `CustomersFioriMapActivity.kt` with the following code:
 
@@ -650,15 +650,15 @@ In this section, you will create a new activity that uses the Fiori Map control.
 
     You should be able to see markers on the screen that represent customers.
 
-    <!-- border -->![Fiori Map View](non-clustered-markers.png)
+    ![Fiori Map View](non-clustered-markers.png)
 
     Users can use the search bar at the top of the screen to find markers. For example, enter **`Illinois`** or **`MX`**.
 
-    <!-- border -->![Search for MX markers](search-bar.png)
+    ![Search for MX markers](search-bar.png)
 
     The toolbar on the side provides icons for a settings dialog, marker legend, current location, and zoom to the extent of the markers on the map.
 
-    <!-- border -->![Map toolbar](map-toolbar.png)
+    ![Map toolbar](map-toolbar.png)
 
     The floating action button in the bottom right corner opens the edit annotations panel, which provides the capability to draw points, lines, and polygons on the map.
 
@@ -812,15 +812,15 @@ In this section, the bottom panel will be populated with details of the selected
 
     Now, when you tap on a marker, the bottom panel should be populated with customer data.
 
-    <!-- border -->![Tap on marker to open details](new-panel.png)
+    ![Tap on marker to open details](new-panel.png)
 
 8.  Tap on **Additional Details**.
 
-    <!-- border -->![Customer details in a fully opened panel](new-panel-full-screen.png)
+    ![Customer details in a fully opened panel](new-panel-full-screen.png)
 
     Notice that the customer details screen is now displayed.
 
-    <!-- border -->![Customer details](customer-details.png)
+    ![Customer details](customer-details.png)
 
 
 ### Implement settings
@@ -931,17 +931,17 @@ In this section you will implement the settings dialog to include a map type set
 
 7.  Tap on the settings icon in the toolbar.
 
-    <!-- border -->![Setting icon in toolbal](setting-icon-in-toolbar.png)
+    ![Setting icon in toolbal](setting-icon-in-toolbar.png)
 
 8.  Change the map type to **Hybrid** and turn **Clustering** on.
 
-    <!-- border -->![Settings](settings.png)
+    ![Settings](settings.png)
 
-    <!-- border -->![Hybrid map example](hybrid-map.png)
+    ![Hybrid map example](hybrid-map.png)
 
     Notice that the markers in close proximity are now grouped together and a number indicates how many markers are in the cluster.
 
-    <!-- border -->![Map panel for Cluster](cluster-panel.png)
+    ![Map panel for Cluster](cluster-panel.png)
 
 Congratulations! You have now successfully added a Fiori Map to an application and tried out some of the features it provides.
 
@@ -1009,7 +1009,7 @@ In this section, you will test the three different types of annotations.
     }
     ```
 
-    <!-- border -->![Force play-services-location version](force-play-services-location-version.png)
+    ![Force play-services-location version](force-play-services-location-version.png)
 
 5. Run the app.
 
@@ -1017,51 +1017,51 @@ In this section, you will test the three different types of annotations.
 
     Click on the three dots on the emulator's toolbar to navigate to the emulator's settings.
 
-    <!-- border -->![Emulator toolbar settings button](emulator-settings.png)
+    ![Emulator toolbar settings button](emulator-settings.png)
 
 7. Under **Location** > **Single points**, search for **`University of Waterloo`** and select the first instance.
 
-    <!-- border -->![Up to date emulator location settings screen 1](up-to-date-emulator-location-settings-1.png)
+    ![Up to date emulator location settings screen 1](up-to-date-emulator-location-settings-1.png)
 
 8. Tap **SAVE POINT**.
 
-    <!-- border -->![Up to date emulator location settings screen 2](up-to-date-emulator-location-settings-2.png)
+    ![Up to date emulator location settings screen 2](up-to-date-emulator-location-settings-2.png)
 
 9. Set the name you want to save as.
 
-    <!-- border -->![Up to date emulator location settings screen 3](up-to-date-emulator-location-settings-3.png)
+    ![Up to date emulator location settings screen 3](up-to-date-emulator-location-settings-3.png)
 
 10. Select the saved point and tap **SET LOCATION** to set the default location.
 
-    <!-- border -->![Up to date emulator location settings screen 4](up-to-date-emulator-location-settings-4.png)
+    ![Up to date emulator location settings screen 4](up-to-date-emulator-location-settings-4.png)
 
 11. Tap the current location button to zoom into the University of Waterloo and you should see the screen below. (If tapping doesn't work, quit the app, try google **Maps** app first, then restart the app, and try the button again.)
 
-    <!-- border -->![Zoom into current location](current-location-effect.png)
+    ![Zoom into current location](current-location-effect.png)
 
 12. To annotate the map, tap on the floating action button in the corner.
 
-    <!-- border -->![Floating action button to edit annotations](fab.png)
+    ![Floating action button to edit annotations](fab.png)
 
     The bottom panel displays options to annotate the map.
 
-    <!-- border -->![Edit annotations panel](edit-annotations.png)
+    ![Edit annotations panel](edit-annotations.png)
 
 13. To add the current location as a point:
     -	Tap on the **Add Point** option in the panel. Note that it may take a few moments for the emulator to process the new coordinates from before.
 
-        <!-- border -->![Add point button in panel](add-point.png)
+        ![Add point button in panel](add-point.png)
 
     -	Tap on **Current Location** under the search bar.
 
-        <!-- border -->![Current location button](current-location-button.png)
+        ![Current location button](current-location-button.png)
 
         A list of location options at the University of Waterloo is displayed.
 
-        <!-- border -->![List of University of Waterloo buildings](list-of-current-location.png)
+        ![List of University of Waterloo buildings](list-of-current-location.png)
 
     > If an API error occurs, such as `Failed to get location address com.google.android.gms.common.api.ApiException`, or nothing happens after tapping **Current Location**, ensure that the **Places API** is enabled on the [Google Cloud Platform](https://console.developers.google.com/). Type **`Places API`** in the search bar and you'll be redirected to the following page.
-    <!-- border -->![Google Cloud Platform Places API page](places-api.png)
+    ![Google Cloud Platform Places API page](places-api.png)
 
     > If you enabled **Places API** but still nothing happens after tapping, use
     ```URL
@@ -1071,15 +1071,15 @@ In this section, you will test the three different types of annotations.
 
     You can also add a point by tapping directly on the map. This will create a white and blue dot indicating where the new point is located. The added point will appear in the panel under the **Address** section. You can only add one point to the map. You can move it by long pressing on it and then dragging it to a new location or you can delete it (select the point and then click the **X** mark in the **ADDRESS** list) and then add a new point.
 
-    <!-- border -->![Point added onto map](added-point.png)
+    ![Point added onto map](added-point.png)
 
 14. To add a polyline to the map, select the **Polyline** option and tap different places on the map to add multiple points. The added points will be connected with a line.
 
-    <!-- border -->![Add polyline to map](add-polyline.png)
+    ![Add polyline to map](add-polyline.png)
 
 15. To add a polygon, select the **Polygon** option and tap different places on the map to add multiple points. The points are connected in the order that they appear in the list within the panel and take up the least amount of area.
 
-    <!-- border -->![Add polygon to map](add-polygon.png)
+    ![Add polygon to map](add-polygon.png)
 
     You can move the existing points on the map by holding onto a point and then dragging it to the desired location.
 
@@ -1126,7 +1126,7 @@ In this section you will customize the map markers based on the customer's count
 
     The markers now have different colors depending on whether they are located in Canada (CA), the United States (US), or Mexico (MX). The meaning of the colors is shown in the legend.
 
-    <!-- border -->![Marker Legend](legend.png)
+    ![Marker Legend](legend.png)
 
     With clustering enabled, notice that clustered markers turn white if the markers in the cluster are located in different countries.
 
