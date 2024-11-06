@@ -100,23 +100,19 @@ The SDK libraries also log output based on the app's log level.
 
     ![Log upload succeeded](log_uploaded.png)
 
-2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/Hybrid** > **com.sap.wizapp** > **Mobile Client Log Upload**.
+2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Log Upload**.
 
-    ![Mobile Applications > Native/Hybrid > com.sap.wizapp > Mobile Client Log Upload](select_and_download_log.png)
+    ![Mobile Applications > Native/MDK > com.sap.wizapp > Mobile Client Log Upload](select_and_download_log.png)
 
 3.  Select the **Error Logs** tab and you will see the log you just uploaded in the **Error** level list. If the log doesn't appear immediately, wait for a few moments, then click **Go** to refresh the view.
 
-    ![View error log](view_error_log.png)
-
-4.  You can inspect the log details in the browser by clicking on its table entry. The following screenshot contains the details of the first log.
-
-    ![View log details](view_log_details.png)
+4.  You can inspect the log details in the browser by clicking on its table entry.
 
 5.  Select the **Log Files** tab and you will see the log files you just uploaded in the list. You can download the files by clicking **Download**.
 
     ![View log details](view_log_files.png)
 
-6.  Additionally, you can access the logs locally on an emulator. You can browse the file system of an Android emulator using the **Device File Explorer** to view the log files as shown below, in **data** > **data** > **com.sap.wizapp** (or the package name of your project) > **files**.
+6.  Additionally, you can access the logs locally on an emulator. You can browse the file system of an Android emulator using the **Device Explorer** to view the log files as shown below: **data** > **data** > **com.sap.wizapp** (or the package name of your project) > **files**.
 
     ![View logs in emulator](local_log_location.png)
 

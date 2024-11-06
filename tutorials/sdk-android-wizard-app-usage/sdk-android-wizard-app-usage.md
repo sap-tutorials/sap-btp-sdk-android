@@ -112,11 +112,7 @@ The app must first receive permission to collect usage information from the user
 
     A session is typically defined as how long the app has been open for in the foreground, but different records within the application can also be modified to act as sessions.
 
-4. There can be multiple `USERSESSIONIDs` associated with a single `REGISTRATIONID`. `REGISTRATIONID` is independent of your username and you can see a complete list of all user registrations for the app in the [Mobile Services cockpit](https://mobile-service-cockpit-web.cfapps.eu10.hana.ondemand.com/) by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Settings Exchange** > **User Registrations**.
-
-    ![User Registrations](user_registrations.png)
-
-    In the following example the same user registered on two different devices and ran three user sessions.
+4. A single `REGISTRATIONID` can be associated with multiple `USERSESSIONIDs`. `REGISTRATIONID` is independent of your username. In the following example the same user registered on two different devices and ran three user sessions.
 
     ![Session Descriptive Information](session_description_info.png)
 
@@ -208,7 +204,7 @@ The following steps record how often users start adding or updating products but
 
 14. Upload the usage by going to **Settings** and tap on **Upload Usage Data**.
 
-15. After downloading the `clientUsage_uploads.csv` file from the [Mobile Services cockpit](https://mobile-service-cockpit-web.cfapps.eu10.hana.ondemand.com/), you should be able to see new entries with `I_VIEW` values of `ProductsCreateFragment` and `I_ACTION` values of `onBackPressed` and `createOrEditProductClicked`.
+15. After downloading the `clientUsage_uploads.csv` file from the **Mobile Services cockpit**, you should be able to see new entries with `I_VIEW` values of `ProductsCreateFragment` and `I_ACTION` values of `onBackPressed` and `createOrEditProductClicked`.
 
     ![New Entries in the Client Upload csv](new_client_upload_example.png)
 
@@ -303,23 +299,21 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
     >There may be an error on `HttpException`. Select it and press **`Alt+Enter`** on Windows, or, press **`option+Enter`** on Macs, to import the related class from `com.sap.cloud.mobile.foundation.networking`.
 
-7.  In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`SettingsFragment`** to open `SettingsFragment.kt`.
+7.  In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`SettingsViewModel`** to open `SettingsViewModel.kt`.
 
 8.  On Windows, press **Ctrl+F**, or, on a Mac, press **command+F**, to find:
 
     ```Kotlin
-    usageService.uploadUsageData(forceUpload = false, owner = this,
+    usageService.uploadUsageData(forceUpload = true, owner = lifecycleOwner,
     ```
 
-9.  Change **false** to **true**.
-
-    This will allow the user to upload the usage report via the app's settings screen regardless of the number of days specified in the policy.
+9.  When `forceUpload` is set to **true**, the user can upload the usage report through the app's settings screen, regardless of the number of days specified in the policy.
 
     When the app is run and the number of days in the policy has passed, there should be a Toast notification showing that the usage report has been uploaded successfully.
 
-10.  To test this feature, in **Settings** > **System** > **Date & time** from the emulator, toggle **Set time automatically** to **off**.
+10. To test this feature, in **Settings** > **System** > **Date & time** from the emulator, toggle **Set time automatically** to **off**.
 
-11.  Change the **Date** to a day in the future and re-run the app (quit first). The usage report should be uploaded automatically.
+11. Change the **Date** to a day in the future and re-run the app (quit first). The usage report should be uploaded automatically.
 
     ![Usage Report Successfully Uploaded Toast Message](usage_report_uploaded_toast_message.png)
 

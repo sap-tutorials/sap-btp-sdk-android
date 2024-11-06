@@ -16,8 +16,8 @@ time: 30
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services. (To just complete this tutorial mission (except tutorial 7 about translation hub), it's sufficient to simply [Get a Free Account on SAP BTP Trial](hcp-create-trial-account).)
     - **Mobile Services**
 - Make sure you can [Access SAP Mobile Services](fiori-ios-hcpms-setup).
-- Installed [Android Studio Hedgehog 2023.1.1](https://developer.android.com/studio/archive). Please use the specified version.
-- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 24.4.x or higher of the SAP BTP SDK for Android.
+- Installed [Android Studio Koala 2024.1.1](https://developer.android.com/studio/archive). Please use the specified version.
+- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 24.8.x or higher of the SAP BTP SDK for Android.
 - Created a Google account.
 
 ## You will learn
@@ -34,11 +34,11 @@ time: 30
 
 1.  Open **Android Studio**.
 
-2.  Choose **New SAP BTP Android App**, which is an option created by the SAP BTP SDK Wizard for Android.
+2.  Choose **New SAP BTP Android App**
 
     ![New project](new-project.png)
 
-3.  The wizard can save the server connection details for multiple servers. Fill in the required fields as shown below.
+3.  The wizard can save server connection details for multiple servers. Fill in the required fields as shown below.
 
     | Field | Value |
     |:----|:----|
@@ -56,17 +56,17 @@ time: 30
 
     ![Server connection](server-connection.png)
 
-5.  Click **Next** on the **Server Connection** tab.
+5.  Click **Next** in the **Server Connection** screen.
 
-6.  On the **Cloud Configuration** tab, select **Sample** and set the **Application ID** to be **`com.sap.wizapp`**.
+6.  Select **Sample** in the **Cloud Configuration** screen and set the **Application ID** to **`com.sap.wizapp`**.
 
     ![Sample tab information](sample-application-wizard.png)
 
-7.  SAP Mobile Services provides a sample back-end destination named `com.sap.edm.sampleservice.v2` that is being used here to provide data for the application. It contains product categories, product, supplier, customer and sales order data. Select it and click **Next**.
+7.  SAP Mobile Services provides a sample back-end destination called `com.sap.edm.sampleservice.v2`, which is used here to provide data for the application. It includes product categories, products, suppliers, customers and sales order data. Select it and click **Next**.
 
     ![Odata service destination screen](Odata-service-destination.png)
 
-8.  On the **Android Studio Project** tab, provide the following configuration data.
+8.  Provide the following configuration data in the **Android Studio Project** screen.
 
     | Field | Value |
     |:----|:----|
@@ -76,7 +76,7 @@ time: 30
 
     ![Project configuration](project-configuration.png)
 
-9.  On the **Project Features** tab, provide the following configuration data.
+9.  Provide the following configuration data in the **Project Features** screen.
 
     | Field | Value |
     |:----|:----|
@@ -92,14 +92,14 @@ time: 30
 
     ![Project features](push-notification-checkbox-enabled.png)
 
-10.  If you would like to add push notification support to your app, proceed to **Step 2**, which describes how to acquire the `google-services.json` file required for push messaging. Otherwise, uncheck **Enable Push**, click **Finish** and proceed to **Step 3**.
+10.  If you would like to add push notification support to your app, proceed to **Step 2**, which describes how to acquire the `google-services.json` file required for cloud messaging. Otherwise, uncheck **Enable Push**, click **Finish** and proceed to **Step 3**.
 
 
 
 ### Enable push notifications
 
 
-If you check the **Enable Push** checkbox, an error message is displayed explaining that you need to specify a `google-services.json` file. We will obtain this file from the [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) feature in [Google Firebase](https://firebase.google.com/).
+If you check the **Enable Push** checkbox, an error message will appear, indicating that you need to specify a `google-services.json` file. We will obtain this file from the [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) feature in [Google Firebase](https://firebase.google.com/).
 
 ![Push Notifications enabled](push-notification-checkbox-enabled.png)
 
@@ -109,11 +109,11 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
 2.  Click **Continue** until a new project is successfully created.
 
-3.  Access **Project settings** for the newly created project.
+3.  Navigate to the **Project settings** for the newly created project.
 
     ![Project settings](firebase-project-settings.png)
 
-4.  Scroll down and add Firebase to your app.
+4.  Scroll down and add a Firebase to your app.
 
     ![Add Firebase to your Android app](add-firebase-to-android.png)
 
@@ -125,7 +125,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     ![Download google-services.json file](download-google-services-button.png)
 
-6.  Now browse for the `google-services.json` file in the wizard. This file is placed into the app folder of the generated project and helps enable the app to work with Google Firebase notifications.
+6.  Now browse for the `google-services.json` file in the wizard. This file is located in the generated project's app folder, enabling the app to work with Google Firebase notifications.
 
     ![Add google-services.json file to wizard](wizard-google-services-added.png)
 
@@ -142,14 +142,14 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     ![Project created](project-created.png)
 
-    >You may have a build error similar to: "Could not resolve all files for configuration ':classpath'......", open **Preferences** (Windows: **Settings**, Mac: **Android Studio > Settings...**) to change gradle jdk to 17.
+    >You may encounter a build error similar to: "Could not resolve all files for configuration ':classpath'......", open **Preferences** (Windows: **Settings**, Mac: **Android Studio > Settings...**) to change `gradle jdk` to 17.
     ![Set gradle jdk to 17](gradle-jdk.png)
 
     >Finally, sync the project with the gradle files.
     ![Sync project with gradle files](sync-gradle.png)
 
 2.  Choose an emulator for running the app.
-    >If you enabled push service, please make sure you install an emulator with **Target** labeled as **Google Play**. For more information on creating virtual devices that run in the Android Emulator, see [Create and manage virtual devices](https://developer.android.com/studio/run/managing-avds) in the Android Studio User Guide.
+    >If you enabled the push service, please ensure you install an emulator with the **Target** labeled as **Google Play**. For more information on creating virtual devices that run in the Android Emulator, see [Create and manage virtual devices](https://developer.android.com/studio/run/managing-avds) in the Android Studio User Guide.
 
     ![Deployment target](choose-emulator.png)
 
@@ -157,7 +157,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     ![Run the project](run.png)
 
-    The welcome screen is shown the first time the app is run.
+    The welcome screen is displayed the first time the app is launched.
 
     ![Welcome screen](welcome-screen.png)
 
@@ -177,17 +177,17 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     ![Passcode Policy](passcode-policy.png)
 
-6.  Because **Enable Usage Reporting** is checked, this screen can be used to show details of how the collected data will be used. For now, select either **Allow** or **Deny**. **Usage Reporting** is covered in a later tutorial in this mission.
+6.  **Enable Usage Reporting** is checked, this screen can display details about how the collected data will be utilized. For now, select either **Allow** or **Deny**. **Usage Reporting** is covered in another tutorial in this mission.
 
     ![Usage Reporting Consent Screen](usage-reporting-consent-screen.png)
 
-7.  Just like usage reporting, since **Enable Crash Reporting** is checked as well, this screen will be used to display details of how the collected information will be used. Select either **Allow** or **Deny**. If you select **Deny**, the crash information will only be stored locally.
+7.  Similar to `Usage Reporting`, if **Enable Crash Reporting** is checked, this screen will show details about how the collected information will be used. Choose either **Allow** or **Deny**. If you select **Deny**, the crash information will only be stored locally.
 
     ![Crash Reporting Consent Screen](crash-reporting-consent-screen.png)
 
-8.  Click **Next** button on **Allow Notifications** screen to select either **Allow** or **Don't allow** to indicate whether you want app to send you notifications.
+8.  Click **Next** on the **Allow Notifications** screen to choose either **Allow** or **Don't allow** to indicate whether you want the app to send you notifications.
 
-9.  The first screen of the app shows the different entities that are in the sample OData service.
+9.  The first screen of the app displays various entities that are available in the sample OData service.
 
     ![Entities screen](entities-screen.png)
 
@@ -195,7 +195,7 @@ If you check the **Enable Push** checkbox, an error message is displayed explain
 
     ![Products screen](products-screen.png)
 
-10.  Tap a list item to display the following editable detail screen.
+10. Tap a list item to display the following editable detail screen.
 
     ![Category detail](product-detail.png)
 

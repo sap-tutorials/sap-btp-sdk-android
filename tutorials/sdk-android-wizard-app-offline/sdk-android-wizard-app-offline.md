@@ -73,7 +73,24 @@ To protect the data in offline store, you must enable offline store encryption b
 
 2.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`initializeOffline`**, to move to the `initializeOffline` method. Call the `setStoreEncryptionKey` method of the `OfflineODataParameters` instance to encrypt the offline store. In single user mode, before you can get the encryption key using `UserSecureStoreDelegate`, you must generate and save an encryption key to `UserSecureStore` first.
 
-    ![Parameter setting Java](offline-key-kotlin.png)
+    ```Kotlin
+    val encryptionKey = if (runtimeMultipleUserMode) {
+        UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+    } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+        if (UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY) == null) {
+            val bytes = ByteArray(32)
+            val random = SecureRandom()
+            random.nextBytes(bytes)
+            val key = Base64.encodeToString(bytes, Base64.NO_WRAP)
+            UserSecureStoreDelegate.getInstance().saveData(OFFLINE_DATASTORE_ENCRYPTION_KEY, key)
+            Arrays.fill(bytes, 0.toByte())
+            key
+        } else {
+            UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY)
+        }
+    }
+    storeEncryptionKey = encryptionKey
+    ```
 
 >For additional information about multiple user mode, see [Enable Multi-User Mode for Your Android Application](sdk-android-wizard-app-multiuser).
 
@@ -100,27 +117,99 @@ The application allows users to make changes against a local offline store and s
 
 1.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`OfflineOpenWorker`** to open `OfflineOpenWorker.kt` and examine the `open` method.
 
-    ![Open method](opening_offline_store_method_kotlin.png)
+    ```Kotlin
+    override suspend fun doWork(): Result = withContext(IO) {
+        ... ...
+        OfflineWorkerUtil.offlineODataProvider?.also { provider ->
+            provider.open({
+                ... ...
+            }, { exception ->
+                ... ...
+            })
+        }
+        ... ...
+    }
+    ```
 
     The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
 
     The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `MainBusinessActivity` when the user logs in to the application.
 
-    ![Open method calls OfflineOpenWorker](method_calls_offline_open_worker_kotlin.png)
+    ```Kotlin
+    // In OfflineWorkerUtil.kt
+    @JvmStatic
+    fun open(context: Context) {
+        ... ...
+        openRequest = OneTimeWorkRequestBuilder<OfflineOpenWorker>()
+            .setConstraints(constraints)
+            .build()
+        ... ...
+    }
+    ```
 
-    ![WizardFlowStateListener calls open](logon_calls_open_kotlin.png)
+    ```Kotlin
+    // In MainBusinessActivity.kt
+    override fun onResume() {
+        ... ...
+        spforLockAndWipe.getString(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG, null)?.let {
+            ... ...
+        } ?: run {
+            ... ...
+            OfflineWorkerUtil.open(application)
+            ... ...
+        }
+    }
+    ```
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`OfflineSyncWorker`** to open `OfflineSyncWorker.kt` and examine the `download` and `upload` methods.
 
-    ![Sync method](syncing_offline_store_worker_kotlin.png)
+    ```Kotlin
+    override suspend fun doWork(): Result = withContext(IO) {
+        ... ...
+
+        OfflineWorkerUtil.offlineODataProvider?.also { provider ->
+            ... ...
+            provider.upload({
+                ... ...
+                provider.download({
+                    ... ...
+                }, {
+                    ... ...
+                })
+            }, {
+                ... ...
+            })
+        }
+
+        ... ...
+    }
+    ```
 
     The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation and pass the given callbacks through.
 
     The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetListActivity` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
 
-    ![Sync method calls OfflineSyncWorker](method_calls_offline_sync_worker_kotlin.png)
+    ```Kotlin
+    // In OfflineWorkerUtil.kt
+    @JvmStatic
+    fun sync(context: Context) {
+        ... ...
 
-    ![EntitySetListActivity performs sync](entity_set_list_activity_performs_sync_kotlin.png)
+        syncRequest = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
+            .setConstraints(constraints)
+            .build()
+
+        ... ...
+    }
+    ```
+
+    ```Kotlin
+    // In EntitySetListActivity.kt
+    private fun synchronize() {
+        OfflineWorkerUtil.sync(applicationContext)
+        ... ...
+    }
+    ```
 
 For more information about how the offline store works, see the [Working With Offline Stores](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/working-with-offline-stores.html).
 
