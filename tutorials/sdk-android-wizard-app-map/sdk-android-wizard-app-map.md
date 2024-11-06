@@ -16,15 +16,14 @@ keywords: sdkforandroid
 You have:
 1. [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services.
     - **SAP Mobile Services**
-2. [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 7.0.2 or higher of the SAP BTP SDK for Android.
-3. Completed [Try Out SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
+2. Completed [Try Out SAP BTP SDK Wizard for Android](sdk-android-wizard-app).
 
 ## You will learn
   - How to add a Google Map to the wizard-generated app and display customer locations
   - How to add a Fiori Map control and try out its features
 
 ## Intro
-A Fiori Map control extends the Google [Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/intro) or `Esri` [`ArcGIS Runtime SDK for Android`](https://developers.arcgis.com/android/). It provides additional APIs that handle clustering, as well as a toolbar, panel, and an editor to annotate map. For additional details, see [Fiori Design Guidelines](https://experience.sap.com/fiori-design-android/).
+A Fiori Map control extends the Google [Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/intro). It provides additional APIs that handle clustering, as well as a toolbar, panel, and an editor to annotate map. For additional details, see [Fiori Design Guidelines](https://experience.sap.com/fiori-design-android/).
 
 ---
 
@@ -33,7 +32,7 @@ A Fiori Map control extends the Google [Maps SDK for Android](https://developers
 
 In this section you will create a new activity to display a map.
 
-1. In Android Studio, in the project explorer, navigate to **`app > java > com.sap.wizapp > mdui > customers`**.
+1. In Android Studio, in the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > mdui > customers`**.
 
 2. Right-click and choose **`New > Activity > Gallery... > Google Maps Views Activity`**.
 
@@ -45,7 +44,7 @@ In this section you will create a new activity to display a map.
 
 4. Click **Finish**.
 
-5. In the `AndroidManifest.xml` file, copy the URL on line 18.
+5. In the `AndroidManifest.xml` file, copy the URL on line 17.
 
 6. Paste the URL into a browser to register the application with the Maps SDK for Android. Follow the instructions to get an **API Key**.
 
@@ -77,21 +76,7 @@ In this section you will create a new activity to display a map.
     import com.sap.wizapp.R
     ```
 
-14. Go to [Firebase console](https://console.firebase.google.com/).
-
-15. Select the project, in this example, **Wiz App**.
-
-16. Access **Project settings** for the project.
-
-    ![Project Settings](project-settings.png)
-
-17. Scroll down to download **google-services.json**.
-
-    ![Download google-services.json](download-google-services.png)
-
-18. Save the json file to the **WizApp/app** folder.
-
-19. Run the app. Select **Customers**.
+14. Run the app. Select **Customers**.
 
     ![Entities screen](tap-on-customers.png)
 
@@ -363,7 +348,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </LinearLayout>
     ```
 
-6. In Android Studio, using the project explorer, navigate to **`app > java > com.sap.wizapp > mdui > customers`**.
+6. In Android Studio, using the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > mdui > customers`**.
 
 7. Right-click and choose **New** > **Activity** > **Empty Views Activity**.
 
@@ -955,7 +940,7 @@ In this section, you will test the three different types of annotations.
 
 2. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onCreate`** to navigate to the `onCreate` method.
 
-3. Add the following code after the `mGoogleFioriMapView.onCreate` is called. This will save any points, `polylines`, or polygons drawn on the map.
+3. Add the following code after the `mGoogleFioriMapView.onCreate` is called. This will save any points, polylines, or polygons drawn on the map.
 
     ```Kotlin
     // Handle the editor's save event.
@@ -1005,7 +990,7 @@ In this section, you will test the three different types of annotations.
 
     ```Gradle
     resolutionStrategy {
-        force("com.google.android.gms:play-services-location:17.1.0")
+        force("com.google.android.gms:play-services-location:21.3.0")
     }
     ```
 

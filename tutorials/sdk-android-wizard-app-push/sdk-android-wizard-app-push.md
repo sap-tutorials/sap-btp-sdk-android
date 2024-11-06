@@ -27,7 +27,7 @@ time: 20
 ### Configure Mobile Services for push notifications
 
 
-1. Go to [SAP Mobile Services Cockpit](https://mobile-service-cockpit-web.cfapps.us10.hana.ondemand.com/), select the **com.sap.wizapp** application.
+1. Go to **SAP Mobile Services Cockpit**, select the **com.sap.wizapp** application.
 
     ![Application page in CF cockpit](cf-trial-application-page.png)
 
@@ -109,9 +109,26 @@ Tap the notification and you can see the app displays the notification.
 
 Currently, the message is displayed in a dialog with cancel action.
 
-You can add custom logic to the app to decide on the action to take, such as displaying the new Office Furniture category.
+You can add custom logic to the app to decide on the action to take, such as displaying the new Office Furniture category by modifying the `showMessageDialog` method in the class `FCMPushCallbackListener`.
 
-![Show Notification Code](show-notification-code-kotlin.png)
+```Kotlin
+private fun showMessageDialog(activity: FragmentActivity, message: PushRemoteMessage) {
+    var textMessage = message.alert ?: activity.getString(R.string.push_text)
+    var notificationTitle = message.title?: activity.getString(R.string.push_message)
+
+    DialogHelper(activity).showDialogWithCancelAction(
+            fragmentManager = activity.supportFragmentManager,
+            message = textMessage,
+            negativeAction = {},
+            title = notificationTitle,
+            positiveAction = {
+                message.notificationID?.let {
+                    BasePushService.setPushMessageStatus(it, PushRemoteMessage.NotificationStatus.CONSUMED)
+                }
+            }
+    )
+}
+```
 
 >For further information on push, see [Push Notifications](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/push/android/push.html), [Push API Notification Scenarios](https://help.sap.com/viewer/38dbd9fbb49240f3b4d954e92335e670/Cloud/en-US/aaec2dbe78ec4fc08ef0a605a899e3dd.html), and [About FCM Messages](https://firebase.google.com/docs/cloud-messaging/concept-options).
 

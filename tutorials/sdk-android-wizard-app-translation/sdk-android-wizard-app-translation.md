@@ -46,7 +46,7 @@ The following code in the `WelcomeStepFragment` class, in the `onCreateView` met
 
 ```Kotlin
 LaunchScreenSettings.Builder()
-                .setHeaderLineLabel(getString(R.string.welcome_screen_headline_label))
+                .setHeaderLineLabel(getString(R.string.application_name))
 ```
 
 The `getString` method determines what the current local language is on the device or emulator and then reads from the matching strings file.
@@ -55,9 +55,9 @@ You can set the language on an Android device or emulator using **Settings > Sys
 
 ![Additional Languages](additional-languages.png)
 
- Select the default language by long pressing on a language and dragging it to the top of the list.
+Select the default language by long pressing on a language and dragging it to the top of the list.
 
- ![Default Language](default-language.png)
+![Default Language](default-language.png)
 
 When the app is restarted, it now shows strings in the preferred language if that language is supported by the app. If the language is not currently supported, the strings will be in English by default.
 
@@ -94,14 +94,14 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
 
     - **URL** – The URL of the SAP Translation Hub service. Enter the URL using the following table as guidance:
 
-      | Global Account | URL | Sample URL |
-      |:----|:----|:----|
-      | Trial | `https://saptranslation-<subaccountname>.hanatrial.ondemand.com` | https://saptranslation-s0001001002trial.hanatrial.ondemand.com |
-      | Enterprise | `https://sap<provider subaccount name>-<subscription subaccount name>.<region host>` | https://sapa7d6108fa-c77539gg5d.hana.ondemand.com |
+        | Global Account | URL | Sample URL |
+        |:----|:----|:----|
+        | Trial | **`https://saptranslation-<subaccountname>.hanatrial.ondemand.com`** | **`https://saptranslation-s0001001002trial.hanatrial.ondemand.com`** |
+        | Enterprise | **`https://sap<provider subaccount name>-<subscription subaccount name>.<region host>`** | **`https://sapa7d6108fa-c77539gg5d.hana.ondemand.com`** |
 
     - **Username** and **Password** – The credentials of your SAP BTP account.
 
-    ![Translation Wizard Page 1](wiz-page1.png)
+        ![Translation Wizard Page 1](wiz-page1.png)
 
 3.  Click **Next** and choose **Create New SAP Translation Hub project**.
 
@@ -115,9 +115,9 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
 
     ![Translation Wizard Page 2](wiz-page3b.png)
 
-6.  Press **Finish** and wait for a few moments. The **Event Log** should print `Success: Project translated successfully`.
+6.  Press **Finish** and wait for a few moments. A pop-up window will display `Project translated successfully`.
 
-    There should now be two additional files, `strings_localized.xml(ca)` and `strings.xml(ca)`.
+    There should now be an additional file, `strings_localized.xml(ca)` or `strings.xml(ca)`.
 
     ![Translation Result](translation-result.png)
 
