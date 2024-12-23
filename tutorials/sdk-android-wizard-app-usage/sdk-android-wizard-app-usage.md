@@ -34,6 +34,46 @@ When the app is first installed, a consent screen will automatically be shown to
 
 The app must first receive permission to collect usage information from the user.
 
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+1. Tap **ALLOW** to allow the app to record how the app is being used.
+
+    ![Consent Screen](consent-jc.png)
+
+    If **DENY** was selected, the user's choice can later be changed in the app's **Settings** screen.
+
+    ![Usage in Settings](accept_usage_tracking_jc.png)
+
+    Once you try to enable **Consent to Usage Collection**, the consent screen will be displayed again to confirm your choice.
+
+    The **Consent to Usage Collection** will be disabled and cannot be enabled if usage was not enabled in the **Mobile Services cockpit**.
+
+2. To review this policy setting, in the **Mobile Services cockpit**, access **Mobile Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**.
+
+    ![Access Mobile Client Usage and User Feedback](mobile_client_usage_and_user_feedback.png)
+
+    The **Client Usage Configuration** specifies whether uploads of usage data are allowed and the time interval between automatic usage report uploads.
+
+    The preset value for **Upload Report After** is 0 (usage reports will not be uploaded automatically), which we will use in the implementation of automatically uploading usage reports to the server. Finally, click **Save** to save any changes.
+
+    ![Enable Usage in Client Policies](enable_usage.png)
+
+3. From the **Settings** screen, tap **Upload Usage Data**.
+
+    ![Click Upload Usage](upload_usage_button_jc.png)
+
+4. If an empty usage report notification is shown when **Upload Usage Data** is selected, navigate away from the app by going to your phone's **Home** screen and re-entering the app. Then try uploading the usage report again. Placing the app in the background will complete or end the current usage session. Partial sessions can not be uploaded.
+
+    ![Empty Usage Report Upload Attempt](empty_usage_report_jc.png)
+
+    If **Upload Usage Data** was successful, then a Toast message should pop up informing you that the usage information has been uploaded to the server.
+
+    ![Successful Usage Upload](successful_upload_jc.png)
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
 1. Tap **ALLOW** to allow the app to record how the app is being used.
 
     ![Consent Screen](consent.png)
@@ -44,13 +84,9 @@ The app must first receive permission to collect usage information from the user
 
     Once you try to enable **Consent to Usage Collection**, the consent screen will be displayed again to confirm your choice.
 
-2. From the **Settings** screen, tap **Upload Usage Data**.
-
-    ![Click Upload Usage](upload_usage_button.png)
-
     The **Consent to Usage Collection** will be disabled and cannot be enabled if usage was not enabled in the **Mobile Services cockpit**.
 
-3. To review this policy setting, in the **Mobile Services cockpit**, access **Mobile Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**.
+2. To review this policy setting, in the **Mobile Services cockpit**, access **Mobile Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**.
 
     ![Access Mobile Client Usage and User Feedback](mobile_client_usage_and_user_feedback.png)
 
@@ -60,6 +96,10 @@ The app must first receive permission to collect usage information from the user
 
     ![Enable Usage in Client Policies](enable_usage.png)
 
+3. From the **Settings** screen, tap **Upload Usage Data**.
+
+    ![Click Upload Usage](upload_usage_button.png)
+
 4. If an empty usage report notification is shown when **Upload Usage Data** is selected, navigate away from the app by going to your phone's **Home** screen and re-entering the app. Then try uploading the usage report again. Placing the app in the background will complete or end the current usage session. Partial sessions can not be uploaded.
 
     ![Empty Usage Report Upload Attempt](empty_usage_report.png)
@@ -67,6 +107,8 @@ The app must first receive permission to collect usage information from the user
     If **Upload Usage Data** was successful, then a Toast message should pop up informing you that the usage information has been uploaded to the server.
 
     ![Successful Usage Upload](successful_upload.png)
+
+[OPTION END]
 
 
 ### Examine uploaded usage data
@@ -116,6 +158,23 @@ The app must first receive permission to collect usage information from the user
 
     ![Session Descriptive Information](session_description_info.png)
 
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+When the application is initially launched, the report will contain entries that describe the device screen, memory and networking capabilities in a condensed form in four columns, marking the end of a session.
+
+| `I_VALUE`           |  Description
+| :------------------ | :-----------------
+| `EnterApplication`  | Screen resolution of the device (`I_SCREEN`)
+| `device`            | Reiterates the screen resolution (`I_SCREEN` and `I_VIEW`), device platform (`I_ELEMENT`), and specifies the device language (`I_ACTION`)
+| `memory`            | Device RAM (`I_SCREEN`), internal storage (`I_VIEW`), and available space on the SD card (`I_ELEMENT`)
+| `networking`        | Device network connected status (`I_SCREEN`), device Wifi connected status (`I_VIEW`), and device cell data connected status (`I_ELEMENT`) with carrier name (`I_ACTION`) if cell data connected
+
+![Device Information in First Entries](first_entries_jc.png)
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
 When the application is initially launched, the report will contain entries that describe the device screen, memory and networking capabilities in a condensed form in four columns, marking the end of a session.
 
 | `I_VALUE`           |  Description
@@ -124,6 +183,7 @@ When the application is initially launched, the report will contain entries that
 | `location`          | Location permission for the application (denied or authorized); if authorized then it will list the latitude (`I_VIEW`), longitude (`I_ELEMENT`), and city (`I_ACTION`)
 | `device`            | Reiterates the screen resolution (`I_SCREEN` and `I_VIEW`), device platform (`I_ELEMENT`), and specifies the device language (`I_ACTION`)
 | `memory`            | Device RAM (`I_SCREEN`), internal storage (`I_VIEW`), and available space on the SD card (`I_ELEMENT`)
+| `networking`        | Device network connected status (`I_SCREEN`), device Wifi connected status (`I_VIEW`), and device cell data connected status (`I_ELEMENT`) with carrier name (`I_ACTION`) if cell data connected
 
 ![Device Information in First Entries](first_entries.png)
 
@@ -139,17 +199,108 @@ The code segment that records `EntitySetListActivity` is in the `onCreate` metho
 SDKInitializer.getService(UsageService::class)?.eventBehaviorViewDisplayed(EntitySetListActivity::class.java.simpleName, "elementId", "onCreate", "called")
 ```
 
+[OPTION END]
+
 
 ### Add further usage instrumentation
 
 
 The Usage feature can be used to instrument an app to track things that might provide insight into a user's behaviors.
 
-The following steps record how often users start adding or updating products but cancel their changes.  This is somewhat similar to a metric in a shopping cart type app, where it might be interesting to know how often items are added to a shopping cart, but the sale is not completed.
+The following steps record how often users start adding or updating products but cancel their changes. This is somewhat similar to a metric in a shopping cart type app, where it might be interesting to know how often items are added to a shopping cart, but the sale is not completed.
 
-1. In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`ProductsCreateFragment`** to open `ProductsCreateFragment.kt`.
+[OPTION BEGIN [Jetpack Compose-based UI]]
 
-2. On Windows, press **Ctrl+F12**, or, on a Mac, press **command+F12** and type **`onCreate`**, to move to the `onCreate` method in the same file.
+1. In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`ODataViewModel`** to open `ODataViewModel.kt`.
+
+2. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onUpdate`**, to navigate to the `onUpdate` method in the same file.
+
+3. Add the following code segment to the very beginning of the method:
+
+    ```Kotlin
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "edit${entityType.localName}Clicked", "Begin Edit ${entityType.localName}")
+    ```
+
+    This generates a usage event record for when a user taps the **Edit** icon within any entity screen.
+
+4. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onCreate`**, to navigate to the `onCreate` method. Add the following code segment to the very beginning of the method:
+
+    ```Kotlin
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "create${entityType.localName}Clicked", "Begin Create ${entityType.localName}")
+    ```
+
+    This generates a usage event record for when a user taps the **Add** icon within any entity screen.
+
+5. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`exitCreation`**, to navigate to the `exitCreation` method. Add the following code segment to the very beginning of the method:
+
+    ```Kotlin
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "onBackPressed", "Create ${entityType.localName} Cancelled")
+    ```
+
+    This generates the usage event record whenever the user navigates away from a creating screen without saving.
+
+6. Add the following imports if they are not auto-added:
+
+    ```Kotlin
+    import com.sap.cloud.mobile.foundation.mobileservices.SDKInitializer
+    import com.sap.cloud.mobile.foundation.usage.UsageService
+    ```
+
+7. Build and run the app.
+
+8. Generate usage information by accessing **Products**.
+
+    ![Access Products](test_usage1_jc.png)
+
+9. Tap the floating **Add** button to create a product.
+
+    ![Create a New Product Item](test_usage2_jc.png)
+
+10. Press the **Back** button to exit the page without saving.
+
+    ![Press Back Button](test_usage3_jc.png)
+
+11. Repeat these steps two more times to generate multiple entries for the usage report.
+
+12. Select an existing product and tap its **Edit** button.
+
+    ![Edit Product](edit_product_jc.png)
+
+13. Then immediately tap the **check mark** button to save the information.
+
+    ![Save Product](save_product_jc.png)
+
+14. End the usage session by placing the app in the background. Navigate back into the app.
+
+15. Upload the usage by going to **Settings** and tap on **Upload Usage Data**.
+
+16. After downloading the `clientUsage_uploads.csv` file from the **Mobile Services cockpit**, you should be able to see new entries with `I_VIEW` values of `ODataViewModel` and `I_ACTION` values of `onBackPressed`, `createProductClicked` and `editProductClicked`.
+
+    ![New Entries in the Client Upload csv](new_client_upload_example_jc.png)
+
+17. In the four empty cells that are not in the `R` ( `I_ACTION` ) column on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
+
+    ```Excel
+    =COUNTIF(R:R, "*createProductClicked*")+COUNTIF(R:R, "*editProductClicked*")
+    ```
+
+18. Next to `Cancelled Product Create`, use the following formula to find the number of times the user cancelled an add product action:
+
+    ```Excel
+    =COUNTIF(R:R, "*onBackPressed*")
+    ```
+
+    In the example, the user tried to create a product three times but cancelled three times, and edited it once.
+
+    ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas_jc.png)
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
+1. In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`ProductsCreateFragment`** to open `ProductsCreateFragment.kt`.
+
+2. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onCreate`**, to navigate to the `onCreate` method in the same file.
 
 3. Find the following line:
 
@@ -165,7 +316,7 @@ The following steps record how often users start adding or updating products but
 
     This generates a usage event record for when a user taps the **Add** or **Edit** icon within **Products**.
 
-5. On Windows, press **Ctrl+F12**, or, on a Mac, press **command+F12** and type **`onMenuItemSelected`**, to move to the `onMenuItemSelected` method. Add the following code segment before the `else` case in the same file:
+5. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onMenuItemSelected`**, to navigate to the `onMenuItemSelected` method. Add the following code segment before the `else` case in the same file:
 
     ```Kotlin
     android.R.id.home -> {
@@ -220,9 +371,11 @@ The following steps record how often users start adding or updating products but
     =COUNTIF(R:R, "*onBackPressed*")
     ```
 
-    In the example, the user tried to create a product four times, but cancelled three times.
+    In the example, the user tried to create a product three times but cancelled three times, and edit it once.
 
     ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas.png)
+
+[OPTION END]
 
 
 ### Auto-upload of usage data
@@ -234,7 +387,7 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
     ![Set Auto Upload of Usage Report](automatic_upload.png)
 
-2.  In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
+2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
 
 3.  Near the end of the class, add the following companion objects:
 
@@ -243,7 +396,7 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
     private var uploadInterval: Int = 0
     ```
 
-4.  On Windows, press **Ctrl+F12**, or, on a Mac, press **command+F12**, and type **`onClientPolicyRetrieved`** to move to the `onClientPolicyRetrieved` method.
+4.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`onClientPolicyRetrieved`** to navigate to the `onClientPolicyRetrieved` method.
 
 5.  At the end of the method, add the following code:
 
@@ -299,15 +452,15 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
     >There may be an error on `HttpException`. Select it and press **`Alt+Enter`** on Windows, or, press **`option+Enter`** on Macs, to import the related class from `com.sap.cloud.mobile.foundation.networking`.
 
-7.  In Android Studio, on Windows, press **Ctrl+N**, or, on a Mac, press **command+O**, and type **`SettingsViewModel`** to open `SettingsViewModel.kt`.
+7.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`SettingsViewModel`** to open `SettingsViewModel.kt`.
 
-8.  On Windows, press **Ctrl+F**, or, on a Mac, press **command+F**, to find:
+8.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, to find:
 
     ```Kotlin
     usageService.uploadUsageData(forceUpload = true, owner = lifecycleOwner,
     ```
 
-9.  When `forceUpload` is set to **true**, the user can upload the usage report through the app's settings screen, regardless of the number of days specified in the policy.
+9.  When `forceUpload` is set to `true`, the user can upload the usage report through the app's settings screen, regardless of the number of days specified in the policy.
 
     When the app is run and the number of days in the policy has passed, there should be a Toast notification showing that the usage report has been uploaded successfully.
 

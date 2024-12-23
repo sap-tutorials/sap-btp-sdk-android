@@ -47,9 +47,7 @@ time: 20
 
 4. In the [Firebase console](https://console.firebase.google.com/), select project **Wiz App**, and then go to **Project settings**.
 
-    - ![Firebase console page](firebase-console-page.png)
-
-    - ![Project settings](firebase-project-settings.png)
+    ![Project settings](firebase-project-settings.png)
 
 5. Select the **Service accounts** tab and click **Generate new private key** button. Then click **Generate key** in the pop-up window and store the downloaded private key file securely because the key cannot be recovered if lost.
 
@@ -83,6 +81,20 @@ time: 20
 ### Foreground notification
 
 
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+Notice that the notification displayed at the top of the screen.
+
+![Notification pop up](pop-up-notification-jc.png)
+
+Tap the notification and you can see the app displays the notification.
+
+![Receive notification](receive-notification-jc.png)
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
 Notice that the notification displayed at the top of the screen.
 
 ![Notification pop up](pop-up-notification.png)
@@ -91,9 +103,57 @@ Tap the notification and you can see the app displays the notification.
 
 ![Receive notification](receive-notification.png)
 
+[OPTION END]
+
 
 ### Background notification
 
+
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+1. On an emulator or mobile device, open another app, such as Chrome, which will cause the Wiz App to no longer be the foreground app.
+
+2. If you now send another notification, you will notice that because the app is in the background, or not running, a notification is placed in the notification drawer.
+
+    ![Receive Notification Background](receive-notification-background-jc.png)
+
+3. Tapping the notification will bring the app to the foreground or open the app.
+
+    ![Receive Notification from Background](receive-notification-jc.png)
+
+    >If the app was not running when the notification was tapped, due to a change made in the previous tutorial, you can view it by pressing **Back** and navigating from the **Categories** screen to the **Entity** list screen.
+
+Currently, the message is displayed in a dialog with cancel action.
+
+You can add custom logic to the app to decide on the action to take, such as displaying the new Office Furniture category by modifying the `showMessageDialog` method in the class `FCMPushCallbackListener`.
+
+```Kotlin
+private fun showMessageDialog(activity: Activity, message: PushRemoteMessage) {
+    activity.addContentView(
+        ComposeView(activity).apply {
+            setContent {
+                var showDialog by remember { mutableStateOf(true) }
+                if (showDialog) {
+                    val textMessage = message.alert ?: activity.getString(R.string.push_text)
+                    val notificationTitle = message.title?: activity.getString(R.string.push_message)
+                    AlertDialogComponent(title = notificationTitle, text = textMessage, onPositiveButtonClick = {
+                        message.notificationID?.let {
+                            BasePushService.setPushMessageStatus(it, PushRemoteMessage.NotificationStatus.CONSUMED)
+                        }
+                        showDialog = false
+                    })
+                }
+            }
+        },
+        
+        ... ...
+    )
+}
+```
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
 
 1. On an emulator or mobile device, open another app, such as Chrome, which will cause the Wiz App to no longer be the foreground app.
 
@@ -129,6 +189,8 @@ private fun showMessageDialog(activity: FragmentActivity, message: PushRemoteMes
     )
 }
 ```
+
+[OPTION END]
 
 >For further information on push, see [Push Notifications](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/push/android/push.html), [Push API Notification Scenarios](https://help.sap.com/viewer/38dbd9fbb49240f3b4d954e92335e670/Cloud/en-US/aaec2dbe78ec4fc08ef0a605a899e3dd.html), and [About FCM Messages](https://firebase.google.com/docs/cloud-messaging/concept-options).
 
