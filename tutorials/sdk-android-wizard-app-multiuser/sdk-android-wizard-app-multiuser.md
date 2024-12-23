@@ -51,11 +51,33 @@ The following cases are not supported in multi-user mode:
 ### Enable multi-user mode for a wizard-generated online application
 
 
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
 1.  Open the project you previously created using the **SAP BTP SDK Wizard for Android**.
 
-2.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.kt`.
+2.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`sap_mobile_services.json`** to open `sap_mobile_services.json`.
 
-3. On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`startOnboarding`** to move to the `startOnboarding` method. For the **`FlowContext`** instance, change the parameter of the **`setMultipleUserMode`** method from **`false`** to **`true`**:
+3.  Change the value of `multiUser` from `false` to **`true`**.
+
+    Notice that the setting will only take effect when the very first user onboards. Once a user is onboarded, this setting will be saved in the local database. All subsequent flows will use the same setting from the database and ignore the one inside `sap_mobile_services.json`. To change this setting, you need to reset the application to bring up the onboarding process, and the new setting will be updated in the local database after onboarding.
+
+4.  Re-run (reset/uninstall first) the app and notice that the onboarding process is same as for single-user mode, except that no biometric authentication screen is shown. After onboarding, put the app in background until the sign in screen appears. In multi-user mode, there is a **Switch or add user** button at the bottom of the screen.
+
+    ![Sign in screen](sign-in-screen.png)
+
+    When the button is clicked, the user list is displayed. You can either select an existing user from the list or click the **ADD USER** icon at the right top of the screen. This will start the onboarding process for the new user.
+
+    ![User list screen](user-screen-jc.png)
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
+1.  Open the project you previously created using the **SAP BTP SDK Wizard for Android**.
+
+2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WelcomeActivity`** to open `WelcomeActivity.kt`.
+
+3. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`startOnboarding`** to navigate to the `startOnboarding` method. For the `FlowContext` instance, change the parameter of the `setMultipleUserMode` method from `false` to **`true`**:
 
     ```Kotlin
     val flowContext =
@@ -64,11 +86,11 @@ The following cases are not supported in multi-user mode:
                     .setMultipleUserMode(true)
     ```
 
-    Notice that the setting will only take effect when the very first user onboards. Once a user is onboarded, this setting will be saved in the local database. All subsequent flows will use the same setting from the database and ignore the one inside **`flowContext`**. To change this setting, you need to reset the application to bring up the onboarding process, and the new setting will be updated in the local database after onboarding.
+    Notice that the setting will only take effect when the very first user onboards. Once a user is onboarded, this setting will be saved in the local database. All subsequent flows will use the same setting from the database and ignore the one inside `flowContext`. To change this setting, you need to reset the application to bring up the onboarding process, and the new setting will be updated in the local database after onboarding.
 
-4.  On Windows, press **`Ctrl+Shift+N`**, or, on a Mac, press **`command+Shift+O`**, and type **`sap_mobile_service.json`** to open `sap_mobile_service.json`.
+4.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`sap_mobile_services.json`** to open `sap_mobile_services.json`.
 
-5.  Change the value of **`multiUser`** from **`false`** to **`true`**.
+5.  Change the value of `multiUser` from `false` to **`true`**.
 
 6.  Re-run (reset/uninstall first) the app and notice that the onboarding process is same as for single-user mode, except that no biometric authentication screen is shown. After onboarding, put the app in background until the sign in screen appears. In multi-user mode, there is a **Switch or add user** button at the bottom of the screen.
 
@@ -78,27 +100,117 @@ The following cases are not supported in multi-user mode:
 
     ![User list screen](user-screen.png)
 
+[OPTION END]
+
 
 ### Enable multi-user mode for a wizard-generated offline app
 
+
+[OPTION BEGIN [Jetpack Compose-based UI]]
 
 1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Mobile Settings Exchange** in the assigned features list:
 
     ![Cockpit app screen](cockpit-app.png)
 
-    Scroll down to the bottom of the **Client Configuration** tab and enable the **Allow Upload of Pending Changes from Previous User** option (remember to click **`Save`** to save the change):
+    Scroll down to the bottom of the **Client Configuration** tab and enable the **Allow Upload of Pending Changes from Previous User** option (remember to click **Save** to save the change):
 
     ![Cockpit app setting screen](cockpit-app-setting.png)
 
 2.  Open the project you previously created using the **SAP BTP SDK Wizard for Android**.
 
-3.  Enable **`setMultipleUserMode`** for **`FlowContext`** instance same as online app.
+3.  Enable `multiUser` in `sap_mobile_services.json` same as online app.
 
-4.  Enable **`multiUser`** in `sap_mobile_service.json` same as online app.
+4.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineWorkerUtil`** to open `OfflineWorkerUtil.kt`.
 
-5.  In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`OfflineWorkerUtil`** to open `OfflineWorkerUtil.kt`.
+5.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`initializeOffline`** to navigate to the `initializeOffline` method. Notice that for the `OfflineODataParameters` instance, the value of the `isForceUploadOnUserSwitch` parameter is set based on the value of `runtimeMultipleUserMode`. This value is retrieved from the `UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserMode()` API call in `OfflineOpenViewModel.kt`.
 
-6.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`initializeOffline`** to move to the `initializeOffline` method. Notice that for the **`OfflineODataParameters`** instance, the value of the **`isForceUploadOnUserSwitch`** parameter is set based on the value of `runtimeMultipleUserMode`. This value is retrieved from the **`UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync()`** API call in `MainBusinessActivity.kt`.
+    ```Kotlin
+    /*
+     * Create OfflineODataProvider
+     * This is a blocking call, no data will be transferred until open, download, upload
+     * @return if initialization needed
+     */
+    suspend fun initializeOffline(
+        context: Context,
+        appConfig: AppConfig,
+        runtimeMultipleUserMode: Boolean
+    ): Boolean {
+        ...
+
+        try {
+            val url = URL(serviceUrl + CONNECTION_ID_ESPMCONTAINER)
+            val offlineODataParameters = OfflineODataParameters().apply {
+                ...
+
+                isForceUploadOnUserSwitch = runtimeMultipleUserMode
+                val encryptionKey = if (runtimeMultipleUserMode) {
+                    UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+                } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+                    ...
+                }
+                storeEncryptionKey = encryptionKey
+            }.also {
+                ...
+            }
+            logger.debug("start init offline odata provider")
+            
+            ...
+
+            return true
+        } catch (e: Exception) {
+            logger.error("Exception encountered setting up offline store: " + e.message)
+            throw e
+        }
+    }
+    ```
+
+    In `OfflineOpenViewModel.kt`:
+
+    ```Kotlin
+    init {
+        viewModelScope.launch(Dispatchers.Default) {
+            val isMultipleUserMode =
+                UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserMode()
+            val appConfig = FlowContextRegistry.flowContext.appConfig
+
+            if (OfflineWorkerUtil.initializeOffline(application, appConfig, isMultipleUserMode)) {
+                startOpenOffline()
+            } else {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        result = OpenResult.OpenSuccess()
+                    )
+                }
+            }
+        }
+    }
+    ```
+
+6.  Unlike the single-user mode scenario, the encryption key is not generated by the client code, but rather retrieved from the server by SDK. Client code can acquire the key using the `UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()` API call.
+
+7.  Re-run (reset/uninstall first) the app. Notice that the onboarding process and add/switch user process are the same as for the online app.
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
+
+1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Mobile Settings Exchange** in the assigned features list:
+
+    ![Cockpit app screen](cockpit-app.png)
+
+    Scroll down to the bottom of the **Client Configuration** tab and enable the **Allow Upload of Pending Changes from Previous User** option (remember to click **Save** to save the change):
+
+    ![Cockpit app setting screen](cockpit-app-setting.png)
+
+2.  Open the project you previously created using the **SAP BTP SDK Wizard for Android**.
+
+3.  Enable `setMultipleUserMode` for `FlowContext` instance same as online app.
+
+4.  Enable `multiUser` in `sap_mobile_service.json` same as online app.
+
+5.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineWorkerUtil`** to open `OfflineWorkerUtil.kt`.
+
+6.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`initializeOffline`** to navigate to the `initializeOffline` method. Notice that for the `OfflineODataParameters` instance, the value of the `isForceUploadOnUserSwitch` parameter is set based on the value of `runtimeMultipleUserMode`. This value is retrieved from the `UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync()` API call in `MainBusinessActivity.kt`.
 
     ```Kotlin
     /*
@@ -120,12 +232,20 @@ The following cases are not supported in multi-user mode:
                 ...
 
                 isForceUploadOnUserSwitch = runtimeMultipleUserMode
-
+                val encryptionKey = if (runtimeMultipleUserMode) {
+                    UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+                } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+                    ...
+                }
+                storeEncryptionKey = encryptionKey
+            }.also {
                 ...
             }
+
             ...
+        } catch (e: Exception) {
+            logger.error("Exception encountered setting up offline store: " + e.message)
         }
-        ...
     }
     ```
 
@@ -153,13 +273,63 @@ The following cases are not supported in multi-user mode:
     }
     ```
 
-7.  Unlike the single-user mode scenario, the encryption key is not generated by the client code, but rather retrieved from the server by SDK. Client code can acquire the key using the **`UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()`** API call.
+7.  Unlike the single-user mode scenario, the encryption key is not generated by the client code, but rather retrieved from the server by SDK. Client code can acquire the key using the `UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()` API call.
 
 8.  Re-run (reset/uninstall first) the app. Notice that the onboarding process and add/switch user process are the same as for the online app.
+
+[OPTION END]
 
 
 ### Handle offline pending changes when switching users
 
+
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+1.  In the offline multi-user mode scenario, when a user makes changes to the local offline store, the changes may not be uploaded to the server when the device is handed over to another user. After the new user clicks **Switch or add user** button to sign in or do onboarding, the pending changes will be uploaded to the server automatically.
+
+2.  If there is an error during synchronization, a screen will be displayed, notifying the user about the synchronization failure.
+
+    If synchronization failed because there is no internet connection, a network error screen will be displayed.
+
+    ![Offline network error screen](offline-network-error.png)
+
+    If synchronization failed due to a transaction issue, a transaction error screen will be displayed.
+
+    ![Offline transaction error screen](offline-transaction-error-jc.png)
+
+3.  The SDK provides a UI component for the two screens and apps can reference the screens to provide error handling.
+
+4.  For the **Offline Network Error Screen**, the client code implements the logic for button click events.   
+
+    On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`OfflineSyncScreen`** to open `OfflineSyncScreen.kt`.
+
+    On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`SyncFailureType.NETWORK_ERROR`** to move to the network error handling. When the network error occurs, make the **Offline Network Error Screen** visible and provide your logic for the button click event.
+
+    ```Kotlin
+    OfflineNetworkIssueScreen(
+        onBackButtonClick = navigateToWelcome,
+        onMainButtonClick = viewModel::startOpenOffline
+    )
+    ```
+
+5.  For **Offline Transaction Issue Screen**, the client code needs to set the user information of previous user and implement the logic for button click events.
+
+    On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`SyncFailureType.TRANSACTION_ISSUE`** to move to the transaction issue handling. When the transaction issue occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUser` method of the `OfflineOpenViewModel` class.
+
+    ```Kotlin
+    viewModel.previousUser?.let {
+                    OfflineTransactionIssueScreen(
+                        userName = it.name,
+                        email = it.email,
+                        onBackButtonClick = navigateToWelcome,
+                        onMainButtonClick = navigateToWelcome
+                    )
+                } ?: throw IllegalStateException("Unexpected offline transaction issue without previous user")
+    ```
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
 
 1.  In the offline multi-user mode scenario, when a user makes changes to the local offline store, the changes may not be uploaded to the server when the device is handed over to another user. After the new user clicks **Switch or add user** button to sign in or do onboarding, the pending changes will be uploaded to the server automatically.
 
@@ -208,7 +378,7 @@ The following cases are not supported in multi-user mode:
 
 5.  For **Offline Transaction Issue Screen**, the client code needs to set the user information of previous user and implement the logic for button click events.
 
-    On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineTransactionIssueAction`** to move to the `offlineTransactionIssueAction` method. When the transaction error occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUser` method of the `OfflineODataProvider` class to get the user ID and then call the `getUserInfoById` method of the `UserSecureStoreDelegate` class to get the user information.
+    On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineTransactionIssueAction`** to move to the `offlineTransactionIssueAction` method. When the transaction error occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUser` method of the `OfflineODataProvider` class to get the user ID and then call the `getUserInfoById` method of the `UserSecureStoreDelegate` class with the user ID.
 
     ```Kotlin
     private fun offlineTransactionIssueAction() {
@@ -241,15 +411,41 @@ The following cases are not supported in multi-user mode:
     }
     ```
 
+[OPTION END]
+
 
 ### APIs to help customize a multi-user mode app
 
+
+[OPTION BEGIN [Jetpack Compose-based UI]]
+
+1.  The Flows-Compose component exposes one API in the `UserSecureStoreDelegate` class for you to acquire user information by ID, such as user name and email:
+
+    `suspend fun getUserInfoById(userId: String): DeviceUser?`
+
+    Notice that this function can only be called after the onboarding or restore flow.
+
+2.  After onboarding, the setting for multi-user mode enablement is saved in the local database. To get this setting, the `UserSecureStoreDelegate` class exposes the following API:
+
+    `suspend fun getRuntimeMultipleUserMode(): Boolean`
+
+3.  The Flows component exposes one API in `FlowActionHandler` class for you to customize the user information displayed on the Sign-in and user list screens, that will obfuscate the user name and email by default:
+
+    `open fun customizeSignInScreenUserInfo(user: DeviceUser): SignInScreenUserInfo`
+
+    Notice that a default obfuscate algorithm is provided in the APIs. You can override the APIs to provide your own obfuscate algorithm.
+
+4.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
+
+[OPTION END]
+
+[OPTION BEGIN [View-based UI]]
 
 1.  The Flows component exposes two APIs in the `UserSecureStoreDelegate` class for you to acquire user information by ID, such as user name and email:
 
     `fun getUserInfoByIdAsync(userId: String) : DeviceUser?`
 
-    `fun getUserInfoById(userId: String): DeviceUser?`
+    `suspend fun getUserInfoById(userId: String): DeviceUser?`
 
     The `getUserInfoByIdAsync` function is mainly used by the Java code. Notice that this function can only be called after the onboarding or restore flow.
 
@@ -271,9 +467,9 @@ The following cases are not supported in multi-user mode:
 
 4.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
 
-    As a sample implementation of this callback, you can examine a wizard-generated offline app. In Android Studio, on Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
+    As a sample implementation of this callback, you can examine a wizard-generated offline app. In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
 
-    On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onOfflineEncryptionKeyReady`** to move to the `onOfflineEncryptionKeyReady` method. Examine the code and notice that it does some clean and reset work:
+    On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`onOfflineEncryptionKeyReady`** to navigate to the `onOfflineEncryptionKeyReady` method. Examine the code and notice that it does some clean and reset work:
 
     ```Kotlin
     override fun onOfflineEncryptionKeyReady(key: String?) {
@@ -315,6 +511,8 @@ The following cases are not supported in multi-user mode:
     ```
 
     You can provide your own logic in this callback.
+
+[OPTION END]
 
 Congratulations! You have learned how to enable multi-user mode for your android applications!
 
