@@ -108,7 +108,7 @@ The following cases are not supported in multi-user mode:
 
 [OPTION BEGIN [Jetpack Compose-based UI]]
 
-1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Mobile Settings Exchange** in the assigned features list:
+1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Client Settings** in the general settings list:
 
     ![Cockpit app screen](cockpit-app.png)
 
@@ -194,7 +194,7 @@ The following cases are not supported in multi-user mode:
 
 [OPTION BEGIN [View-based UI]]
 
-1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Mobile Settings Exchange** in the assigned features list:
+1.  For an offline application, you have to enable the **Allow Upload of Pending Changes from Previous User** option on the server side first. Go to the **SAP Mobile Services cockpit** and select your application from the application list. Click **Client Settings** in the general settings list:
 
     ![Cockpit app screen](cockpit-app.png)
 
@@ -461,7 +461,7 @@ The following cases are not supported in multi-user mode:
 
     `open fun obfuscateUserName(name: String): String`
 
-    `fun obfuscateEmail(email: String): String`
+    `open fun obfuscateEmail(email: String): String`
 
     Notice that a default obfuscate algorithm is provided in the APIs. You can override the APIs to provide your own obfuscate algorithm.
 

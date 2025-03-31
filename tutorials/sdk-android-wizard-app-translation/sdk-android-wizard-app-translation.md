@@ -97,7 +97,7 @@ The [SAP Translation Hub](https://help.sap.com/viewer/product/SAP_TRANSLATION_HU
         | Global Account | URL | Sample URL |
         |:----|:----|:----|
         | Trial | **`https://saptranslation-<subaccountname>.hanatrial.ondemand.com`** | **`https://saptranslation-s0001001002trial.hanatrial.ondemand.com`** |
-        | Enterprise | **`https://sap<provider subaccount name>-<subscription subaccount name>.<region host>`** | **`https://sapa7d6108fa-c77539gg5d.hana.ondemand.com`** |
+        | Enterprise | **`https://sap<provider subaccount name>-<subscription subaccount name>.<region host>`** | **`https://sapa5b6789cd-e77777fg7h.hana.ondemand.com`** |
 
     - **Username** and **Password** – The credentials of your SAP BTP account.
 

@@ -27,21 +27,16 @@ time: 20
 ### Configure Mobile Services for push notifications
 
 
-1. Go to **SAP Mobile Services Cockpit**, select the **com.sap.wizapp** application.
+1. Go to **SAP Mobile Services Cockpit**, navigate to **Mobile Applications > Native/MDK** and select the **btp.sdk.wizapp** application.
 
-    ![Application page in CF cockpit](cf-trial-application-page.png)
-
-2. Select **Mobile Push Notification**.
-
-    ![Mobile Push Notification](push-notification.png)
+2. Select **Push Notification**.
 
     >If you don't see the option, follow the screenshots to add this feature:
     >
     > - ![Add assigned features](add-assigned-features.png)
     > - ![Add push notification](add-push-notification.png)
-    > - ![Confirm save](confirm-change.png)
 
-3. The **Mobile Push Notification** screen requires information from [Firebase](https://firebase.google.com/).
+3. The **Push Notification** screen requires information from [Firebase](https://firebase.google.com/).
 
     ![Push notification](push-notification-blank.png)
 
@@ -53,7 +48,7 @@ time: 20
 
     ![Generate private key](generate-private-key.png)
 
-6. In the SAP Mobile Services **Mobile Push Notification** settings screen, click **Browse...** to load the downloaded private key file. After that, click **Save** to save changes.
+6. In the SAP Mobile Services **Push Notification** settings screen, click **Browse...** to load the downloaded private key file. After that, click **Save** to save changes.
 
     ![Push notification android](push-notification-android.png)
 

@@ -104,8 +104,6 @@ time: 15
 
 5.  Navigate back to the entity list screen, then back into the **Settings** screen to see the effect of changing the log level.
 
-    ![Settings menu opened](settings_menu_jc.png)
-
 6.  Examine the **Logcat** (located at the bottom of the Android Studio screen, click it and you can see the logs). In the filter, add the name of the class that we are interested in seeing the log from: **`com.sap.wizapp.ui.odata.viewmodel.SettingsViewModel`**.
 
     Notice that the messages were logged since the log level of the app was set to **Debug** or **Path**.
@@ -138,8 +136,6 @@ The SDK libraries also log output based on the app's log level.
 
 5.  Navigate back to the entity list screen, then back into the **Settings** screen to see the effect of changing the log level.
 
-    ![Settings menu opened](settings_menu.png)
-
 6.  Examine the **Logcat** (located at the bottom of the Android Studio screen, click it and you can see the logs). In the filter, add the name of the class that we are interested in seeing the log from: **`com.sap.wizapp.mdui.EntitySetListActivity`**.
 
     Notice that the messages were logged since the log level of the app was set to **Debug** or **Path**.
@@ -169,9 +165,9 @@ The SDK libraries also log output based on the app's log level.
 
     ![Log upload succeeded](log_uploaded_jc.png)
 
-2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Log Upload**.
+2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** > **Client Log Upload**.
 
-    ![Mobile Applications > Native/MDK > com.sap.wizapp > Mobile Client Log Upload](select_and_download_log.png)
+    ![Mobile Applications > Native/MDK > btp.sdk.wizapp > Client Log Upload](select_and_download_log.png)
 
 3.  Select the **Error Logs** tab and you will see the log you just uploaded in the **Error** level list. If the log doesn't appear immediately, wait for a few moments, then click **Go** to refresh the view.
 
@@ -199,9 +195,9 @@ The SDK libraries also log output based on the app's log level.
 
     ![Log upload succeeded](log_uploaded.png)
 
-2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Log Upload**.
+2.  In the **Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** > **Client Log Upload**.
 
-    ![Mobile Applications > Native/MDK > com.sap.wizapp > Mobile Client Log Upload](select_and_download_log.png)
+    ![Mobile Applications > Native/MDK > btp.sdk.wizapp > Client Log Upload](select_and_download_log.png)
 
 3.  Select the **Error Logs** tab and you will see the log you just uploaded in the **Error** level list. If the log doesn't appear immediately, wait for a few moments, then click **Go** to refresh the view.
 
