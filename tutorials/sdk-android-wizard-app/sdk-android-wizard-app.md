@@ -16,8 +16,8 @@ time: 30
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services. (To just complete this tutorial mission (except tutorial 7 about translation hub), it's sufficient to simply [Get a Free Account on SAP BTP Trial](hcp-create-trial-account).)
     - **Mobile Services**
 - Make sure you can [Access SAP Mobile Services](fiori-ios-hcpms-setup).
-- Installed [Android Studio Koala 2024.1.1](https://developer.android.com/studio/archive). Please use the specified version.
-- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 24.8.x or higher of the SAP BTP SDK for Android.
+- Installed [Android Studio Koala Feature Drop 2024.1.2 Patch 1](https://developer.android.com/studio/archive). Please use the specified version.
+- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 24.12.x or higher of the SAP BTP SDK for Android.
 - Created a Google account.
 
 ## You will learn
@@ -58,11 +58,11 @@ time: 30
 
 5.  Click **Next** in the **Server Connection** screen.
 
-6.  Select **Sample** in the **Cloud Configuration** screen and set the **Application ID** to **`com.sap.wizapp`**.
+6.  Select **Sample** in the **Cloud Configuration** screen and set the **Application ID** to **`btp.sdk.wizapp`**.
 
     ![Sample tab information](sample-application-wizard.png)
 
-7.  SAP Mobile Services provides a sample back-end destination called `com.sap.edm.sampleservice.v2`, which is used here to provide data for the application. It includes product categories, products, suppliers, customers and sales order data. Select it and click **Next**.
+7.  SAP Mobile Services provides a sample back-end destination called `com.sap.edm.sampleservice.v4`, which is used here to provide data for the application. It includes product categories, products, suppliers, customers and sales order data. Select it and click **Next**.
 
     ![Odata service destination screen](Odata-service-destination.png)
 
@@ -171,9 +171,9 @@ If you check the **Enable Push** checkbox, an error message will appear, indicat
 
     ![Passcode screen](create-passcode.png)
 
-5.  You can modify the passcode policy in the [Mobile Service Cockpit](https://mobile-service-cockpit-web.cfapps.eu10.hana.ondemand.com/) under **Client Configuration** in **Mobile Settings Exchange** page. The passcode screen will not be displayed if the **Enable Passcode Policy** is not checked.
+5.  You can modify the passcode policy in the **Mobile Service Cockpit** under **Client Configuration** in **Client Settings** page. The passcode screen will not be displayed if the **Enable Passcode Policy** is not checked.
 
-    ![Mobile Settings Exchange page access](access-mobile-settings-exchange.png)
+    ![Client Settings page access](access-client-settings.png)
 
     ![Passcode Policy](passcode-policy.png)
 

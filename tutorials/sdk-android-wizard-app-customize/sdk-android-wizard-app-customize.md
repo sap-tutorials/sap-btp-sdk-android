@@ -68,27 +68,31 @@ In this section, you will configure the object cell to display a product's name,
 
 1.  In Android Studio, on Windows, press **`Ctrl+shift+N`**, or on a Mac, press **`command+shift+O`**. Type **`ProductEntitiesScreen`** to open `ProductEntitiesScreen.kt`.
 
-2.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`viewModel.getEntityTitle(entity)`** to navigate to the line `headline = viewModel.getEntityTitle(entity),`. Change this line to `headline = entity.getOptionalValue(Product.name).toString(),`. This will display the product name as the headline value of the object cell.
+2.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`viewModel.getEntityTitle(entity)`** to navigate to the line `setHeadline(viewModel.getEntityTitle(entity))`. Change this line to `setHeadline(entity.getOptionalValue(Product.name).toString())`. This will display the product name as the headline value of the object cell.
 
     If the class `Product` appears in red, it indicates that Android Studio could not locate the class. Select the class, and on Windows press **`Alt+Enter`**, or on a Mac, press **`option+return`** to use Android Studio's quick fix to add the missing imports.
 
-    Alternatively, you can enable the following setting: Windows: **Settings**; Mac: **Android Studio > Settings...**
+    Alternatively, you can open the settings screen: Windows: **Settings**; Mac: **Android Studio > Settings...**. Then go to **Editor > General > Auto Import**, enable **Add unambiguous imports on the fly** in the `Kotlin` section.
 
-    ![Add unambiguous imports on the fly](auto-import-kotlin.png)
-
-3.  In the same code block, replace `subheadline` and `footnote`, and add `status` with the following code, which will display the category, description, and price.
+3.  In the same code block, replace `setSubheadline` and `setFootnote`, and add `setStatusInfoLabel` with the following code, which will display the category, description, and price.
 
     ```Kotlin
-    subheadline = entity.getDataValue(Product.category).toString(),
-    footnote = entity.getDataValue(Product.shortDescription).toString(),
-    status = FioriObjectCellStatusData(
-        label = "$ ${entity.getDataValue(Product.price).toString()}"
-    ),
+    setSubheadline(entity.getDataValue(Product.category).toString())
+    setFootnote(entity.getDataValue(Product.shortDescription).toString())
+    setStatusInfoLabel(
+        FioriStatusInfoLabelDataInOC(
+            items = listOf(
+                FioriLabelItemData(
+                    label = "$ ${entity.getDataValue(Product.price).toString()}"
+                )
+            )
+        )
+    )
     ```
 
 4.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`FioriObjectCell`** to navigate to the `FioriObjectCell` invocation.
 
-5.  Add the following code right after `FioriObjectCell`, and add it right before `if (entities.loadState.refresh == LoadState.Loading)`, to add a divider between the product items.
+5.  Add the following code right after `FioriObjectCell` invocation, and add it right before `if (entities.loadState.refresh == LoadState.Loading)` at the same time, to add a divider between the product items.
 
     ```Kotlin
     FioriDivider()
@@ -165,9 +169,7 @@ In this section, you will configure the object cell to display a product's name,
 
     If the classes `LinearLayoutManager` and `DividerItemDecoration` appear in red, it indicates that Android Studio could not locate them. Select each class, and on Windows, press **`Alt+Enter`**, or on a Mac, press **`option+return`** to use Android Studio's quick fix to add the missing imports.
 
-    Alternatively, you can enable the following setting: Windows: **Settings**; Mac: **Android Studio > Settings...**
-
-    ![Add unambiguous imports on the fly](auto-import-kotlin.png)
+    Alternatively, you can enable the following setting: Windows: **Settings**; Mac: **Android Studio > Settings...**. Then go to **Editor > General > Auto Import**, enable **Add unambiguous imports on the fly** in the `Kotlin` section.
 
 6.  On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`Repository`** to open `Repository.kt`.
 
@@ -223,7 +225,7 @@ In this section, you will update the screen's title, configure the object cell t
 
 7.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`FioriObjectCell`** to navigate to the `FioriObjectCell` invocation. 
 
-8.  Add the following code right after `FioriObjectCell` and add it right before `if (entities.loadState.refresh == LoadState.Loading)`, which adds a divider between categories:
+8.  Add the following code right after `FioriObjectCell` invocation and add it right before `if (entities.loadState.refresh == LoadState.Loading)` at the same time, which adds a divider between categories:
 
     ```Kotlin
     FioriDivider()
@@ -234,14 +236,20 @@ In this section, you will update the screen's title, configure the object cell t
 10. Replace the value of `objectCellData` with the following to display the main category instead, hide the footnote, and show the number of products per category.
 
     ```Kotlin
-    val objectCellData = FioriObjectCellData(
-        headline = viewModel.getEntityTitle(entity),
-        subheadline = entity.getDataValue(ProductCategory.mainCategoryName).toString(),
-        avatar = avatar,
-        status = FioriObjectCellStatusData(
-            label = "${entity.getDataValue(ProductCategory.numberOfProducts).toString()} Products"
+    val objectCellData = FioriObjectCellData.Builder().apply {
+        setHeadline(viewModel.getEntityTitle(entity))
+        setSubheadline(entity.getDataValue(ProductCategory.mainCategoryName).toString())
+        setAvatar(avatar)
+        setStatusInfoLabel(
+            FioriStatusInfoLabelDataInOC(
+                items = listOf(
+                    FioriLabelItemData(
+                        label = "${entity.getDataValue(ProductCategory.numberOfProducts).toString()} Products"
+                    )
+                )
+            )
         )
-    ).apply { setDisplayReadIndicator(false) }
+    }.build()
     ```
 
 11. Run the app again. You'll see that the **title**, **subheadline**, and **status** are now displayed, while the **icon** and **footnote** are no longer visible.
@@ -366,7 +374,9 @@ In this section, you will modify the app to initially show the **Product Categor
 
 3. On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`ODataViewModel`**, to open `ODataViewModel.kt`.
 
-4. Replace the `onFloatingAdd` function with the following code:
+4. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`onFloatingAdd`**, to navigate to `onFloatingAdd` method.
+
+5. Replace the `onFloatingAdd` function with the following code:
 
     ```Kotlin
     //return create action when nav property value is list type or null, or entitySet is singleton and entity screen is not empty
@@ -389,15 +399,15 @@ In this section, you will modify the app to initially show the **Product Categor
     }
     ```
 
-5. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductEntitiesScreen`**, to open `ProductEntitiesScreen.kt`.
+6. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductEntitiesScreen`**, to open `ProductEntitiesScreen.kt`.
 
-6. Add a variable to retrive the selected category name from `ODataViewModel`:
+7. Add a variable in the method body to retrive the selected category name from `ODataViewModel`:
 
     ```Kotlin
     val category = (viewModel.parent as? ProductCategory)?.categoryName
     ```
 
-7. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`return@items`** to locate the line `val entity = entities[index] ?: return@items`. Immediately after this line, add the following code to filter the products list to display only the products for the selected category:
+8. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`return@items`** to locate the line `val entity = entities[index] ?: return@items`. Immediately after this line, add the following code to filter the products list to display only the products for the selected category:
 
     ```Kotlin
     category?.also {
@@ -407,9 +417,9 @@ In this section, you will modify the app to initially show the **Product Categor
     }
     ```
 
-8. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ODataNavHost`**, to open `ODataNavHost.kt`.
+9. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ODataNavHost`**, to open `ODataNavHost.kt`.
 
-9. Replace the `if (!uiState.isEntityFocused)` block with the following:
+10. Replace the `if (!uiState.isEntityFocused)` block with the following:
     
     ```Kotlin
     if (!uiState.isEntityFocused) {
@@ -434,7 +444,7 @@ In this section, you will modify the app to initially show the **Product Categor
 
     You can navigate to the **EntityList** screen by pressing the **Back** button on the **Product Categories** screen. The **EntityList** screen retains the **Settings** menu for convenience.
 
-10. Replace the `EntityOperationType.DETAIL` code block with the following, which will enable the navigation from the Category list screen to the Product list screen.
+11. Replace the `EntityOperationType.DETAIL` code block with the following, which will enable the navigation from the Category list screen to the Product list screen.
 
     ```Kotlin
     EntityOperationType.DETAIL -> if (viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) {
@@ -454,7 +464,7 @@ In this section, you will modify the app to initially show the **Product Categor
     }
     ```
 
-11. Replace the `viewModel` of `composable(route = EntityNavigationCommands(entityType).entityListNav.route)` with the following `viewModel` so that the product screen can retrieve the selected category name:
+12. Replace the `viewModel` of `composable(route = EntityNavigationCommands(entityType).entityListNav.route)` with the following `viewModel` so that the product screen can retrieve the selected category name:
 
     ```Kotlin
     val viewModel: ODataViewModel = viewModel(
@@ -472,19 +482,19 @@ In this section, you will modify the app to initially show the **Product Categor
     )
     ```
 
-12. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductCategoryEntitiesScreen`**, to open `ProductCategoryEntitiesScreen.kt`.
+13. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductCategoryEntitiesScreen`**, to open `ProductCategoryEntitiesScreen.kt`.
 
-13. Set `floatingActionClick` in `OperationScreenSettings` of `OperationScreen` to **`null`** instead of `viewModel.onFloatingAdd()`.
+14. Set `floatingActionClick` in `OperationScreenSettings` of `OperationScreen` to **`null`** instead of `viewModel.onFloatingAdd()`.
 
-14. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`EntityScreenCommonUI`**, to open `EntityScreenCommonUI.kt`.
+15. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`EntityScreenCommonUI`**, to open `EntityScreenCommonUI.kt`.
 
-15. Find the `ActionItem` of `R.string.menu_home` and change its overflowMode to the following:
+16. Find the `ActionItem` of `R.string.menu_home` and change its overflowMode to the following:
 
     ```Kotlin
     overflowMode = if(viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) OverflowMode.NOT_SHOWN else OverflowMode.IF_NECESSARY,
     ```
 
-16. Run the app again. You'll see that the **Product Categories** screen is now the first screen displayed, the **Home** menu is no longer visible, and selecting a category shows the products list screen, which now displays only the products for that selected category.
+17. Run the app again. You'll see that the **Product Categories** screen is now the first screen displayed, the **Home** menu is no longer visible, and selecting a category shows the products list screen, which now displays only the products for that selected category.
 
     ![Product category list screen](reformatted-product-category-list2-jc.png)
 
@@ -584,8 +594,6 @@ In this section you will add a search field to **Product Categories** screen, al
 [OPTION BEGIN [Jetpack Compose-based UI]]
 
 1.  First, right-click the `res/drawable` folder to create a new **Drawable Resource File** **`ic_search_icon.xml`**, and use the following XML content.
-
-    ![Create a new Drawable Resource File](create-new-drawable-resource-file.png)
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -765,8 +773,6 @@ In this section you will add a search field to **Product Categories** screen, al
 
 1.  First, right-click the `res/drawable` folder to create a new **Drawable Resource File** **`ic_search_icon.xml`**, and use the following XML content.
 
-    ![Create a new Drawable Resource File](create-new-drawable-resource-file.png)
-
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
     <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -783,8 +789,6 @@ In this section you will add a search field to **Product Categories** screen, al
     The current menu `res/menu/itemlist_menu.xml` is shared among all list screens. We will now use a new XML file for the **Product Categories** screen.
 
 2.  Right-click the `res/menu` folder to add a new **Menu Resource File** named **`product_categories_menu.xml`**, and use the following XML for its contents.
-
-    ![Add a new Menu Resource File](add-new-menu-resource-file.png)
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -892,9 +896,7 @@ In this section, you will add a Top Products section to the **Products** screen,
 
 First, we'll generate additional sales data in the sample OData service.
 
-1.  In **SAP Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** and go to **Mobile Sample OData ESPM**.
-
-    ![Sample OData feature on Mobile Services](sample-odata-feature.png)
+1.  In **SAP Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** and go to **Sample OData ESPM**.
 
 2.  Change the **Entity Sets** dropdown to **`SalesOrderItems`** and then click the **generate sample sales orders** icon five times. This will create additional sales order items, which we can use to base our top products on, based on the quantity sold.
 
@@ -1050,9 +1052,7 @@ In this section, you will add a Top Products section to the **Products** screen,
 
 First, we'll generate additional sales data in the sample OData service.
 
-1.  In **SAP Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/Hybrid** > **com.sap.wizapp** and go to **Mobile Sample OData ESPM**.
-
-    ![Sample OData feature on Mobile Services](sample-odata-feature.png)
+1.  In **SAP Mobile Services cockpit**, navigate to **Mobile Applications** > **Native/Hybrid** > **btp.sdk.wizapp** and go to **Sample OData ESPM**.
 
 2.  Change the **Entity Sets** dropdown to **`SalesOrderItems`** and then click the **generate sample sales orders** icon five times. This will create additional sales order items, which we can use to base our top products on, based on the quantity sold.
 

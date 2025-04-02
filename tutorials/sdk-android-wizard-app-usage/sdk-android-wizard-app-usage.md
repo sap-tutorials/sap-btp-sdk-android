@@ -48,9 +48,9 @@ The app must first receive permission to collect usage information from the user
 
     The **Consent to Usage Collection** will be disabled and cannot be enabled if usage was not enabled in the **Mobile Services cockpit**.
 
-2. To review this policy setting, in the **Mobile Services cockpit**, access **Mobile Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**.
+2. To review this policy setting, in the **Mobile Services cockpit**, access **Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** > **Client Usage and User Feedback**.
 
-    ![Access Mobile Client Usage and User Feedback](mobile_client_usage_and_user_feedback.png)
+    ![Access Client Usage and User Feedback](client_usage_and_user_feedback.png)
 
     The **Client Usage Configuration** specifies whether uploads of usage data are allowed and the time interval between automatic usage report uploads.
 
@@ -86,9 +86,9 @@ The app must first receive permission to collect usage information from the user
 
     The **Consent to Usage Collection** will be disabled and cannot be enabled if usage was not enabled in the **Mobile Services cockpit**.
 
-2. To review this policy setting, in the **Mobile Services cockpit**, access **Mobile Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**.
+2. To review this policy setting, in the **Mobile Services cockpit**, access **Client Usage and User Feedback** by navigating to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** > **Client Usage and User Feedback**.
 
-    ![Access Mobile Client Usage and User Feedback](mobile_client_usage_and_user_feedback.png)
+    ![Access Client Usage and User Feedback](client_usage_and_user_feedback.png)
 
     The **Client Usage Configuration** specifies whether uploads of usage data are allowed and the time interval between automatic usage report uploads.
 
@@ -120,7 +120,7 @@ The app must first receive permission to collect usage information from the user
 
     Different charts become available when you select between **Sessions**, **Demographics**, and **Behavior** in the drop-down (green) box. The mark in the yellow box controls whether to display filters that are in the red box right below.
 
-2. To download the usage report, go to **Mobile Applications** > **Native/MDK** > **com.sap.wizapp** > **Mobile Client Usage and User Feedback**. You can filter the data by changing the value of the **Last 7 Days** dropdown. Click the **Download** icon to export the filtered data to a `.csv` file.
+2. To download the usage report, go to **Mobile Applications** > **Native/MDK** > **btp.sdk.wizapp** > **Client Usage and User Feedback**. You can filter the data by changing the value of the **Last 7 Days** dropdown. Click the **Download** icon to export the filtered data to a `.csv` file.
 
     ![Download Usage From Management Cockpit](download_usage.png)
 
@@ -387,7 +387,7 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
     ![Set Auto Upload of Usage Report](automatic_upload.png)
 
-2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
+2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener` class.
 
 3.  Near the end of the class, add the following companion objects:
 
@@ -413,7 +413,7 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
     This code gets the usage policy information from the server client policy and stores it inside global variables.
 
-6.  Add the following method in the file:
+6.  Add the following method in the class:
 
     ```Kotlin
     private fun uploadUsage() {

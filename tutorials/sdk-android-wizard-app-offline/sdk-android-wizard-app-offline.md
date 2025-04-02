@@ -723,7 +723,7 @@ In this section we will create an **Error Information** screen that displays the
     <string name="request_url">Request URL</string>
     ```
 
-3.  Create a new activity in the `app/java/com.sap.wizapp/mdui` folder by right-clicking, then selecting **New** > **Activity** > **Empty Views Activity**. Name the new activity **`ErrorActivity`**.
+3.  Create a new activity in the `app/kotlin+java/com.sap.wizapp/mdui` folder by right-clicking, then selecting **New** > **Activity** > **Empty Views Activity**. Name the new activity **`ErrorActivity`**.
 
 4.  Press **`Shift`** twice and type **`activity_error`** to open `res/layout/activity_error.xml`.
 
