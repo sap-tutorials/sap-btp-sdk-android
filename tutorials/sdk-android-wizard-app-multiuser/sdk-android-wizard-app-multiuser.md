@@ -63,7 +63,7 @@ The following cases are not supported in multi-user mode:
 
 4.  Re-run (reset/uninstall first) the app and notice that the onboarding process is same as for single-user mode, except that no biometric authentication screen is shown. After onboarding, put the app in background until the sign in screen appears. In multi-user mode, there is a **Switch or add user** button at the bottom of the screen.
 
-    ![Sign in screen](sign-in-screen.png)
+    ![Sign in screen](sign-in-screen-jc.png)
 
     When the button is clicked, the user list is displayed. You can either select an existing user from the list or click the **ADD USER** icon at the right top of the screen. This will start the onboarding process for the new user.
 
@@ -378,7 +378,7 @@ The following cases are not supported in multi-user mode:
 
 5.  For **Offline Transaction Issue Screen**, the client code needs to set the user information of previous user and implement the logic for button click events.
 
-    On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineTransactionIssueAction`** to move to the `offlineTransactionIssueAction` method. When the transaction error occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUser` method of the `OfflineODataProvider` class to get the user ID and then call the `getUserInfoById` method of the `UserSecureStoreDelegate` class with the user ID.
+    On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineTransactionIssueAction`** to move to the `offlineTransactionIssueAction` method. When the transaction error occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUserDetails` method from the flow context.
 
     ```Kotlin
     private fun offlineTransactionIssueAction() {
@@ -390,7 +390,7 @@ The following cases are not supported in multi-user mode:
             with(binding.offlineTransactionIssueScreen) {
                 initialize(offlineTransactionIssueScreenSettings)
                 CoroutineScope(IO).launch {
-                    val user = UserSecureStoreDelegate.getInstance().getUserInfoById(OfflineWorkerUtil.offlineODataProvider!!.previousUser)
+                    val user = FlowContextRegistry.flowContext.getPreviousUserDetails()
                     withContext(Main) {
                         user?.let {
                             setPrevUserName(it.name)
@@ -401,7 +401,6 @@ The following cases are not supported in multi-user mode:
                     }
                 }
             }
-            // Provide logic for the button click event
             binding.offlineTransactionIssueScreen.setButtonClickListener(View.OnClickListener {
                 startActivity(Intent(this, WelcomeActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -429,13 +428,17 @@ The following cases are not supported in multi-user mode:
 
     `suspend fun getRuntimeMultipleUserMode(): Boolean`
 
-3.  The Flows component exposes one API in `FlowActionHandler` class for you to customize the user information displayed on the Sign-in and user list screens, that will obfuscate the user name and email by default:
+3.  The Flows component expose the following API in `FlowContext` class for you to acquire the details of the previous user, such as user name and email:
+
+    `fun getPreviousUser() : DeviceUser?`
+
+4.  The Flows component exposes one API in `FlowActionHandler` class for you to customize the user information displayed on the Sign-in and user list screens, that will obfuscate the user name and email by default:
 
     `open fun customizeSignInScreenUserInfo(user: DeviceUser): SignInScreenUserInfo`
 
     Notice that a default obfuscate algorithm is provided in the APIs. You can override the APIs to provide your own obfuscate algorithm.
 
-4.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
+5.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
 
 [OPTION END]
 
@@ -457,7 +460,11 @@ The following cases are not supported in multi-user mode:
 
     The `getRuntimeMultipleUserModeAsync` function is mainly used by the Java code.
 
-3.  The Flows component exposes two APIs in `FlowActionHandler` class for you to obfuscate the user name and email displayed on the Sign-in screen:
+3.  The Flows component expose the following API in `FlowContext` class for you to acquire the details of the previous user, such as user name and email:
+
+    `fun getPreviousUserDetails() : DeviceUser?`
+
+4.  The Flows component exposes two APIs in `FlowActionHandler` class for you to obfuscate the user name and email displayed on the Sign-in screen:
 
     `open fun obfuscateUserName(name: String): String`
 
@@ -465,7 +472,7 @@ The following cases are not supported in multi-user mode:
 
     Notice that a default obfuscate algorithm is provided in the APIs. You can override the APIs to provide your own obfuscate algorithm.
 
-4.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
+5.  The `FlowStateListener` class provides one callback, `onOfflineEncryptionKeyReady(key: String?)`, for you to handle the encryption key ready event.
 
     As a sample implementation of this callback, you can examine a wizard-generated offline app. In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`WizardFlowStateListener`** to open `WizardFlowStateListener.kt`.
 

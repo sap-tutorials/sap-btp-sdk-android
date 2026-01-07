@@ -46,9 +46,9 @@ time: 15
             }
         }
 
-        val consentUsage = UserSecureStoreDelegate.getInstance().getConsentStatus(ConsentType.USAGE)
+        val consentUsage = UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.USAGE)
         val consentCrashReport =
-            UserSecureStoreDelegate.getInstance().getConsentStatus(ConsentType.CRASH_REPORT)
+            UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.CRASH_REPORT)
         logger.debug(
             "init consent data : consentUsage {}, consentCrashReport {}",
             consentUsage,
@@ -116,7 +116,7 @@ The SDK libraries also log output based on the app's log level.
 
 1.  Change the filter to **`com.sap.cloud.mobile.foundation`**.
 
-2.  Press **Back** to exit the app and you will see the logged lines from the foundation library.
+2.  Exit the app and you will see the logged lines from the foundation library.
 
     ![Debug log level output for foundation](debug_log_foundation_jc.png)
 

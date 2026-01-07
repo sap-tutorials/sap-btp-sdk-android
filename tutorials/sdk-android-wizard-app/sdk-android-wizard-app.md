@@ -16,8 +16,8 @@ time: 30
 - You have [Set Up a BTP Account for Tutorials](group.btp-setup). Follow the instructions to get an account, and then to set up entitlements and service instances for the following BTP services. (To just complete this tutorial mission (except tutorial 7 about translation hub), it's sufficient to simply [Get a Free Account on SAP BTP Trial](hcp-create-trial-account).)
     - **Mobile Services**
 - Make sure you can [Access SAP Mobile Services](fiori-ios-hcpms-setup).
-- Installed [Android Studio Koala Feature Drop 2024.1.2 Patch 1](https://developer.android.com/studio/archive). Please use the specified version.
-- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 24.12.x or higher of the SAP BTP SDK for Android.
+- Installed [Android Studio Narwhal 3 Feature Drop | 2025.1.3](https://developer.android.com/studio/archive). **Please use the specified version**.
+- [Downloaded](https://developers.sap.com/trials-downloads.html?search=sdk%20for%20android) and [Installed](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/getting-started/android/setup.html) version 25.11.x or higher of the SAP BTP SDK for Android.
 - Created a Google account.
 
 ## You will learn

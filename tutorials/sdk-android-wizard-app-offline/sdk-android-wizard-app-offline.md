@@ -322,7 +322,7 @@ The application allows users to make changes against a local offline store and s
     ```Kotlin
     // In EntitySetListActivity.kt
     private fun synchronize() {
-        OfflineWorkerUtil.sync(applicationContext)
+        OfflineWorkerUtil.sync(application)
         ... ...
     }
     ```
@@ -736,6 +736,7 @@ In this section we will create an **Error Information** screen that displays the
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".mdui.ErrorActivity"
         android:orientation="vertical">
 
