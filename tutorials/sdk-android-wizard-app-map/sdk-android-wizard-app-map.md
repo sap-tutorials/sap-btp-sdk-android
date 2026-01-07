@@ -34,7 +34,7 @@ In this section you will create a new activity to display a map.
 
 [OPTION BEGIN [Jetpack Compose-based UI]]
 
-1. In Android Studio, in the `AndroidManifest.xml` file, add the following content as a child of the `<application>` tag:
+1. In Android Studio, in the `AndroidManifest.xml` file, add the following content as a child of the `<application>` tag right before `<activity>` tags:
 
     ```XML
     <!--
@@ -54,32 +54,39 @@ In this section you will create a new activity to display a map.
 
 2. Follow the directions mentioned in the above comments to obtain an **API key**.
 
-3. In Android Studio, in the top-level `build.gradle` file, add the following code to the `dependencies` element under `buildscript`.
+3. Open the `local.properties` file in your project-level directory and then add the following code. Replace `YOUR_API_KEY` with your API key.
+
+    ```
+    MAPS_API_KEY=YOUR_API_KEY
+    ```
+
+4. In Android Studio, in the top-level `build.gradle` file, add the following code to the `dependencies` element under `buildscript`.
 
     ```Gradle
     buildscript {
-        ... ...
         dependencies {
-            ... ...
-            classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
+            // ...
+            classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
         }
     }
     ```
 
-4. Open the module-level `build.gradle` file and add the following code to the top of the file.
+5. Open the module-level `build.gradle` file and add the following code to the `plugins` element.
 
     ```Gradle
-    apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    plugins {
+        id("com.android.application")
+        // ...
+        id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    }
     ```
 
-5. Follow the guide of point 4 to 8 from [Step 3: Add your API key to the project](https://developers.google.com/maps/documentation/android-sdk/config#step_3_add_your_api_key_to_the_project).
-
-6. Add the following dependency to the module-level `build.gradle` file and sync the project again:
+6. Add the following dependency to the module-level `build.gradle` file and click **Sync Now** to sync the project:
 
     ```Gradle
     dependencies {
         // Android Maps Compose composables for the Maps SDK for Android
-        implementation("com.google.maps.android:maps-compose:6.4.0")
+        implementation("com.google.maps.android:maps-compose:6.12.2")
 
         ... ...
     }
@@ -87,9 +94,9 @@ In this section you will create a new activity to display a map.
 
 7. In the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > ui > odata > screens > customer`**.
 
-8. Right-click and choose **`New > Kotlin Class/File`**.
+8. Right-click and choose **New** > **Kotlin Class / File**.
 
-9. Name the file as **`CustomersMapScreen`**. Select **`File`** and then press **`Enter`**.
+9. Name the file as **`CustomersMapScreen`**. Select **File** and then press **`Enter`**.
 
 10. Replace the content of `CustomersMapScreen` with the following:
 
@@ -112,7 +119,7 @@ In this section you will create a new activity to display a map.
                 (
                 navigateToHome: () -> Unit,
                 navigateUp: () -> Unit,
-                viewModel: ODataViewModel,
+                viewModel: ODataViewModel<EntityValue>,
                 isExpandScreen: Boolean,
             ) -> Unit =
         { _, _, _, _ ->
@@ -154,49 +161,142 @@ In this section you will create a new activity to display a map.
 
 [OPTION BEGIN [View-based UI]]
 
-1. In Android Studio, in the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > mdui > customers`**.
+1. In Android Studio, in the `AndroidManifest.xml` file, add the following content as a child of the `<application>` tag right before `<activity>` tags:
 
-2. Right-click and choose **`New > Activity > Gallery... > Google Maps Views Activity`**.
+    ```XML
+    <!--
+            TODO: Before you run your application, you need a Google Maps API key.
 
-3. Set **Activity Name** to be **`CustomersMapActivity`**.
+            To get one, follow the directions here:
 
-    ![Creating map activity](map-create-dialog.png)
+            https://developers.google.com/maps/documentation/android-sdk/get-api-key
 
-4. Click **Finish**.
+            Once you have your API key (it starts with "AIza"), define a new property in your
+            project's local.properties file (e.g. MAPS_API_KEY=Aiza...).
+    -->
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="${MAPS_API_KEY}" />
+    ```
 
-5. In the `AndroidManifest.xml` file, copy the URL on line 17.
+2. Follow the directions mentioned in the above comments to obtain an **API key**.
 
-6. Paste the URL into a browser to register the application with the Maps SDK for Android. Follow the instructions to get an **API Key**.
-
-7. Open the `local.properties` file in your project-level directory and then add the following code. Replace `YOUR_API_KEY` with your API key.
+3. Open the `local.properties` file in your project-level directory and then add the following code. Replace `YOUR_API_KEY` with your API key.
 
     ```
     MAPS_API_KEY=YOUR_API_KEY
     ```
 
-8. In your `AndroidManifest.xml` file, go to `com.google.android.geo.API_KEY` and update the `android:value` attribute as follows:
+4. In Android Studio, in the top-level `build.gradle` file, add the following code to the `dependencies` element under `buildscript`.
 
-    ```XML
-    <meta-data
-      android:name="com.google.android.geo.API_KEY"
-      android:value="${MAPS_API_KEY}" />
+    ```Gradle
+    buildscript {
+        dependencies {
+            // ...
+            classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+        }
+    }
     ```
 
-9. On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`EntitySetListActivity`** to open `EntitySetListActivity.kt`.
+5. Open the module-level `build.gradle` file and add the following code to the top of the file.
 
-10. On Windows, press **`Ctrl+F`**, or, on a Mac press **`command+F`**, and search for **`CustomersActivity::class`**.
+    ```Gradle
+    apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    ```
 
-11. Replace `CustomersActivity::class` with **`CustomersMapActivity::class`** so that when the user taps on **Customers**, the app will navigate to the newly added activity that includes a map.
+6. Add the following dependency to the module-level `build.gradle` file and click **Sync Now** to sync the project:
 
-12. On Windows press **`Ctrl+N`** or on a Mac press **`command+O`**, and type **`CustomersMapActivity`** to open `CustomersMapActivity.kt`.
+    ```Gradle
+    dependencies {
+        implementation 'com.google.android.gms:play-services-maps:19.2.0'
 
-13. Add the following import if it isn't added automatically:
+        ... ...
+    }
+    ```
+
+7. In the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > mdui > customers`**.
+
+8. Right-click and choose **New** > **Activity** > **Empty Views Activity**.
+
+9. Set **Activity Name** to be **`CustomersMapActivity`** and click **Finish**.
+
+10. Replace the class content with the following:
 
     ```Kotlin
+    package com.sap.wizapp.mdui.customers
+
+    import androidx.appcompat.app.AppCompatActivity
+    import android.os.Bundle
     import com.sap.wizapp.R
+
+    import com.google.android.gms.maps.CameraUpdateFactory
+    import com.google.android.gms.maps.GoogleMap
+    import com.google.android.gms.maps.OnMapReadyCallback
+    import com.google.android.gms.maps.SupportMapFragment
+    import com.google.android.gms.maps.model.LatLng
+    import com.google.android.gms.maps.model.MarkerOptions
+    import com.sap.wizapp.databinding.ActivityCustomersMapBinding
+
+    class CustomersMapActivity : AppCompatActivity(), OnMapReadyCallback {
+
+        private lateinit var mMap: GoogleMap
+        private lateinit var binding: ActivityCustomersMapBinding
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+
+            binding = ActivityCustomersMapBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+        }
+
+        /**
+        * Manipulates the map once available.
+        * This callback is triggered when the map is ready to be used.
+        * This is where we can add markers or lines, add listeners or move the camera. In this case,
+        * we just add a marker near Sydney, Australia.
+        * If Google Play services is not installed on the device, the user will be prompted to install
+        * it inside the SupportMapFragment. This method will only be triggered once the user has
+        * installed Google Play services and returned to the app.
+        */
+        override fun onMapReady(googleMap: GoogleMap) {
+            mMap = googleMap
+
+            // Add a marker in Sydney and move the camera
+            val sydney = LatLng(-34.0, 151.0)
+            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        }
+    }
     ```
 
-14. Run the app. Select **Customers**.
+11. On Windows, press **`Ctrl+Shift+N`**, or, on a Mac, press **`command+shift+O`**, and type **`activity_customers_map`** to open `activity_customers_map.xml`.
+
+12. Replace its contents with the following:
+
+    ```XML
+    <?xml version="1.0" encoding="utf-8"?>
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".mdui.customers.CustomersMapActivity" />
+    ```
+
+13. On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`EntitySetListActivity`** to open `EntitySetListActivity.kt`.
+
+14. On Windows, press **`Ctrl+F`**, or, on a Mac press **`command+F`**, and search for **`CustomersActivity::class`**.
+
+15. Replace `CustomersActivity::class` with **`CustomersMapActivity::class`** so that when the user taps on **Customers**, the app will navigate to the newly added activity that includes a map.
+
+16. Run the app. Select **Customers**.
 
     ![Entities screen](tap-on-customers.png)
 
@@ -269,7 +369,7 @@ In this section, you will add code to place a marker on the map for each custome
             (
             navigateToHome: () -> Unit,
             navigateUp: () -> Unit,
-            viewModel: ODataViewModel,
+            viewModel: ODataViewModel<EntityValue>,
             isExpandScreen: Boolean,
         ) -> Unit =
     { _, _, viewModel, _ ->
@@ -441,7 +541,7 @@ In this section, you will add code to display the customer detail screen when th
 
 [OPTION BEGIN [Jetpack Compose-based UI]]
 
-1. Add a parameter `onInfoWindowClick` to `Marker` with the following code:
+1. In the `CustomersMapScreen.kt` file, add a parameter `onInfoWindowClick` to `Marker` which is located in `GoogleMap` of the variable `CustomersMapScreen` with the following code:
 
     ```Kotlin
     onInfoWindowClick = {
@@ -567,7 +667,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
 
 [OPTION BEGIN [Jetpack Compose-based UI]]
 
-1. Press **`Shift`** twice, and type **`styles.xml`** to open `styles.xml`.
+1. Press **`Shift`** twice, and type **`styles.xml`** to open `app/src/main/res/value/styles.xml`.
 
 2. Add the following code right after `AppTheme` and before `AppTheme.NoActionBar`:
 
@@ -580,30 +680,33 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </style>
     ```
 
-3. Add the following dependency in the app module's `build.gradle` file in the dependencies object and click **Sync Now**.
+3. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`libs.versions.toml`** to open `libs.versions.toml`. 
+
+4. Add the following content right before `sap-cloud-foundation`:
 
     ```Gradle
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.activity:activity-ktx:1.10.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-
-    implementation group: 'com.sap.cloud.android', name: 'google-maps', version: sdkVersion
+    google-maps = { group = "com.sap.cloud.android", name = "google-maps", version.ref = "sapSdkVersion" }
     ```
 
-    ![Add Map Dependency](app-build-gradle-jc.png)
+5. Add the following dependencies in the app module's `build.gradle` file to the `dependencies` element and click **Sync Now**.
 
-4. In Android Studio, using the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > ui`**.
+    ```Gradle
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.activity:activity-ktx:1.12.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation(libs.google.maps)
+    ```
 
-5. Right-click and choose **New** > **Activity** > **Empty Views Activity**.
+6. In Android Studio, using the project explorer, navigate to **`app > kotlin+java > com.sap.wizapp > ui`**.
 
-6. Set **Activity Name** to be **`CustomersFioriMapActivity`**.
+7. Right-click and choose **New** > **Activity** > **Empty Views Activity**.
 
-7. Click **Finish**.
+8. Set **Activity Name** to be **`CustomersFioriMapActivity`**.
 
-    ![Dialog to create Fiori map activity](create-fiori-map-activity.png)
+9. Click **Finish**.
 
-8. Replace the file contents in the newly created `CustomersFioriMapActivity.kt` with the following code:
+10. Replace the file contents in the newly created `CustomersFioriMapActivity.kt` with the following code:
 
     ```Kotlin
     package com.sap.wizapp.ui
@@ -836,15 +939,16 @@ In this section, you will create a new activity that uses the Fiori Map control.
     }
     ```
 
-9. Press **Shift** twice and type **`activity_customers_fiori_map.xml`** to open `activity_customers_fiori_map.xml`.
+11. Press **Shift** twice and type **`activity_customers_fiori_map.xml`** to open `activity_customers_fiori_map.xml`.
 
-10. Replace its contents with the following code.
+12. Replace its contents with the following code.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -859,7 +963,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </androidx.constraintlayout.widget.ConstraintLayout>
     ```
 
-11. Create a new **Layout Resource File** in `res/layout` called **`detail_panel.xml`** and replace its contents with the following code.
+13. Right-click on the folder `app/src/main/res/layout` to create a new **Layout Resource File** in it called **`detail_panel.xml`** and replace its contents with the following code.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -879,7 +983,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </androidx.constraintlayout.widget.ConstraintLayout>
     ```
 
-12. Create a new **Layout Resource File** in `res/layout` called **`search_auto_complete.xml`** and replace its contents with the following code.
+14. Create a new **Layout Resource File** in `app/src/main/res/layout` called **`search_auto_complete.xml`** and replace its contents with the following code.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -895,11 +999,17 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </LinearLayout>
     ```
 
-13. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`EntitySetsScreen`** to open `EntitySetsScreen.kt`.
+15. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`EntitySetsScreen`** to open `EntitySetsScreen.kt`.
 
-14. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and search for **`onClick`**.
+16. Declare a context variable right before `FioriObjectCell(`:
 
-15. Replace `onClick` parameter with the following code so that when the user taps on **Customers**, the app will navigate to the newly added activity with the Fiori map on it.
+    ```Kotlin
+    val context = LocalContext.current
+    ```
+
+17. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and search for **`onClick`**.
+
+18. Replace `onClick` parameter with the following code so that when the user taps on **Customers**, the app will navigate to the newly added activity with the Fiori map on it.
 
     ```Kotlin
     onClick = {
@@ -913,13 +1023,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     }
     ```
 
-16. Declare a context variable right before `FioriObjectCell(`:
-
-    ```Kotlin
-    val context = LocalContext.current
-    ```
-
-17. Add the necessary imports to the top of the file if they are not auto-imported.
+19. Add the necessary imports to the top of the file if they are not auto-imported.
 
     ```Kotlin
     import android.content.Intent
@@ -927,11 +1031,11 @@ In this section, you will create a new activity that uses the Fiori Map control.
     import com.sap.cloud.android.odata.espmcontainer.ESPMContainerMetadata
     ```
 
-18. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`AndroidManifest`** to open `AndroidManifest.xml`.
+20. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`AndroidManifest`** to open `AndroidManifest.xml`.
 
-19. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and search for **`CustomersFioriMapActivity`**.
+21. On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and search for **`CustomersFioriMapActivity`**.
 
-20. Modify the activity so it specifies the `NoActionBar` theme, which will cause the activity to not display an action bar.
+22. Modify the activity so it specifies the `NoActionBar` theme, which will cause the activity to not display an action bar.
 
     ```XML
     <activity
@@ -940,7 +1044,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
         android:exported="false" />
     ```
 
-21. Run the app.
+23. Run the app.
 
     You should be able to see markers on the screen that represent customers.
 
@@ -981,9 +1085,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     implementation group: 'com.sap.cloud.android', name: 'google-maps', version: sdkVersion
     ```
 
-    ![Add Map Dependency](app-build-gradle.png)
-
-4. Create a new **Layout Resource File** in `res/layout` called **`detail_panel.xml`** and replace its contents with the following code.
+4. Right-click on the folder `app/src/main/res/layout` to create a new **Layout Resource File** in it called **`detail_panel.xml`** and replace its contents with the following code.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -1003,7 +1105,7 @@ In this section, you will create a new activity that uses the Fiori Map control.
     </androidx.constraintlayout.widget.ConstraintLayout>
     ```
 
-5. Create a new **Layout Resource File** in `res/layout` called **`search_auto_complete.xml`** and replace its contents with the following code.
+5. Create a new **Layout Resource File** in `app/src/main/res/layout` called **`search_auto_complete.xml`** and replace its contents with the following code.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -1026,8 +1128,6 @@ In this section, you will create a new activity that uses the Fiori Map control.
 8. Set **Activity Name** to be **`CustomersFioriMapActivity`**.
 
 9. Click **Finish**.
-
-    ![Dialog to create Fiori map activity](create-fiori-map-activity.png)
 
 10. Replace the file contents in the newly created `CustomersFioriMapActivity.kt` with the following code:
 
@@ -1719,7 +1819,7 @@ In this section, the bottom panel will be populated with details of the selected
 
 In this section you will implement the settings dialog to include a map type setting and a clustering toggle.
 
-1.  Create a new **Layout Resource File** in `res/layout` called **`settings_panel.xml`** and replace its contents with the following code. This creates the layout for the settings page.
+1.  Create a new **Layout Resource File** in `app/src/main/res/layout` called **`settings_panel.xml`** and replace its contents with the following code. This creates the layout for the settings page.
 
     ```XML
     <?xml version="1.0" encoding="utf-8"?>
@@ -1901,8 +2001,6 @@ In this section, you will test the three different types of annotations.
         force("com.google.android.gms:play-services-location:21.3.0")
     }
     ```
-
-    ![Force play-services-location version](force-play-services-location-version-jc.png)
 
 5. Run the app.
 
@@ -2132,11 +2230,11 @@ In this section you will customize the map markers based on the customer's count
     private fun addCustomerMarkerToMap(customer: Customer) {
         val country = customer.country
         getCustomerLatLongFromAddress(customer.city + ", " + country)?.let { latLng ->
-            var color = (Color.parseColor("#E9573E")) // US
+            var color = ("#E9573E".toColorInt()) // US
             if (country == "MX") {
-                color = (Color.parseColor("#FFA02B"))
+                color = ("#FFA02B".toColorInt())
             } else if (country == "CA") {
-                color = Color.parseColor("#0070F2")
+                color = "#0070F2".toColorInt()
             }
             val customerMarker = FioriMarkerOptions.Builder()
                 .tag(customer)

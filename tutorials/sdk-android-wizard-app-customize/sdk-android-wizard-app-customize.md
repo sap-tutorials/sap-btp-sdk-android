@@ -100,7 +100,7 @@ In this section, you will configure the object cell to display a product's name,
 
 6.  On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`Repository`** to open `Repository.kt`.
 
-7.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`read`** to navigate to the `read(pageSize: Int = 40, page: Int = 0)` method.
+7.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`read`** to navigate to the `read(pageSize: Int = 40, page: Int = 0, query: DataQuery? = null)` method.
 
 8.  Replace the `orderByProperty?.also` block with the following code to specify that the sort order should be by category and then by the name of the products.
 
@@ -349,7 +349,7 @@ In this section, you will modify the app to initially show the **Product Categor
 
     ```Kotlin
     composable(route = EntityNavigationCommands(ESPMContainerMetadata.EntityTypes.productCategory).entityListNav.route) {
-        val viewModel: ODataViewModel = viewModel(
+        val viewModel: ODataViewModel<EntityValue> = viewModel(
             factory = ODataEntityViewModelFactory(
                 LocalContext.current.applicationContext as Application,
                 ESPMContainerMetadata.EntityTypes.productCategory,
@@ -379,21 +379,17 @@ In this section, you will modify the app to initially show the **Product Categor
 5. Replace the `onFloatingAdd` function with the following code:
 
     ```Kotlin
-    //return create action when nav property value is list type or null, or entitySet is singleton and entity screen is not empty
-    fun onFloatingAdd(): (() -> Unit)? {
-        val action = this::onCreateAction
-        // If a singleton entity already exists on the screen, remove the "+" floating button.
-        entitySet?.let {
-            if (it.isSingleton && _odataUIState.value.masterEntity != null) {
-                return null
-            }
+    open fun onFloatingAdd(): (() -> Unit)? {
+        val action = {
+            onCreateAction()
+            refreshEntities()
         }
 
         return parent?.let { parent ->
             return navigationPropertyName?.let {
                 val navProp = parent.entityType.getProperty(navigationPropertyName)
                 val navValue = parent.getOptionalValue(navProp)
-                if(navProp.isEntityList || navValue == null ) action else null
+                if (navProp.isEntityList || navProp.isComplexList || navValue == null) action else null
             } ?: action
         } ?: action
     }
@@ -401,7 +397,7 @@ In this section, you will modify the app to initially show the **Product Categor
 
 6. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductEntitiesScreen`**, to open `ProductEntitiesScreen.kt`.
 
-7. Add a variable in the method body to retrive the selected category name from `ODataViewModel`:
+7. Add a variable in the method body, after the variable "viewModel", to retrive the selected category name from `ODataViewModel`:
 
     ```Kotlin
     val category = (viewModel.parent as? ProductCategory)?.categoryName
@@ -425,12 +421,12 @@ In this section, you will modify the app to initially show the **Product Categor
     if (!uiState.isEntityFocused) {
         entityListScreen(
             {
-                if (viewModel.entityType != ESPMContainerMetadata.EntityTypes.productCategory) {
+                if ((viewModel as EntityViewModel).entityType != ESPMContainerMetadata.EntityTypes.productCategory) {
                     navController.navigate(EntitySetsDest.route)
                 }
             },
             {
-                if (viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) {
+                if ((viewModel as EntityViewModel).entityType == ESPMContainerMetadata.EntityTypes.productCategory) {
                     navController.navigate(EntitySetsDest.route)
                 } else {
                     navController.navigateUp()
@@ -447,7 +443,7 @@ In this section, you will modify the app to initially show the **Product Categor
 11. Replace the `EntityOperationType.DETAIL` code block with the following, which will enable the navigation from the Category list screen to the Product list screen.
 
     ```Kotlin
-    EntityOperationType.DETAIL -> if (viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) {
+    EntityOperationType.DETAIL -> if ((viewModel as EntityViewModel).entityType == ESPMContainerMetadata.EntityTypes.productCategory) {
         viewModel.lostEntityFocus()
         val productCategory = uiState.masterEntity as ProductCategory
         navController.currentBackStackEntry?.savedStateHandle?.set(
@@ -464,22 +460,32 @@ In this section, you will modify the app to initially show the **Product Categor
     }
     ```
 
-12. Replace the `viewModel` of `composable(route = EntityNavigationCommands(entityType).entityListNav.route)` with the following `viewModel` so that the product screen can retrieve the selected category name:
+12. Replace the `composable(route = EntityNavigationCommands(entityType).entityListNav.route)` block with the following code so that the product screen can retrieve the selected category name:
 
     ```Kotlin
-    val viewModel: ODataViewModel = viewModel(
-        factory = ODataEntityViewModelFactory(
-            LocalContext.current.applicationContext as Application,
-            entityType,
-            entitySet,
-            getOrderByProperty(entityType),
-            if (entityType == ESPMContainerMetadata.EntityTypes.product)
-                navController.previousBackStackEntry?.savedStateHandle?.get<ProductCategory>(
-                    "productCategory"
+    composable(route = EntityNavigationCommands(entityType).entityListNav.route) {
+        ODataScreen(
+            navController,
+            isExpandedScreen,
+            viewModel(
+                factory = ODataEntityViewModelFactory(
+                    LocalContext.current.applicationContext as Application,
+                    entityType,
+                    entitySet,
+                    getOrderByProperty(entityType),
+                    if (entityType == ESPMContainerMetadata.EntityTypes.product)
+                        navController.previousBackStackEntry?.savedStateHandle?.get<ProductCategory>(
+                            "productCategory"
+                        )
+                    else null
                 )
-            else null
+            ),
+            entityExpandScreen,
+            entityListScreen,
+            entityEditScreen,
+            entityDetailScreen
         )
-    )
+    }
     ```
 
 13. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`ProductCategoryEntitiesScreen`**, to open `ProductCategoryEntitiesScreen.kt`.
@@ -491,7 +497,7 @@ In this section, you will modify the app to initially show the **Product Categor
 16. Find the `ActionItem` of `R.string.menu_home` and change its overflowMode to the following:
 
     ```Kotlin
-    overflowMode = if(viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) OverflowMode.NOT_SHOWN else OverflowMode.IF_NECESSARY,
+    overflowMode = if((viewModel as EntityViewModel).entityType == ESPMContainerMetadata.EntityTypes.productCategory) OverflowMode.NOT_SHOWN else OverflowMode.IF_NECESSARY,
     ```
 
 17. Run the app again. You'll see that the **Product Categories** screen is now the first screen displayed, the **Home** menu is no longer visible, and selecting a category shows the products list screen, which now displays only the products for that selected category.
@@ -619,22 +625,9 @@ In this section you will add a search field to **Product Categories** screen, al
     <string name="menu_search">Search</string>
     ```
 
-4.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`EntityScreenCommonUI`**, to open the `EntityScreenCommonUI.kt` file.
+4.  On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`BaseOperationViewModel`**, to open the `BaseOperationViewModel` class.
 
-5.  Add the following `ActionItem` right before the other `ActionItem`s in the function `getSelectedItemActionsList(navigateToHome: () -> Unit, viewModel: ODataViewModel, deleteState: MutableState<Boolean>)`. (Note that there is another function with the same name that takes two parameters.)
-
-    ```Kotlin
-    ActionItem(
-        nameRes = R.string.menu_search,
-        iconRes = if (viewModel.showSearchInput.collectAsState().value) R.drawable.ic_sap_icon_decline else R.drawable.ic_search_icon,
-        overflowMode = if(viewModel.entityType == ESPMContainerMetadata.EntityTypes.productCategory) OverflowMode.IF_NECESSARY else OverflowMode.NOT_SHOWN,
-        doAction = if (viewModel.showSearchInput.collectAsState().value) viewModel::hideSearchInput else viewModel::showSearchInput
-    ),
-    ```
-
-6.  On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`BaseOperationViewModel`**, to open the `BaseOperationViewModel` class.
-
-7.  Add the following to the bottom of the class:
+5.  Add the following to the bottom of the class:
 
     ```Kotlin
     private val _showSearchInput = MutableStateFlow(false)
@@ -654,6 +647,19 @@ In this section you will add a search field to **Product Categories** screen, al
         // Handle query text change
         _searchQuery.value = newText
     }
+    ```
+
+6.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`EntityScreenCommonUI`**, to open the `EntityScreenCommonUI.kt` file.
+
+7.  Add the following `ActionItem` right before the other `ActionItem`s in the function `getSelectedItemActionsList(navigateToHome: () -> Unit, viewModel: ODataViewModel, deleteState: MutableState<Boolean>)`. (Note that there is another function with the same name that takes two parameters.)
+
+    ```Kotlin
+    ActionItem(
+        nameRes = R.string.menu_search,
+        iconRes = if (viewModel.showSearchInput.collectAsState().value) R.drawable.ic_sap_icon_decline else R.drawable.ic_search_icon,
+        overflowMode = if((viewModel as EntityViewModel).entityType == ESPMContainerMetadata.EntityTypes.productCategory) OverflowMode.IF_NECESSARY else OverflowMode.NOT_SHOWN,
+        doAction = if (viewModel.showSearchInput.collectAsState().value) viewModel::hideSearchInput else viewModel::showSearchInput
+    ),
     ```
 
 8.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+Shift+O`**, and type **`BaseOperationScreen`**, to open the `BaseOperationScreen.kt` file.

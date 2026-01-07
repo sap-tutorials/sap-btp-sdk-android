@@ -218,7 +218,7 @@ The following steps record how often users start adding or updating products but
 3. Add the following code segment to the very beginning of the method:
 
     ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "edit${entityType.localName}Clicked", "Begin Edit ${entityType.localName}")
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "edit${(this as EntityViewModel).entityType.localName}Clicked", "Begin Edit ${entityType.localName}")
     ```
 
     This generates a usage event record for when a user taps the **Edit** icon within any entity screen.
@@ -226,65 +226,67 @@ The following steps record how often users start adding or updating products but
 4. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onCreate`**, to navigate to the `onCreate` method. Add the following code segment to the very beginning of the method:
 
     ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "create${entityType.localName}Clicked", "Begin Create ${entityType.localName}")
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "create${(this as EntityViewModel).entityType.localName}Clicked", "Begin Create ${entityType.localName}")
     ```
 
     This generates a usage event record for when a user taps the **Add** icon within any entity screen.
 
-5. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`exitCreation`**, to navigate to the `exitCreation` method. Add the following code segment to the very beginning of the method:
+5. On Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`EntityViewModel`** to open `EntityViewModel.kt`.
+
+6. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`exitCreation`**, to navigate to the `exitCreation` method. Add the following code segment to the very beginning of the method:
 
     ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "onBackPressed", "Create ${entityType.localName} Cancelled")
+    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(EntityViewModel::class.java.simpleName, "elementId", "onBackPressed", "Create ${entityType.localName} Cancelled")
     ```
 
     This generates the usage event record whenever the user navigates away from a creating screen without saving.
 
-6. Add the following imports if they are not auto-added:
+7. Add the following imports if they are not auto-added:
 
     ```Kotlin
     import com.sap.cloud.mobile.foundation.mobileservices.SDKInitializer
     import com.sap.cloud.mobile.foundation.usage.UsageService
     ```
 
-7. Build and run the app.
+8. Build and run the app.
 
-8. Generate usage information by accessing **Products**.
+9. Generate usage information by accessing **Products**.
 
     ![Access Products](test_usage1_jc.png)
 
-9. Tap the floating **Add** button to create a product.
+10. Tap the floating **Add** button to create a product.
 
     ![Create a New Product Item](test_usage2_jc.png)
 
-10. Press the **Back** button to exit the page without saving.
+11. Press the **Back** button to exit the page without saving.
 
     ![Press Back Button](test_usage3_jc.png)
 
-11. Repeat these steps two more times to generate multiple entries for the usage report.
+12. Repeat these steps two more times to generate multiple entries for the usage report.
 
-12. Select an existing product and tap its **Edit** button.
+13. Select an existing product and tap its **Edit** button.
 
     ![Edit Product](edit_product_jc.png)
 
-13. Then immediately tap the **check mark** button to save the information.
+14. Then immediately tap the **check mark** button to save the information.
 
     ![Save Product](save_product_jc.png)
 
-14. End the usage session by placing the app in the background. Navigate back into the app.
+15. End the usage session by placing the app in the background. Navigate back into the app.
 
-15. Upload the usage by going to **Settings** and tap on **Upload Usage Data**.
+16. Upload the usage by going to **Settings** and tap on **Upload Usage Data**.
 
-16. After downloading the `clientUsage_uploads.csv` file from the **Mobile Services cockpit**, you should be able to see new entries with `I_VIEW` values of `ODataViewModel` and `I_ACTION` values of `onBackPressed`, `createProductClicked` and `editProductClicked`.
+17. After downloading the `clientUsage_uploads.csv` file from the **Mobile Services cockpit**, you should be able to see new entries with `I_VIEW` values of `ODataViewModel` and `I_ACTION` values of `onBackPressed`, `createProductClicked` and `editProductClicked`.
 
     ![New Entries in the Client Upload csv](new_client_upload_example_jc.png)
 
-17. In the four empty cells that are not in the `R` ( `I_ACTION` ) column on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
+18. In the four empty cells on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
 
     ```Excel
     =COUNTIF(R:R, "*createProductClicked*")+COUNTIF(R:R, "*editProductClicked*")
     ```
 
-18. Next to `Cancelled Product Create`, use the following formula to find the number of times the user cancelled an add product action:
+19. Next to `Cancelled Product Create`, use the following formula to find the number of times the user cancelled an add product action:
 
     ```Excel
     =COUNTIF(R:R, "*onBackPressed*")
