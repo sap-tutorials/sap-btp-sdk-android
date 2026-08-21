@@ -88,16 +88,16 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
     You can customize your client code so that the reset flow hides this dialog by setting the value of **`needConfirmWhenReset`** parameter to **`false`** for the **`FlowOptions`** instance and set this **`FlowOptions`** instance for the **`FlowContext`** instance to start the reset flow.
 
-    ```Kotlin
-    val flowContext =
-            FlowContextBuilder()
-                    .setFlowType(FlowType.RESET)
-                    .setFlowOptions(FlowOptions(
-                            needConfirmWhenReset = false
-                    ))
-                    .build()
-    Flow.start(this, flowContext)
-    ```
+   ```Kotlin
+   val flowContext =
+           FlowContextBuilder()
+                   .setFlowType(FlowType.RESET)
+                   .setFlowOptions(FlowOptions(
+                           needConfirmWhenReset = false
+                   ))
+                   .build()
+   Flow.start(this, flowContext)
+   ```
 
 5.  Before removing all the data managed by the Flows component, the reset flow will notify the `ApplicationReset` event. You can use the `onApplicationReset` callback of the `FlowStateListener` instance to insert its own logic for application reset, for example to clear the data managed by the client code and un-register the push token.
 
@@ -123,17 +123,17 @@ There may be occasions when the user wants to reset the app to initial state. Th
 
     You can customize your client code so that the reset flow hides this dialog by overriding the **`isResetConfirmationNeeded`** function of the **`FlowOptions`** instance to return **`false`** and set this **`FlowOptions`** instance for the **`FlowContext`** instance to start the reset flow.
 
-    ```Java
-    FlowContext flowContext = new FlowContextBuilder()
-                .setFlowType(FlowType.RESET)
-                .setFlowOptions(new FlowOptions(){
-                    @Override
-                    public boolean isResetConfirmationNeeded() {
-                        return false;
-                    }
-                }).build();
-    Flow.start(this, flowContext);
-    ```
+   ```Java
+   FlowContext flowContext = new FlowContextBuilder()
+               .setFlowType(FlowType.RESET)
+               .setFlowOptions(new FlowOptions(){
+                   @Override
+                   public boolean isResetConfirmationNeeded() {
+                       return false;
+                   }
+               }).build();
+   Flow.start(this, flowContext);
+   ```
 
 5.  Before removing all the data managed by the Flows component, the reset flow will notify the `ApplicationReset` event. You can use the `onApplicationReset` callback of the `FlowStateListener` instance to insert its own logic for application reset, for example to clear the data managed by the client code and un-register the push token.
 
@@ -164,43 +164,43 @@ The logout flow will try to logout the current user if network is available, the
 
     You can customize your client code so that the logout flow hides this dialog by setting the value of **`needConfirmWhenLogout`** parameter to **`false`** for the **`FlowOptions`** instance and set this **`FlowOptions`** instance for the **`FlowContext`** instance to start the reset flow.
 
-    ```Kotlin
-    val flowContext =
-            FlowContextBuilder()
-                    .setFlowType(FlowType.LOGOUT)
-                    .setFlowOptions(FlowOptions(
-                            needConfirmWhenLogout = false
-                    ))
-                    .build()
-    Flow.start(this, flowContext)
-    ```
+   ```Kotlin
+   val flowContext =
+           FlowContextBuilder()
+                   .setFlowType(FlowType.LOGOUT)
+                   .setFlowOptions(FlowOptions(
+                           needConfirmWhenLogout = false
+                   ))
+                   .build()
+   Flow.start(this, flowContext)
+   ```
 
 5.  Logout flow will not automatically remove the push registration. Client code can implement the callback function **`FlowActivityResultCallback`** to delete the Firebase push token if it does not want to receive push notifications after logout. The logout flow will trigger the callback function after a successful logout.
 
-    ```Kotlin
-    Flow.start(
-        this,
-        FlowContextRegistry.flowContext.    
-        copy(
-            flowType = FlowType.LOGOUT)){
-            _, resultCode, _->
-            if(resultCode ==RESULT_OK) {
-                SDKInitializer.getService
-                (FirebasePushService::class)?.also
-                {
-                    FirebaseMessaging.getInstance().
-                    deleteToken().addOnSuccessListener
-                    { 
-                        Log.e("PushService","PushService token was revoked!") 
-                    }
-                    .addOnFailureListener { e1: Exception? ->
+   ```Kotlin
+   Flow.start(
+       this,
+       FlowContextRegistry.flowContext.    
+       copy(
+           flowType = FlowType.LOGOUT)){
+           _, resultCode, _->
+           if(resultCode ==RESULT_OK) {
+               SDKInitializer.getService
+               (FirebasePushService::class)?.also
+               {
+                   FirebaseMessaging.getInstance().
+                   deleteToken().addOnSuccessListener
+                   { 
+                       Log.e("PushService","PushService token was revoked!") 
+                   }
+                   .addOnFailureListener { e1: Exception? ->
 
-                        Log.e("PushService","PushService token couldn't be revoked!:$e1")
-                    }
-                }
-            }
-        }
-    ```
+                       Log.e("PushService","PushService token couldn't be revoked!:$e1")
+                   }
+               }
+           }
+       }
+   ```
 
 Congratulations! You now have learned how to restore, reset and logout an application using the Flows component!
 

@@ -34,31 +34,31 @@ time: 15
 
     Note that the following code block contains two logger statements:
 
-    ```Kotlin
-    init {
-        //init from shared preference
-        viewModelScope.launch(Dispatchers.Default) {
-            preferencesFlow.collect { userReference ->
-                logger.debug("get preference as {}", userReference.logSetting)
-                _settingUIState.update { uiState ->
-                    uiState.copy(level = LogPolicy.getLogLevel(userReference.logSetting))
-                }
-            }
-        }
+   ```Kotlin
+   init {
+       //init from shared preference
+       viewModelScope.launch(Dispatchers.Default) {
+           preferencesFlow.collect { userReference ->
+               logger.debug("get preference as {}", userReference.logSetting)
+               _settingUIState.update { uiState ->
+                   uiState.copy(level = LogPolicy.getLogLevel(userReference.logSetting))
+               }
+           }
+       }
 
-        val consentUsage = UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.USAGE)
-        val consentCrashReport =
-            UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.CRASH_REPORT)
-        logger.debug(
-            "init consent data : consentUsage {}, consentCrashReport {}",
-            consentUsage,
-            consentCrashReport
-        )
+       val consentUsage = UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.USAGE)
+       val consentCrashReport =
+           UserSecureStoreDelegate.getInstance().consentStatus(ConsentType.CRASH_REPORT)
+       logger.debug(
+           "init consent data : consentUsage {}, consentCrashReport {}",
+           consentUsage,
+           consentCrashReport
+       )
 
-        ... ...
-    ```
+       ... ...
+   ```
 
-    These messages will be logged when the app's log level is set to **Debug** or **Path** and the app's **Settings** menu item is opened.
+   These messages will be logged when the app's log level is set to **Debug** or **Path** and the app's **Settings** menu item is opened.
 
 [OPTION END]
 
@@ -70,20 +70,20 @@ time: 15
 
     Note that the following method contains two LOGGER statements:
 
-    ```Kotlin
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        LOGGER.debug("onOptionsItemSelected: " + item.title)
-        return when (item.itemId) {
-            R.id.menu_settings -> {
-                LOGGER.debug("settings screen menu item selected.")
-                Intent(this, SettingsActivity::class.java).also {
-                    this.startActivity(it)
-                }
-                true
-            }
-    ```
+   ```Kotlin
+   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+       LOGGER.debug("onOptionsItemSelected: " + item.title)
+       return when (item.itemId) {
+           R.id.menu_settings -> {
+               LOGGER.debug("settings screen menu item selected.")
+               Intent(this, SettingsActivity::class.java).also {
+                   this.startActivity(it)
+               }
+               true
+           }
+   ```
 
-    These messages will be logged when the app's log level is set to **Debug** or **Path** and the app's **Settings** menu item is opened.
+   These messages will be logged when the app's log level is set to **Debug** or **Path** and the app's **Settings** menu item is opened.
 
 [OPTION END]
 

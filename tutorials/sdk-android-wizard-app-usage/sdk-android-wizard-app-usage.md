@@ -217,17 +217,17 @@ The following steps record how often users start adding or updating products but
 
 3. Add the following code segment to the very beginning of the method:
 
-    ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "edit${(this as EntityViewModel).entityType.localName}Clicked", "Begin Edit ${entityType.localName}")
-    ```
+   ```Kotlin
+   SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "edit${(this as EntityViewModel).entityType.localName}Clicked", "Begin Edit ${entityType.localName}")
+   ```
 
     This generates a usage event record for when a user taps the **Edit** icon within any entity screen.
 
 4. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onCreate`**, to navigate to the `onCreate` method. Add the following code segment to the very beginning of the method:
 
-    ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "create${(this as EntityViewModel).entityType.localName}Clicked", "Begin Create ${entityType.localName}")
-    ```
+   ```Kotlin
+   SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ODataViewModel::class.java.simpleName, "elementId", "create${(this as EntityViewModel).entityType.localName}Clicked", "Begin Create ${entityType.localName}")
+   ```
 
     This generates a usage event record for when a user taps the **Add** icon within any entity screen.
 
@@ -235,18 +235,18 @@ The following steps record how often users start adding or updating products but
 
 6. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`exitCreation`**, to navigate to the `exitCreation` method. Add the following code segment to the very beginning of the method:
 
-    ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(EntityViewModel::class.java.simpleName, "elementId", "onBackPressed", "Create ${entityType.localName} Cancelled")
-    ```
+   ```Kotlin
+   SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(EntityViewModel::class.java.simpleName, "elementId", "onBackPressed", "Create ${entityType.localName} Cancelled")
+   ```
 
     This generates the usage event record whenever the user navigates away from a creating screen without saving.
 
 7. Add the following imports if they are not auto-added:
 
-    ```Kotlin
-    import com.sap.cloud.mobile.foundation.mobileservices.SDKInitializer
-    import com.sap.cloud.mobile.foundation.usage.UsageService
-    ```
+   ```Kotlin
+   import com.sap.cloud.mobile.foundation.mobileservices.SDKInitializer
+   import com.sap.cloud.mobile.foundation.usage.UsageService
+   ```
 
 8. Build and run the app.
 
@@ -282,19 +282,19 @@ The following steps record how often users start adding or updating products but
 
 18. In the four empty cells on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
 
-    ```Excel
-    =COUNTIF(R:R, "*createProductClicked*")+COUNTIF(R:R, "*editProductClicked*")
-    ```
+   ```Excel
+   =COUNTIF(R:R, "*createProductClicked*")+COUNTIF(R:R, "*editProductClicked*")
+   ```
 
 19. Next to `Cancelled Product Create`, use the following formula to find the number of times the user cancelled an add product action:
 
-    ```Excel
-    =COUNTIF(R:R, "*onBackPressed*")
-    ```
+   ```Excel
+   =COUNTIF(R:R, "*onBackPressed*")
+   ```
 
-    In the example, the user tried to create a product three times but cancelled three times, and edited it once.
+   In the example, the user tried to create a product three times but cancelled three times, and edited it once.
 
-    ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas_jc.png)
+   ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas_jc.png)
 
 [OPTION END]
 
@@ -306,26 +306,26 @@ The following steps record how often users start adding or updating products but
 
 3. Find the following line:
 
-    ```Kotlin
-    super.onCreate(savedInstanceState)
-    ```
+   ```Kotlin
+   super.onCreate(savedInstanceState)
+   ```
 
 4. Add the following code segment immediately after:
 
-    ```Kotlin
-    SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ProductsCreateFragment::class.java.simpleName, "elementId", "createOrEditProductClicked", "Begin Create or Edit Product")
-    ```
+   ```Kotlin
+   SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ProductsCreateFragment::class.java.simpleName, "elementId", "createOrEditProductClicked", "Begin Create or Edit Product")
+   ```
 
     This generates a usage event record for when a user taps the **Add** or **Edit** icon within **Products**.
 
 5. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`** and type **`onMenuItemSelected`**, to navigate to the `onMenuItemSelected` method. Add the following code segment before the `else` case in the same file:
 
-    ```Kotlin
-    android.R.id.home -> {
-        SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ProductsCreateFragment::class.java.simpleName, "elementId", "onBackPressed", "Create or Edit Product Cancelled")
-        super.onMenuItemSelected(menuItem)
-    }
-    ```
+   ```Kotlin
+   android.R.id.home -> {
+       SDKInitializer.getService(UsageService::class)?.eventBehaviorUserInteraction(ProductsCreateFragment::class.java.simpleName, "elementId", "onBackPressed", "Create or Edit Product Cancelled")
+       super.onMenuItemSelected(menuItem)
+   }
+   ```
 
     This generates the usage event record whenever the user navigates away from an editing screen without saving.
 
@@ -363,19 +363,19 @@ The following steps record how often users start adding or updating products but
 
 16. In the four empty cells that are not in the `R` ( `I_ACTION` ) column on the Excel spreadsheet, label two of them with **`Product Create or Edit Clicked`** and **`Cancelled Product Create or Edit`** respectively. Next to `Product Create or Edit Clicked`, use the following formula to find the number of times the user intended to add/update a product:
 
-    ```Excel
-    =COUNTIF(R:R, "*createOrEditProductClicked*")
-    ```
+   ```Excel
+   =COUNTIF(R:R, "*createOrEditProductClicked*")
+   ```
 
 17. Next to `Cancelled Product Create or Edit`, use the following formula to find the number of times the user cancelled an add/update product action:
 
-    ```Excel
-    =COUNTIF(R:R, "*onBackPressed*")
-    ```
+   ```Excel
+   =COUNTIF(R:R, "*onBackPressed*")
+   ```
 
-    In the example, the user tried to create a product three times but cancelled three times, and edit it once.
+   In the example, the user tried to create a product three times but cancelled three times, and edit it once.
 
-    ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas.png)
+   ![Counting Product Creation and Cancellations with Excel Formulas](excel_formulas.png)
 
 [OPTION END]
 
@@ -393,74 +393,74 @@ Mobile Services provides a **Client Usage Configuration** under **Mobile Client 
 
 3.  Near the end of the class, add the following companion objects:
 
-    ```Kotlin
-    private var isUsageEnabled: Boolean = false
-    private var uploadInterval: Int = 0
-    ```
+   ```Kotlin
+   private var isUsageEnabled: Boolean = false
+   private var uploadInterval: Int = 0
+   ```
 
 4.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`onClientPolicyRetrieved`** to navigate to the `onClientPolicyRetrieved` method.
 
 5.  At the end of the method, add the following code:
 
-    ```Kotlin
-    policies.usagePolicy?.also {
-        isUsageEnabled = it.dataCollectionEnabled
-        uploadInterval = it.uploadDataAfterDays
-        if (isUsageEnabled) {
-            UsageBroker.setDataCollectionEnabled(isUsageEnabled)
-            uploadUsage()
-        }
-    }
-    ```
+   ```Kotlin
+   policies.usagePolicy?.also {
+       isUsageEnabled = it.dataCollectionEnabled
+       uploadInterval = it.uploadDataAfterDays
+       if (isUsageEnabled) {
+           UsageBroker.setDataCollectionEnabled(isUsageEnabled)
+           uploadUsage()
+       }
+   }
+   ```
 
-    This code gets the usage policy information from the server client policy and stores it inside global variables.
+   This code gets the usage policy information from the server client policy and stores it inside global variables.
 
 6.  Add the following method in the class:
 
-    ```Kotlin
-    private fun uploadUsage() {
-        UsageBroker.setDaysToWaitBetweenUpload(uploadInterval)
+   ```Kotlin
+   private fun uploadUsage() {
+       UsageBroker.setDaysToWaitBetweenUpload(uploadInterval)
 
-        //if uploadInterval is greater than 0 then auto-upload is considered to be enabled on Mobile Services
-        if (uploadInterval > 0) {
-            // The upload will only occur if the last upload was more than newDays ago
-            AppUsageUploader.addUploadListener(object: AppUsageUploader.UploadListener {
-                override fun onSuccess() {
-                    Toast.makeText(application, application.getString(R.string.usage_upload_ok), Toast.LENGTH_LONG).show()
-                }
+       //if uploadInterval is greater than 0 then auto-upload is considered to be enabled on Mobile Services
+       if (uploadInterval > 0) {
+           // The upload will only occur if the last upload was more than newDays ago
+           AppUsageUploader.addUploadListener(object: AppUsageUploader.UploadListener {
+               override fun onSuccess() {
+                   Toast.makeText(application, application.getString(R.string.usage_upload_ok), Toast.LENGTH_LONG).show()
+               }
 
-                override fun onError(error: Throwable) {
-                    // make sure to import com.sap.cloud.mobile.foundation.networking.HttpException;
-                    if (error is HttpException) {
-                        logger.debug("Usage Upload server error: {}, code = {}", error.message(), error.code())
-                    } else {
-                        logger.debug("Usage Upload error: {}", error.message)
-                    }
+               override fun onError(error: Throwable) {
+                   // make sure to import com.sap.cloud.mobile.foundation.networking.HttpException;
+                   if (error is HttpException) {
+                       logger.debug("Usage Upload server error: {}, code = {}", error.message(), error.code())
+                   } else {
+                       logger.debug("Usage Upload error: {}", error.message)
+                   }
 
-                    val errorMessage = application.getString(R.string.usage_upload_failed)
-                    logger.error(errorMessage, error)
-                }
+                   val errorMessage = application.getString(R.string.usage_upload_failed)
+                   logger.error(errorMessage, error)
+               }
 
-                override fun onProgress(i: Int) {
-                    logger.debug("Usage upload progress: $i")
-                }
-            })
-            UsageBroker.upload(application, false)
-        }
-    }
-    ```
+               override fun onProgress(i: Int) {
+                   logger.debug("Usage upload progress: $i")
+               }
+           })
+           UsageBroker.upload(application, false)
+       }
+   }
+   ```
 
-    This code sets the upload interval for the application's `UsageBroker` object and then requests an upload of usage. If the amount of days between uploading is sufficient, it will upload the data and, if not, it will delay the upload. If the **Upload Report After** interval is 0 it will not upload any usage.
+   This code sets the upload interval for the application's `UsageBroker` object and then requests an upload of usage. If the amount of days between uploading is sufficient, it will upload the data and, if not, it will delay the upload. If the **Upload Report After** interval is 0 it will not upload any usage.
 
-    >There may be an error on `HttpException`. Select it and press **`Alt+Enter`** on Windows, or, press **`option+Enter`** on Macs, to import the related class from `com.sap.cloud.mobile.foundation.networking`.
+   >There may be an error on `HttpException`. Select it and press **`Alt+Enter`** on Windows, or, press **`option+Enter`** on Macs, to import the related class from `com.sap.cloud.mobile.foundation.networking`.
 
 7.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`SettingsViewModel`** to open `SettingsViewModel.kt`.
 
 8.  On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, to find:
 
-    ```Kotlin
-    usageService.uploadUsageData(forceUpload = true, owner = lifecycleOwner,
-    ```
+   ```Kotlin
+   usageService.uploadUsageData(forceUpload = true, owner = lifecycleOwner,
+   ```
 
 9.  When `forceUpload` is set to `true`, the user can upload the usage report through the app's settings screen, regardless of the number of days specified in the policy.
 

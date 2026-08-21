@@ -82,15 +82,15 @@ primary_tag: products>sap-btp-sdk-for-android
 
 3.  To start a "forgot passcode" flow, set the flow type as **`FlowType.FORGOT_PASSCODE`** and set the user ID who forgot the passcode for the **`FlowContext`** instance, and then call the `start` method of the `Flow` class to start the flow.
 
-    ```Java
-    FlowContext flowContext = new FlowContextBuilder()
-                .setApplication(new AppConfig.Builder().applicationId("app_id").addAuth(
-                        new BasicAuth()).build())
-                .setFlowType(FlowType.FORGOT_PASSCODE)
-                .setForgotPasscodeUserId("TestUser")
-                .build();
-    Flow.start(this, flowContext);
-    ```
+   ```Java
+   FlowContext flowContext = new FlowContextBuilder()
+               .setApplication(new AppConfig.Builder().applicationId("app_id").addAuth(
+                       new BasicAuth()).build())
+               .setFlowType(FlowType.FORGOT_PASSCODE)
+               .setForgotPasscodeUserId("TestUser")
+               .build();
+   Flow.start(this, flowContext);
+   ```
 
 [OPTION END]
 
@@ -110,16 +110,16 @@ primary_tag: products>sap-btp-sdk-for-android
 
 3.  To start a "forgot passcode" flow, set the flow type as **`FlowType.FORGOT_PASSCODE`** and set the user ID who forgot the passcode for the **`FlowContext`** instance, and then call the `start` method of the `Flow` class to start the flow.
 
-    ```Kotlin
-    val flowContext = FlowContextBuilder()
-                .setApplication(AppConfig.Builder().applicationId("app_id")
-                                    .addAuth(BasicAuth())
-                                    .build())
-                .setFlowType(FlowType.FORGOT_PASSCODE)
-                .setForgotPasscodeUserId("TestUser")
-                .build()
-    Flow.start(this, flowContext)
-    ```
+   ```Kotlin
+   val flowContext = FlowContextBuilder()
+               .setApplication(AppConfig.Builder().applicationId("app_id")
+                                   .addAuth(BasicAuth())
+                                   .build())
+               .setFlowType(FlowType.FORGOT_PASSCODE)
+               .setForgotPasscodeUserId("TestUser")
+               .build()
+   Flow.start(this, flowContext)
+   ```
 
 [OPTION END]
 
@@ -134,14 +134,14 @@ primary_tag: products>sap-btp-sdk-for-android
 
 2.  To start a "verify passcode" flow, set the flow type as **`FlowType.VERIFY_PASSCODE`** and then call the `start` method of the `Flow` class to start the flow.
 
-    ```Java
-    FlowContext flowContext = new FlowContextBuilder()
-                .setApplication(new AppConfig.Builder().applicationId("app_id").addAuth(
-                        new BasicAuth()).build())
-                .setFlowType(FlowType.VERIFY_PASSCODE)
-                .build();
-    Flow.start(this, flowContext);
-    ```
+   ```Java
+   FlowContext flowContext = new FlowContextBuilder()
+               .setApplication(new AppConfig.Builder().applicationId("app_id").addAuth(
+                       new BasicAuth()).build())
+               .setFlowType(FlowType.VERIFY_PASSCODE)
+               .build();
+   Flow.start(this, flowContext);
+   ```
 
 3.  When biometric authentication is enabled by the user, the flow will display the "Sign In with Biometric" screen for user to authenticate with biometric information.
 
@@ -159,15 +159,15 @@ primary_tag: products>sap-btp-sdk-for-android
 
 2.  To start a "verify passcode" flow, set the flow type as **`FlowType.VERIFY_PASSCODE`** and then call the `start` method of the `Flow` class to start the flow.
 
-    ```Kotlin
-    val flowContext = FlowContextBuilder()
-                .setApplication(AppConfig.Builder().applicationId("app_id")
-                                    .addAuth(BasicAuth())
-                                    .build())
-                .setFlowType(FlowType.VERIFY_PASSCODE)
-                .build()
-    Flow.start(this, flowContext)
-    ```
+   ```Kotlin
+   val flowContext = FlowContextBuilder()
+               .setApplication(AppConfig.Builder().applicationId("app_id")
+                                   .addAuth(BasicAuth())
+                                   .build())
+               .setFlowType(FlowType.VERIFY_PASSCODE)
+               .build()
+   Flow.start(this, flowContext)
+   ```
 
 3.  When biometric authentication is enabled by the user, the flow will display the "Sign In with Biometric" screen for user to authenticate with biometric information.
 
