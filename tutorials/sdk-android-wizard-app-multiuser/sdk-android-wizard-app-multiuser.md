@@ -79,12 +79,12 @@ The following cases are not supported in multi-user mode:
 
 3. On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`startOnboarding`** to navigate to the `startOnboarding` method. For the `FlowContext` instance, change the parameter of the `setMultipleUserMode` method from `false` to **`true`**:
 
-    ```Kotlin
-    val flowContext =
-                FlowContextBuilder()
-                    .setApplication(appConfig)
-                    .setMultipleUserMode(true)
-    ```
+   ```Kotlin
+   val flowContext =
+               FlowContextBuilder()
+                   .setApplication(appConfig)
+                   .setMultipleUserMode(true)
+   ```
 
     Notice that the setting will only take effect when the very first user onboards. Once a user is onboarded, this setting will be saved in the local database. All subsequent flows will use the same setting from the database and ignore the one inside `flowContext`. To change this setting, you need to reset the application to bring up the onboarding process, and the new setting will be updated in the local database after onboarding.
 
@@ -124,67 +124,67 @@ The following cases are not supported in multi-user mode:
 
 5.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`initializeOffline`** to navigate to the `initializeOffline` method. Notice that for the `OfflineODataParameters` instance, the value of the `isForceUploadOnUserSwitch` parameter is set based on the value of `runtimeMultipleUserMode`. This value is retrieved from the `UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserMode()` API call in `OfflineOpenViewModel.kt`.
 
-    ```Kotlin
-    /*
-     * Create OfflineODataProvider
-     * This is a blocking call, no data will be transferred until open, download, upload
-     * @return if initialization needed
-     */
-    suspend fun initializeOffline(
-        context: Context,
-        appConfig: AppConfig,
-        runtimeMultipleUserMode: Boolean
-    ): Boolean {
-        ...
+   ```Kotlin
+   /*
+    * Create OfflineODataProvider
+    * This is a blocking call, no data will be transferred until open, download, upload
+    * @return if initialization needed
+    */
+   suspend fun initializeOffline(
+       context: Context,
+       appConfig: AppConfig,
+       runtimeMultipleUserMode: Boolean
+   ): Boolean {
+       ...
 
-        try {
-            val url = URL(serviceUrl + CONNECTION_ID_ESPMCONTAINER)
-            val offlineODataParameters = OfflineODataParameters().apply {
-                ...
+       try {
+           val url = URL(serviceUrl + CONNECTION_ID_ESPMCONTAINER)
+           val offlineODataParameters = OfflineODataParameters().apply {
+               ...
 
-                isForceUploadOnUserSwitch = runtimeMultipleUserMode
-                val encryptionKey = if (runtimeMultipleUserMode) {
-                    UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
-                } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
-                    ...
-                }
-                storeEncryptionKey = encryptionKey
-            }.also {
-                ...
-            }
-            logger.debug("start init offline odata provider")
-            
-            ...
+               isForceUploadOnUserSwitch = runtimeMultipleUserMode
+               val encryptionKey = if (runtimeMultipleUserMode) {
+                   UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+               } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+                   ...
+               }
+               storeEncryptionKey = encryptionKey
+           }.also {
+               ...
+           }
+           logger.debug("start init offline odata provider")
+           
+           ...
 
-            return true
-        } catch (e: Exception) {
-            logger.error("Exception encountered setting up offline store: " + e.message)
-            throw e
-        }
-    }
-    ```
+           return true
+       } catch (e: Exception) {
+           logger.error("Exception encountered setting up offline store: " + e.message)
+           throw e
+       }
+   }
+   ```
 
-    In `OfflineOpenViewModel.kt`:
+   In `OfflineOpenViewModel.kt`:
 
-    ```Kotlin
-    init {
-        viewModelScope.launch(Dispatchers.Default) {
-            val isMultipleUserMode =
-                UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserMode()
-            val appConfig = FlowContextRegistry.flowContext.appConfig
+   ```Kotlin
+   init {
+       viewModelScope.launch(Dispatchers.Default) {
+           val isMultipleUserMode =
+               UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserMode()
+           val appConfig = FlowContextRegistry.flowContext.appConfig
 
-            if (OfflineWorkerUtil.initializeOffline(application, appConfig, isMultipleUserMode)) {
-                startOpenOffline()
-            } else {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        result = OpenResult.OpenSuccess()
-                    )
-                }
-            }
-        }
-    }
-    ```
+           if (OfflineWorkerUtil.initializeOffline(application, appConfig, isMultipleUserMode)) {
+               startOpenOffline()
+           } else {
+               _uiState.update { currentState ->
+                   currentState.copy(
+                       result = OpenResult.OpenSuccess()
+                   )
+               }
+           }
+       }
+   }
+   ```
 
 6.  Unlike the single-user mode scenario, the encryption key is not generated by the client code, but rather retrieved from the server by SDK. Client code can acquire the key using the `UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()` API call.
 
@@ -212,66 +212,66 @@ The following cases are not supported in multi-user mode:
 
 6.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`initializeOffline`** to navigate to the `initializeOffline` method. Notice that for the `OfflineODataParameters` instance, the value of the `isForceUploadOnUserSwitch` parameter is set based on the value of `runtimeMultipleUserMode`. This value is retrieved from the `UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync()` API call in `MainBusinessActivity.kt`.
 
-    ```Kotlin
-    /*
-     * Create OfflineODataProvider
-     * This is a blocking call, no data will be transferred until open, download, upload
-     */
-    @JvmStatic
-    fun initializeOffline(
-        context: Context,
-        appConfig: AppConfig,
-        runtimeMultipleUserMode: Boolean
-    ) {
-        ...
+   ```Kotlin
+   /*
+    * Create OfflineODataProvider
+    * This is a blocking call, no data will be transferred until open, download, upload
+    */
+   @JvmStatic
+   fun initializeOffline(
+       context: Context,
+       appConfig: AppConfig,
+       runtimeMultipleUserMode: Boolean
+   ) {
+       ...
 
-        try {
-            ...
+       try {
+           ...
 
-            val offlineODataParameters = OfflineODataParameters().apply {
-                ...
+           val offlineODataParameters = OfflineODataParameters().apply {
+               ...
 
-                isForceUploadOnUserSwitch = runtimeMultipleUserMode
-                val encryptionKey = if (runtimeMultipleUserMode) {
-                    UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
-                } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
-                    ...
-                }
-                storeEncryptionKey = encryptionKey
-            }.also {
-                ...
-            }
+               isForceUploadOnUserSwitch = runtimeMultipleUserMode
+               val encryptionKey = if (runtimeMultipleUserMode) {
+                   UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+               } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+                   ...
+               }
+               storeEncryptionKey = encryptionKey
+           }.also {
+               ...
+           }
 
-            ...
-        } catch (e: Exception) {
-            logger.error("Exception encountered setting up offline store: " + e.message)
-        }
-    }
-    ```
+           ...
+       } catch (e: Exception) {
+           logger.error("Exception encountered setting up offline store: " + e.message)
+       }
+   }
+   ```
 
-    In `MainBusinessActivity.kt`:
+   In `MainBusinessActivity.kt`:
 
-    ```Kotlin
-    override fun onResume() {
-        super.onResume()
+   ```Kotlin
+   override fun onResume() {
+       super.onResume()
 
-        ...
+       ...
 
-        spforLockAndWipe.getString(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG, null)?.let {
-            spforLockAndWipe.edit().remove(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG).apply()
-        } ?: run {
-            ...
+       spforLockAndWipe.getString(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG, null)?.let {
+           spforLockAndWipe.edit().remove(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG).apply()
+       } ?: run {
+           ...
 
-            val isMultipleUserMode = UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync() == true
+           val isMultipleUserMode = UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync() == true
 
-            ...
+           ...
 
-            OfflineWorkerUtil.initializeOffline(application, appConfig, isMultipleUserMode)
+           OfflineWorkerUtil.initializeOffline(application, appConfig, isMultipleUserMode)
 
-            ...
-        }
-    }
-    ```
+           ...
+       }
+   }
+   ```
 
 7.  Unlike the single-user mode scenario, the encryption key is not generated by the client code, but rather retrieved from the server by SDK. Client code can acquire the key using the `UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()` API call.
 
@@ -305,27 +305,27 @@ The following cases are not supported in multi-user mode:
 
     On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`SyncFailureType.NETWORK_ERROR`** to move to the network error handling. When the network error occurs, make the **Offline Network Error Screen** visible and provide your logic for the button click event.
 
-    ```Kotlin
-    OfflineNetworkIssueScreen(
-        onBackButtonClick = navigateToWelcome,
-        onMainButtonClick = viewModel::startOpenOffline
-    )
-    ```
+   ```Kotlin
+   OfflineNetworkIssueScreen(
+       onBackButtonClick = navigateToWelcome,
+       onMainButtonClick = viewModel::startOpenOffline
+   )
+   ```
 
 5.  For **Offline Transaction Issue Screen**, the client code needs to set the user information of previous user and implement the logic for button click events.
 
     On Windows, press **`Ctrl+F`**, or on a Mac, press **`command+F`**, and type **`SyncFailureType.TRANSACTION_ISSUE`** to move to the transaction issue handling. When the transaction issue occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUser` method of the `OfflineOpenViewModel` class.
 
-    ```Kotlin
-    viewModel.previousUser?.let {
-                    OfflineTransactionIssueScreen(
-                        userName = it.name,
-                        email = it.email,
-                        onBackButtonClick = navigateToWelcome,
-                        onMainButtonClick = navigateToWelcome
-                    )
-                } ?: throw IllegalStateException("Unexpected offline transaction issue without previous user")
-    ```
+   ```Kotlin
+   viewModel.previousUser?.let {
+                   OfflineTransactionIssueScreen(
+                       userName = it.name,
+                       email = it.email,
+                       onBackButtonClick = navigateToWelcome,
+                       onMainButtonClick = navigateToWelcome
+                   )
+               } ?: throw IllegalStateException("Unexpected offline transaction issue without previous user")
+   ```
 
 [OPTION END]
 
@@ -353,62 +353,62 @@ The following cases are not supported in multi-user mode:
 
     On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineNetworkErrorAction`** to move to the `offlineNetworkErrorAction` method. When the network error occurs, make the **Offline Network Error Screen** visible and provide your logic for the button click event.
 
-    ```Kotlin
-    private fun offlineNetworkErrorAction() {
-        this@MainBusinessActivity.runOnUiThread {
-            binding.offlineNetworkErrorScreen.visibility = View.VISIBLE
-            binding.offlineInitSyncScreen.visibility = View.INVISIBLE
-            binding.mainBusResumeProgressBar.visibility = View.INVISIBLE
-            val offlineNetworkErrorScreenSettings = OfflineNetworkErrorScreenSettings.Builder().build()
-            with(binding.offlineNetworkErrorScreen) {
-                initialize(offlineNetworkErrorScreenSettings)
-                // Provide logic for the button click event
-                setButtonClickListener(View.OnClickListener {
-                    OfflineWorkerUtil.addProgressListener(progressListener)
-                    OfflineWorkerUtil.open(application)
-                    startEntitySetListActivity()
-                    supportActionBar?.setTitle(R.string.initializing_offline_store)
-                    binding.offlineNetworkErrorScreen.visibility = View.INVISIBLE
-                    binding.offlineInitSyncScreen.visibility = View.VISIBLE
-                })
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   private fun offlineNetworkErrorAction() {
+       this@MainBusinessActivity.runOnUiThread {
+           binding.offlineNetworkErrorScreen.visibility = View.VISIBLE
+           binding.offlineInitSyncScreen.visibility = View.INVISIBLE
+           binding.mainBusResumeProgressBar.visibility = View.INVISIBLE
+           val offlineNetworkErrorScreenSettings = OfflineNetworkErrorScreenSettings.Builder().build()
+           with(binding.offlineNetworkErrorScreen) {
+               initialize(offlineNetworkErrorScreenSettings)
+               // Provide logic for the button click event
+               setButtonClickListener(View.OnClickListener {
+                   OfflineWorkerUtil.addProgressListener(progressListener)
+                   OfflineWorkerUtil.open(application)
+                   startEntitySetListActivity()
+                   supportActionBar?.setTitle(R.string.initializing_offline_store)
+                   binding.offlineNetworkErrorScreen.visibility = View.INVISIBLE
+                   binding.offlineInitSyncScreen.visibility = View.VISIBLE
+               })
+           }
+       }
+   }
+   ```
 
 5.  For **Offline Transaction Issue Screen**, the client code needs to set the user information of previous user and implement the logic for button click events.
 
     On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`offlineTransactionIssueAction`** to move to the `offlineTransactionIssueAction` method. When the transaction error occurs, make the **Offline Transaction Issue Screen** visible, set the information of the previous user and provide your logic for the button click event. To get the information of the previous user, call the `getPreviousUserDetails` method from the flow context.
 
-    ```Kotlin
-    private fun offlineTransactionIssueAction() {
-        this@MainBusinessActivity.runOnUiThread {
-            binding.offlineTransactionIssueScreen.visibility = View.VISIBLE
-            binding.offlineInitSyncScreen.visibility = View.INVISIBLE
-            binding.mainBusResumeProgressBar.visibility = View.INVISIBLE
-            val offlineTransactionIssueScreenSettings = OfflineTransactionIssueScreenSettings.Builder().build()
-            with(binding.offlineTransactionIssueScreen) {
-                initialize(offlineTransactionIssueScreenSettings)
-                CoroutineScope(IO).launch {
-                    val user = FlowContextRegistry.flowContext.getPreviousUserDetails()
-                    withContext(Main) {
-                        user?.let {
-                            setPrevUserName(it.name)
-                            setPrevUserMail(it.email)
-                        } ?: run {
-                            setPrevUserName(OfflineWorkerUtil.offlineODataProvider!!.previousUser)
-                        }
-                    }
-                }
-            }
-            binding.offlineTransactionIssueScreen.setButtonClickListener(View.OnClickListener {
-                startActivity(Intent(this, WelcomeActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                })
-            })
-        }
-    }
-    ```
+   ```Kotlin
+   private fun offlineTransactionIssueAction() {
+       this@MainBusinessActivity.runOnUiThread {
+           binding.offlineTransactionIssueScreen.visibility = View.VISIBLE
+           binding.offlineInitSyncScreen.visibility = View.INVISIBLE
+           binding.mainBusResumeProgressBar.visibility = View.INVISIBLE
+           val offlineTransactionIssueScreenSettings = OfflineTransactionIssueScreenSettings.Builder().build()
+           with(binding.offlineTransactionIssueScreen) {
+               initialize(offlineTransactionIssueScreenSettings)
+               CoroutineScope(IO).launch {
+                   val user = FlowContextRegistry.flowContext.getPreviousUserDetails()
+                   withContext(Main) {
+                       user?.let {
+                           setPrevUserName(it.name)
+                           setPrevUserMail(it.email)
+                       } ?: run {
+                           setPrevUserName(OfflineWorkerUtil.offlineODataProvider!!.previousUser)
+                       }
+                   }
+               }
+           }
+           binding.offlineTransactionIssueScreen.setButtonClickListener(View.OnClickListener {
+               startActivity(Intent(this, WelcomeActivity::class.java).apply {
+                   addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+               })
+           })
+       }
+   }
+   ```
 
 [OPTION END]
 
@@ -478,46 +478,46 @@ The following cases are not supported in multi-user mode:
 
     On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`onOfflineEncryptionKeyReady`** to navigate to the `onOfflineEncryptionKeyReady` method. Examine the code and notice that it does some clean and reset work:
 
-    ```Kotlin
-    override fun onOfflineEncryptionKeyReady(key: String?) {
-        logger.info("offline key ready.")
-        userSwitchFlag =  if (!application.preferenceManager.getBoolean(OfflineWorkerUtil.PREF_DELETE_REGISTRATION, false)) {
-            flowContext.getPreviousUserId()?.let {
-                flowContext.getCurrentUserId() != it
-            } ?: false
-        } else {
-            application.preferenceManager.edit().putBoolean(OfflineWorkerUtil.PREF_DELETE_REGISTRATION, false).apply();
-            OfflineWorkerUtil.resetOffline(application)
-            true
-        }
+   ```Kotlin
+   override fun onOfflineEncryptionKeyReady(key: String?) {
+       logger.info("offline key ready.")
+       userSwitchFlag =  if (!application.preferenceManager.getBoolean(OfflineWorkerUtil.PREF_DELETE_REGISTRATION, false)) {
+           flowContext.getPreviousUserId()?.let {
+               flowContext.getCurrentUserId() != it
+           } ?: false
+       } else {
+           application.preferenceManager.edit().putBoolean(OfflineWorkerUtil.PREF_DELETE_REGISTRATION, false).apply();
+           OfflineWorkerUtil.resetOffline(application)
+           true
+       }
 
-        OfflineWorkerUtil.userSwitchFlag = userSwitchFlag
+       OfflineWorkerUtil.userSwitchFlag = userSwitchFlag
 
-        /*
-         * In single user scenario,
-         * if offline data store initialized and its encryption key not found,
-         * close and remove offline data store, meanwhile, set userSwitchFlag to true to trigger some important setting
-         */
-        if (UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync() == false
-                && application.preferenceManager.getBoolean(OfflineWorkerUtil.PREF_OFFLINE_INITIALIZED, false)
-                && UserSecureStoreDelegate.getInstance().getData<String>(OfflineWorkerUtil.OFFLINE_DATASTORE_ENCRYPTION_KEY) == null) {
-                userSwitchFlag = true
-                OfflineWorkerUtil.resetOffline(application)
-        }
+       /*
+        * In single user scenario,
+        * if offline data store initialized and its encryption key not found,
+        * close and remove offline data store, meanwhile, set userSwitchFlag to true to trigger some important setting
+        */
+       if (UserSecureStoreDelegate.getInstance().getRuntimeMultipleUserModeAsync() == false
+               && application.preferenceManager.getBoolean(OfflineWorkerUtil.PREF_OFFLINE_INITIALIZED, false)
+               && UserSecureStoreDelegate.getInstance().getData<String>(OfflineWorkerUtil.OFFLINE_DATASTORE_ENCRYPTION_KEY) == null) {
+               userSwitchFlag = true
+               OfflineWorkerUtil.resetOffline(application)
+       }
 
-        if (userSwitchFlag) {
-            application.preferenceManager.apply {
-                edit().putBoolean(OfflineWorkerUtil.PREF_OFFLINE_INITIALIZED, false)
-                        .apply()
-            }
-            application.repositoryFactory.reset()
-            OfflineWorkerUtil.offlineODataProvider?.close()
-            OfflineWorkerUtil.resetOfflineODataProvider()
-        }
-    }
-    ```
+       if (userSwitchFlag) {
+           application.preferenceManager.apply {
+               edit().putBoolean(OfflineWorkerUtil.PREF_OFFLINE_INITIALIZED, false)
+                       .apply()
+           }
+           application.repositoryFactory.reset()
+           OfflineWorkerUtil.offlineODataProvider?.close()
+           OfflineWorkerUtil.resetOfflineODataProvider()
+       }
+   }
+   ```
 
-    You can provide your own logic in this callback.
+   You can provide your own logic in this callback.
 
 [OPTION END]
 

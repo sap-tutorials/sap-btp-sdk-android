@@ -41,25 +41,25 @@ The flows component will automatically determine whether to use the onboarding o
 
     !![Flow restore starting method](flowjc-restore-kotlin.png)
 
-    ```Kotlin
-    fun startOnboarding(context: Context, appConfig: AppConfig) {
-        TimeoutLockService.updateApplicationLockState(true)
-        WelcomeActivity.logger.debug("Before starting flow, lock state: {}", ApplicationStates.applicationLocked)
-        FlowUtil.startFlow(
-            context,
-            flowContext = getOnboardingFlowContext(context, appConfig)
-        ) { resultCode, data ->
-            if (resultCode == Activity.RESULT_OK) {
-                onlineInitializationAfterOnboarding(context) {
-                    launchMainBusinessActivity(context)
-                }
-                WelcomeActivity.logger.debug("After flow, lock state: {}",  ApplicationStates.applicationLocked)
-            } else {
-                startOnboarding(context, appConfig)
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   fun startOnboarding(context: Context, appConfig: AppConfig) {
+       TimeoutLockService.updateApplicationLockState(true)
+       WelcomeActivity.logger.debug("Before starting flow, lock state: {}", ApplicationStates.applicationLocked)
+       FlowUtil.startFlow(
+           context,
+           flowContext = getOnboardingFlowContext(context, appConfig)
+       ) { resultCode, data ->
+           if (resultCode == Activity.RESULT_OK) {
+               onlineInitializationAfterOnboarding(context) {
+                   launchMainBusinessActivity(context)
+               }
+               WelcomeActivity.logger.debug("After flow, lock state: {}",  ApplicationStates.applicationLocked)
+           } else {
+               startOnboarding(context, appConfig)
+           }
+       }
+   }
+   ```
 
 4.  The restore flow will notify the same events as the onboarding flow and one additional `UnlockWithPasscode` event, which is specific to the restore flow. When the app is unlocked using a passcode, the client code can get the passcode from the `onUnlockWithPasscode` callback of the `FlowStateListener` instance and open the secure store. [Customize the Jetpack Compose Onboarding Flow](sdk-android-flowsjc-onboarding) explains the events notified in the onboarding flow.
 
@@ -79,20 +79,20 @@ There may be occasions when the user wants to reset the app to its initial state
 
     !![App reset flow](app-reset-kotlin.png)
 
-    ```Kotlin
-    private fun startResetAppFlow(context: Context) {
-        FlowUtil.startFlow(
-            context = context,
-            flowContext = FlowContextRegistry.flowContext.copy(
-                flowType = FlowType.Reset, flow = null
-            )
-        ) { resultCode, _ ->
-            if (resultCode == Activity.RESULT_OK) {
-                launchWelcomeActivity(context)
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   private fun startResetAppFlow(context: Context) {
+       FlowUtil.startFlow(
+           context = context,
+           flowContext = FlowContextRegistry.flowContext.copy(
+               flowType = FlowType.Reset, flow = null
+           )
+       ) { resultCode, _ ->
+           if (resultCode == Activity.RESULT_OK) {
+               launchWelcomeActivity(context)
+           }
+       }
+   }
+   ```
 
 4.  When the reset flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 
@@ -100,23 +100,23 @@ There may be occasions when the user wants to reset the app to its initial state
 
     You can customize your client code so that the reset flow hides this dialog by setting the  **`skip`** parameter to **`true`** for the bundle **`skipConfirmForResetFlow`** and populating this customized bundle with the **`updateIntent`**  parameter to start the reset flow.
 
-    ```Kotlin
-    FlowUtil.startFlow(
-        context = context,
-        flowContext = FlowContextRegistry.flowContext.copy(
-            flowType = FlowType.Reset, flow = null
-        ),
-        updateIntent = { intent ->
-            intent.populateCustomBundle {
-                skipConfirmForResetFlow(skip = true)
-            }
-        }
-    ) { resultCode, _ ->
-        if (resultCode == Activity.RESULT_OK) {
-            launchWelcomeActivity(context)
-        }
-    }
-    ```
+   ```Kotlin
+   FlowUtil.startFlow(
+       context = context,
+       flowContext = FlowContextRegistry.flowContext.copy(
+           flowType = FlowType.Reset, flow = null
+       ),
+       updateIntent = { intent ->
+           intent.populateCustomBundle {
+               skipConfirmForResetFlow(skip = true)
+           }
+       }
+   ) { resultCode, _ ->
+       if (resultCode == Activity.RESULT_OK) {
+           launchWelcomeActivity(context)
+       }
+   }
+   ```
 
 5.  Before removing all the data managed by the Flows component, the reset flow will notify the `ApplicationReset` event. You can use the `onApplicationReset` callback of the `FlowStateListener` instance to insert its own logic for application reset, for example to clear the data managed by the client code and reset the mobile services added to the application.
 
@@ -124,11 +124,11 @@ There may be occasions when the user wants to reset the app to its initial state
 
     !![App reset listener](app-reset-listener.png)
 
-    ```Kotlin
-    override suspend fun onApplicationReset() {
-        this.application.resetApplication()
-    }
-    ```
+   ```Kotlin
+   override suspend fun onApplicationReset() {
+       this.application.resetApplication()
+   }
+   ```
 
 [ACCORDION-END]
 
@@ -144,21 +144,21 @@ The logout flow will try to log out the current user if the network is available
 
     !![Flow logout starting method](flow-logout-kotlin.png)
 
-    ```Kotlin
-    fun StartLogoutFlow() {
-        val context = LocalContext.current
-        FlowUtil.startFlow(
-            context = context,
-            flowContext = FlowContextRegistry.flowContext.copy(
-                flowType = FlowType.Logout, flow = null
-            )
-        ) { resultCode, _ ->
-            if (resultCode == Activity.RESULT_OK) {
-                launchWelcomeActivity(context)
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   fun StartLogoutFlow() {
+       val context = LocalContext.current
+       FlowUtil.startFlow(
+           context = context,
+           flowContext = FlowContextRegistry.flowContext.copy(
+               flowType = FlowType.Logout, flow = null
+           )
+       ) { resultCode, _ ->
+           if (resultCode == Activity.RESULT_OK) {
+               launchWelcomeActivity(context)
+           }
+       }
+   }
+   ```
 
 4.  When the logout flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 
@@ -166,38 +166,38 @@ The logout flow will try to log out the current user if the network is available
 
      You can customize your client code so that the logout flow hides this dialog by setting the  **`skip`** parameter to **`true`** for the bundle **`skipConfirmForLogoutFlow`** and populating this customized bundle with the **`updateIntent`** parameter to start the logout flow.
 
-    ```Kotlin
-    FlowUtil.startFlow(
-        context = context,
-        flowContext = FlowContextRegistry.flowContext.copy(
-            flowType = FlowType.Logout, flow = null
-        ),
-        updateIntent = { intent ->
-            intent.populateCustomBundle {
-                skipConfirmForLogoutFlow(skip = true)
-            }
-        }
-    ) { resultCode, _ ->
-        if (resultCode == Activity.RESULT_OK) {
-            launchWelcomeActivity(context)
-        }
-    }
-    ```
+   ```Kotlin
+   FlowUtil.startFlow(
+       context = context,
+       flowContext = FlowContextRegistry.flowContext.copy(
+           flowType = FlowType.Logout, flow = null
+       ),
+       updateIntent = { intent ->
+           intent.populateCustomBundle {
+               skipConfirmForLogoutFlow(skip = true)
+           }
+       }
+   ) { resultCode, _ ->
+       if (resultCode == Activity.RESULT_OK) {
+           launchWelcomeActivity(context)
+       }
+   }
+   ```
 
 5.  The logout flow will not automatically remove the push registration. The client code can implement the **`FlowActivityResultCallback`** callback function to delete the Firebase push token if it does not want to receive push notifications after logout. The logout flow will trigger the callback function after a successful logout.
 
-    ```Kotlin
-    FlowUtil.startFlow(
-        context = context,
-        flowContext = FlowContextRegistry.flowContext.copy(
-            flowType = FlowType.Logout, flow = null
-        )
-    ) { resultCode, _ ->
-        if (resultCode == Activity.RESULT_OK) {
-            SDKInitializer.getService(FirebasePushService::class)?.stopPush()
-        }
-    }
-    ```
+   ```Kotlin
+   FlowUtil.startFlow(
+       context = context,
+       flowContext = FlowContextRegistry.flowContext.copy(
+           flowType = FlowType.Logout, flow = null
+       )
+   ) { resultCode, _ ->
+       if (resultCode == Activity.RESULT_OK) {
+           SDKInitializer.getService(FirebasePushService::class)?.stopPush()
+       }
+   }
+   ```
 
 [ACCORDION-END]
 
@@ -213,21 +213,21 @@ The delete registration flow will delete the registration of the current user on
 
     !![Flow delete registration starting method](flow-delreg-kotlin.png)
 
-    ```Kotlin
-    private fun startDeleteRegFlow(context: Context, finishCallback: (Int)-> Unit = {}) {
-        FlowUtil.startFlow(
-            context = context,
-            flowContext = FlowContextRegistry.flowContext.copy(
-                flowType = FlowType.DeleteRegistration, flow = null
-            )
-        ) { resultCode, _ ->
-            finishCallback(resultCode)
-            if (resultCode == Activity.RESULT_OK) {
-            launchWelcomeActivity(context)
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   private fun startDeleteRegFlow(context: Context, finishCallback: (Int)-> Unit = {}) {
+       FlowUtil.startFlow(
+           context = context,
+           flowContext = FlowContextRegistry.flowContext.copy(
+               flowType = FlowType.DeleteRegistration, flow = null
+           )
+       ) { resultCode, _ ->
+           finishCallback(resultCode)
+           if (resultCode == Activity.RESULT_OK) {
+           launchWelcomeActivity(context)
+           }
+       }
+   }
+   ```
 
 4.  When the delete registration flow is started, the default behavior is for a dialog to be displayed, asking the user for confirmation.
 
@@ -235,23 +235,23 @@ The delete registration flow will delete the registration of the current user on
 
      You can customize your client code so that the delete registration flow hides this dialog by setting the **`skip`** parameter to **`true`** for the **`skipConfirmForDeleteRegistrationFlow`** bundle and populating this customized bundle with the parameter **`updateIntent`** to start the delete registration flow.
 
-    ```Kotlin
-    FlowUtil.startFlow(
-        context = context,
-        flowContext = FlowContextRegistry.flowContext.copy(
-            flowType = FlowType.DeleteRegistration, flow = null
-        ),
-        updateIntent = { intent ->
-            intent.populateCustomBundle {
-                skipConfirmForDeleteRegistrationFlow(skip = true)
-            }
-        }
-    ) { resultCode, _ ->
-        if (resultCode == Activity.RESULT_OK) {
-            launchWelcomeActivity(context)
-        }
-    }
-    ```
+   ```Kotlin
+   FlowUtil.startFlow(
+       context = context,
+       flowContext = FlowContextRegistry.flowContext.copy(
+           flowType = FlowType.DeleteRegistration, flow = null
+       ),
+       updateIntent = { intent ->
+           intent.populateCustomBundle {
+               skipConfirmForDeleteRegistrationFlow(skip = true)
+           }
+       }
+   ) { resultCode, _ ->
+       if (resultCode == Activity.RESULT_OK) {
+           launchWelcomeActivity(context)
+       }
+   }
+   ```
 
 Congratulations! You now have learned how to restore, reset, logout and delete the user registration of an application using the Jetpack Compose Flows component!
 

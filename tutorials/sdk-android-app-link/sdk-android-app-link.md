@@ -101,30 +101,30 @@ As you primarily use the mobile application, you want to click on the link to op
 
 5. Locate the inserted code block.
 
-    ```kotlin
-    // ATTENTION: This was auto-generated to handle app links.
-    val appLinkIntent: Intent = intent
-    val appLinkAction: String? = appLinkIntent.action
-    val appLinkData: Uri? = appLinkIntent.data
-    ```
+   ```kotlin
+   // ATTENTION: This was auto-generated to handle app links.
+   val appLinkIntent: Intent = intent
+   val appLinkAction: String? = appLinkIntent.action
+   val appLinkData: Uri? = appLinkIntent.data
+   ```
 
 6. Add the following code after the inserted code block.
 
-    ```kotlin
-    appLinkData?.let { uri ->
-            val pathSegments: List<String> = uri.pathSegments
+   ```kotlin
+   appLinkData?.let { uri ->
+           val pathSegments: List<String> = uri.pathSegments
 
-            if (pathSegments.isNotEmpty()) {
-                val lastPathSegment: String = pathSegments.last()
+           if (pathSegments.isNotEmpty()) {
+               val lastPathSegment: String = pathSegments.last()
 
-                if (lastPathSegment == "product") {
-                    Toast.makeText(this, "Product App Link", Toast.LENGTH_SHORT).show()
-                } else if (lastPathSegment == "vendor") {
-                    Toast.makeText(this, "Vendor App Link", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-    ```
+               if (lastPathSegment == "product") {
+                   Toast.makeText(this, "Product App Link", Toast.LENGTH_SHORT).show()
+               } else if (lastPathSegment == "vendor") {
+                   Toast.makeText(this, "Vendor App Link", Toast.LENGTH_SHORT).show()
+               }
+           }
+   }
+   ```
 
     > Ensure that the necessary libraries are imported.
 

@@ -38,31 +38,31 @@ The visibility and the content of each screen will vary depending on the differe
 
 1.  By default, the first screen of the onboarding flow is the EULA screen. This screen allows users to review and agree to the end user license agreement. To exclude this screen, set the value of **`useDefaultEulaScreen`** parameter to **`false`** for the **`FlowOptions`** instance and set this **`FlowOptions`** instance for the **`FlowContext`** instance to start the onboarding flow.
 
-    ```Kotlin
-    val flowContext = FlowContext(
-        appConfig = appConfig,
-        flowOptions = FlowOptions(
-            useDefaultEulaScreen = false
-    )
-    FlowUtil.startFlow(activity, flowContext)
-    ```
+   ```Kotlin
+   val flowContext = FlowContext(
+       appConfig = appConfig,
+       flowOptions = FlowOptions(
+           useDefaultEulaScreen = false
+   )
+   FlowUtil.startFlow(activity, flowContext)
+   ```
 
-    Notice that if the EULA screen is excluded, it will be the responsibility of the client code to handle the end user license agreement.
+   Notice that if the EULA screen is excluded, it will be the responsibility of the client code to handle the end user license agreement.
 
 2.  If the **`AppConfig`** instance in **`FlowContext`** does not provide the authentication info or host for the mobile application, the activation screen will be displayed to get the complete **`AppConfig`** from either the `Discovery Service`, `QR code scanning` or `MDM`. By default, the QR code scanning screen will be displayed. The client code can customize the screen to display other activation screens.
 
     Create a **`FlowOptions`** instance and set the value for **`activationOption`** parameter, **`ActivationOption.DS_ONLY`** value to display the `Discovery Service` method only, **`ActivationOption.MDM_ONLY`** value to display the `MDM` method only and **`ActivationOption.DS_OR_QR`** value to display the activation screen for selecting from both methods. Using the code snippet below, the activation screen will only display the option for Discovery Service.
 
-    ```Kotlin
-    val flowContext = FlowContext(
-        appConfig = appConfig,
-        flowOptions = FlowOptions(
-            activationOption = ActivationOption.DS_ONLY
-    )
-    FlowUtil.startFlow(activity, flowContext)
-    ```
+   ```Kotlin
+   val flowContext = FlowContext(
+       appConfig = appConfig,
+       flowOptions = FlowOptions(
+           activationOption = ActivationOption.DS_ONLY
+   )
+   FlowUtil.startFlow(activity, flowContext)
+   ```
 
-    Notice that if the **`AppConfig`** instance contains complete information, the onboarding flow will skip the activation screen and go directly to the authentication step.
+   Notice that if the **`AppConfig`** instance contains complete information, the onboarding flow will skip the activation screen and go directly to the authentication step.
 
 
 3.  After getting the complete application configuration, the onboarding flow will display different authentication screens based on the authentication type defined for the application. For example, a screen with user input for `User Name` and `Password` properties will be displayed if the authentication type is `Basic`. If the authentication type is `SAML`, the screen will redirect to a web page for user login. The logic to decide which authentication screen to display is built into the onboarding flow and the client code cannot change it.
@@ -71,32 +71,32 @@ The visibility and the content of each screen will vary depending on the differe
 
     Also, the usage consent screen will be skipped if usage reporting is not enabled and the crash report screen will be skipped if crash reporting is not enabled. Otherwise, the screens will be displayed in the  onboarding flow, and the client code cannot alter this fact. To enable the usage reporting and crash reporting services, the client code needs start them using the **`SDKInitializer`** class.
 
-    ```Kotlin
-    val services = mutableListOf<MobileService>()
-    services.add(UsageService())
-    services.add(CrashService())
+   ```Kotlin
+   val services = mutableListOf<MobileService>()
+   services.add(UsageService())
+   services.add(CrashService())
 
-    SDKInitializer.start(this, * services.toTypedArray())
-    ```
+   SDKInitializer.start(this, * services.toTypedArray())
+   ```
 
 5.  Besides the options to include or exclude a step, you can set the client code to customize screens using its  **`ScreenSettings`**, including the title, description, and button text for all screens. For some specific screens, such as the EULA screen, the client code can specify its own URL for the EULA file. See [Onboarding Compose Screens](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/onboarding/android/fiori-compose-screens/Overview.html) in the help documentation for information on the detailed settings for each screen in the onboarding process.
 
     To have the customized screen settings take effect in the onboarding flow, set the list of **`ScreenSettings`** for the **`FlowContext`** instance.
 
-    ```Kotlin
-    val customScreenSettings = CustomScreenSettings(
-        eulaSettings = EulaScreenSettings(
-            eulaUrl = "file:///android_asset/my_eula.html"),
-        setPasscodeScreenSettings = SetPasscodeScreenSettings(
-            description = R.string.set_passcode_screen_desc)
-    )
-    val flowContext = FlowContext(
-        appConfig = appConfig,
-        flowOptions = FlowOptions(
-            screenSettings =  customScreenSettings
-    )
-    FlowUtil.startFlow(activity, flowContext)
-    ```
+   ```Kotlin
+   val customScreenSettings = CustomScreenSettings(
+       eulaSettings = EulaScreenSettings(
+           eulaUrl = "file:///android_asset/my_eula.html"),
+       setPasscodeScreenSettings = SetPasscodeScreenSettings(
+           description = R.string.set_passcode_screen_desc)
+   )
+   val flowContext = FlowContext(
+       appConfig = appConfig,
+       flowOptions = FlowOptions(
+           screenSettings =  customScreenSettings
+   )
+   FlowUtil.startFlow(activity, flowContext)
+   ```
 
 [ACCORDION-END]
 
@@ -112,98 +112,98 @@ In this section, we explain the onboarding-related callbacks in **`FlowStateList
 
     !![App Ready](app-ready-kotlin.png)
 
-    ```Kotlin
-    override suspend fun onAppConfigRetrieved(appConfig: AppConfig) {
-        logger.debug("onAppConfigRetrieved: {}", appConfig)
-        SAPServiceManager.initSAPServiceManager(appConfig)
-    }
-    ```
+   ```Kotlin
+   override suspend fun onAppConfigRetrieved(appConfig: AppConfig) {
+       logger.debug("onAppConfigRetrieved: {}", appConfig)
+       SAPServiceManager.initSAPServiceManager(appConfig)
+   }
+   ```
 
 4.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onApplicationReset`** to move to the `onApplicationReset` method. The event is notified when reset the application by starting the `reset` flow.
 
     !![App Ready](app-reset-kotlin.png)
 
-    ```Kotlin
-    override suspend fun onApplicationReset() {
-        this.application.resetApplication()
-    }
-    ```
+   ```Kotlin
+   override suspend fun onApplicationReset() {
+       this.application.resetApplication()
+   }
+   ```
 
 5.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onClientPolicyRetrieved`** to move to the `onClientPolicyRetrieved` method. After authentication is completed, the onboarding flow will get the client policies from the mobile server and then notify this event. The client code can then create the UI to display the settings.
 
     !![Policy Ready](policy-ready-kotlin.png)
 
-    ```Kotlin
-    override suspend fun onClientPolicyRetrieved(policies: ClientPolicies) {
-        policies.logPolicy?.also { logSettings ->
-            val preferenceRepository = SharedPreferenceRepository(application)
-            val currentSettings =
-                preferenceRepository.userPreferencesFlow.first().logSetting
+   ```Kotlin
+   override suspend fun onClientPolicyRetrieved(policies: ClientPolicies) {
+       policies.logPolicy?.also { logSettings ->
+           val preferenceRepository = SharedPreferenceRepository(application)
+           val currentSettings =
+               preferenceRepository.userPreferencesFlow.first().logSetting
 
-            if (currentSettings.logLevel != logSettings.logLevel) {
-                preferenceRepository.updateLogLevel(LogPolicy.getLogLevel(logSettings))
+           if (currentSettings.logLevel != logSettings.logLevel) {
+               preferenceRepository.updateLogLevel(LogPolicy.getLogLevel(logSettings))
 
-                val logString = when (LogPolicy.getLogLevel(logSettings)) {
-                    Level.ALL -> application.getString(R.string.log_level_path)
-                    Level.INFO -> application.getString(R.string.log_level_info)
-                    Level.WARN -> application.getString(R.string.log_level_warning)
-                    Level.ERROR -> application.getString(R.string.log_level_error)
-                    Level.OFF -> application.getString(R.string.log_level_none)
-                    else -> application.getString(R.string.log_level_debug)
-                }
+               val logString = when (LogPolicy.getLogLevel(logSettings)) {
+                   Level.ALL -> application.getString(R.string.log_level_path)
+                   Level.INFO -> application.getString(R.string.log_level_info)
+                   Level.WARN -> application.getString(R.string.log_level_warning)
+                   Level.ERROR -> application.getString(R.string.log_level_error)
+                   Level.OFF -> application.getString(R.string.log_level_none)
+                   else -> application.getString(R.string.log_level_debug)
+               }
 
-                logger.info(
-                    String.format(
-                        application.getString(R.string.log_level_changed),
-                        logString
-                    )
-                )
+               logger.info(
+                   String.format(
+                       application.getString(R.string.log_level_changed),
+                       logString
+                   )
+               )
 
-                MainScope().launch {
-                    Toast.makeText(
-                        application,
-                        String.format(
-                            application.getString(R.string.log_level_changed),
-                            logString
-                        ),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
-    ```
+               MainScope().launch {
+                   Toast.makeText(
+                       application,
+                       String.format(
+                           application.getString(R.string.log_level_changed),
+                           logString
+                       ),
+                       Toast.LENGTH_SHORT
+                   ).show()
+               }
+           }
+       }
+   }
+   ```
 
 6.  On Windows, press **`Ctrl+F12`**, or, on a Mac, press **`command+F12`**, and type **`onFlowFinishedWithData`** to move to the `onFlowFinishedWithData` method. The flows framework will send this event to the client code when a flow finishes successfully and the flow activity is removed from the back stack. Notice that this callback will only be invoked when the flow is successfully completed. If at any time the flow is canceled, this callback will not be invoked.
 
     !![Flow Finish](flow-finish-kotlin.png)
 
-    ```Kotlin
-    override suspend fun onFlowFinishedWithData(flowName: String?, data: Intent?) {
-        when (flowName) {
-            FlowType.Reset.name, FlowType.Logout.name -> launchWelcomeActivity(application)
-            FlowType.DeleteRegistration.name -> {
-                launchWelcomeActivity(application)
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   override suspend fun onFlowFinishedWithData(flowName: String?, data: Intent?) {
+       when (flowName) {
+           FlowType.Reset.name, FlowType.Logout.name -> launchWelcomeActivity(application)
+           FlowType.DeleteRegistration.name -> {
+               launchWelcomeActivity(application)
+           }
+       }
+   }
+   ```
 
 7.  Besides the callbacks implemented in the **`WizardFlowStateListener`** class, the **`OkHttpClientReady`** method is also useful if you want to add an HTTP header into the **`onOkHttpClient`** instance. Before authentication, the **`OkHttpClient`** instance will be ready and sent to the client code using `onOkHttpClientReady`. To add your own HTTP header, override the **`OkHttpClientReady`** method in your flow state listener.
 
-    ```Kotlin
-    override fun onOkHttpClientReady(httpClient: OkHttpClient) {
-        httpClient.addUniqueInterceptor( object: Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                val request: Request = chain.request()
-                val newRequest = request.newBuilder()
-                    .header("my_header", "my_header_value")
-                    .build()
-                return chain.proceed(newRequest)
-            }
-        })
-    }
-    ```
+   ```Kotlin
+   override fun onOkHttpClientReady(httpClient: OkHttpClient) {
+       httpClient.addUniqueInterceptor( object: Interceptor {
+           override fun intercept(chain: Interceptor.Chain): Response {
+               val request: Request = chain.request()
+               val newRequest = request.newBuilder()
+                   .header("my_header", "my_header_value")
+                   .build()
+               return chain.proceed(newRequest)
+           }
+       })
+   }
+   ```
 
 >Please see [Flows Extension Point](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/onboarding/android/newflows/ExtensionPoints.html) and [`FlowStateListener` in the Flows Component of SAP BTP SDK for Android](https://blogs.sap.com/2021/03/09/flowstatelistener-in-the-flows-component-of-sap-btp-sdk-for-android/) for detailed information on all of the flow states and callbacks. `FlowStateListener` has the same purpose as that in the view-based flows component and the sequence of the callback functions is also the same. The difference is that every callback function is marked as suspend, so it's easier for the client code to call other suspend functions.
 
@@ -227,14 +227,14 @@ This section provides some sample implementations for the methods in the **`Flow
 
     The first two methods allow you to add additional rules for passcode policy and the last method is for you to add your own validation logic in addition to the rules defined in the passcode policy. For example, when the passcode policy allows special characters, you can still add the logic to disable certain special characters. For instance, the sample code below prevents the user from being able to use "@" as one of the possible special characters:
 
-    ```Kotlin
-    override fun validatePasscode(code: CharArray): Boolean {
-        if(code.contains('@')) {
-            return false
-        }
-        return super.validatePasscode(code)
-    }
-    ```
+   ```Kotlin
+   override fun validatePasscode(code: CharArray): Boolean {
+       if(code.contains('@')) {
+           return false
+       }
+       return super.validatePasscode(code)
+   }
+   ```
 
 2.  The **`FlowActionHandler`** provides two methods related to the QR code:
 
@@ -246,18 +246,18 @@ This section provides some sample implementations for the methods in the **`Flow
 
     For example, you can specify that the QR code must contain some particular properties:
 
-    ```Kotlin
-    override fun validateBarcode(barcode: String): ServiceResult<Boolean> {
-        return if (barcode != null && barcode.contains("AppId") && barcode.contains("ClientId")
-                && barcode.contains("AuthorizationEndpointUrl")
-                && barcode.contains("ServerUrl") && barcode.contains("RedirectUrl")
-                && barcode.contains("TokenUrl")) {
-            ServiceResult.SUCCESS(true)
-        } else {
-            ServiceResult.FAILURE("")
-        }
-    }
-    ```
+   ```Kotlin
+   override fun validateBarcode(barcode: String): ServiceResult<Boolean> {
+       return if (barcode != null && barcode.contains("AppId") && barcode.contains("ClientId")
+               && barcode.contains("AuthorizationEndpointUrl")
+               && barcode.contains("ServerUrl") && barcode.contains("RedirectUrl")
+               && barcode.contains("TokenUrl")) {
+           ServiceResult.SUCCESS(true)
+       } else {
+           ServiceResult.FAILURE("")
+       }
+   }
+   ```
 
 3.  The **`FlowActionHandler`** provides two methods related to handling the certificate:
 
@@ -269,12 +269,12 @@ This section provides some sample implementations for the methods in the **`Flow
 
     For example, you can create a **`SslClientAuth`** instance using a **`ChooseCertificateProvider`** instance to pop up a dialog for user to choose a certificate:
 
-    ```Kotlin
-    override fun onCertificateSslClientAuthPrepared(): SslClientAuth {
-        val chooseCertificateProvider = ChooseCertificateProvider()
-        return SslClientAuth(chooseCertificateProvider)
-    }
-    ```
+   ```Kotlin
+   override fun onCertificateSslClientAuthPrepared(): SslClientAuth {
+       val chooseCertificateProvider = ChooseCertificateProvider()
+       return SslClientAuth(chooseCertificateProvider)
+   }
+   ```
 
 4.  The **`FlowActionHandler`** provides two methods for user name and email obfuscation when displaying the information on the sign-in screen:
 
@@ -284,22 +284,22 @@ This section provides some sample implementations for the methods in the **`Flow
 
     For example, you can choose to not obfuscate the email but obfuscate the user name by keeping the first two characters and replacing the other characters with several "\_" characters:
 
-    ```Kotlin
-    override fun obfuscateEmail(email: String): String {
-        return email
-    }
+   ```Kotlin
+   override fun obfuscateEmail(email: String): String {
+       return email
+   }
 
-    override fun obfuscateUserName(name: String): String {
-        if (name.isEmpty()) {
-            return name
-        }
-        return if (name.length > 2) {
-            name.substring(0, 2) + "____"
-        } else {
-            name.substring(0, 1) + "_____"
-        }
-    }
-    ```
+   override fun obfuscateUserName(name: String): String {
+       if (name.isEmpty()) {
+           return name
+       }
+       return if (name.length > 2) {
+           name.substring(0, 2) + "____"
+       } else {
+           name.substring(0, 1) + "_____"
+       }
+   }
+   ```
 
 5.  The **`FlowActionHandler`** provides a method for the client code to add "back button press" logic when a web view is displayed for authentication. For some authentication types, the onboarding flow will open a web view for authentication. You can add your own logic to specify what action is taken when the **`Back`** button of the web view is pressed.
 
@@ -307,21 +307,21 @@ This section provides some sample implementations for the methods in the **`Flow
 
     The following sample code implements a warning dialog when the **`Back`** button is pressed:
 
-    ```Kotlin
-     override fun webViewBackPressHandler() = IBackPress {
-        val activity = AppLifecycleCallbackHandler.getInstance().activity
-        activity?.let {
-            AlertDialog.Builder(activity)
-                .setMessage("Are you sure you want to exit onboarding flow?")
-                .setPositiveButton("OK") { dialog, _ ->
-                    activity.finish()
-                    dialog.dismiss()
-                }.setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }.show()
-        }
-    }
-    ```
+   ```Kotlin
+    override fun webViewBackPressHandler() = IBackPress {
+       val activity = AppLifecycleCallbackHandler.getInstance().activity
+       activity?.let {
+           AlertDialog.Builder(activity)
+               .setMessage("Are you sure you want to exit onboarding flow?")
+               .setPositiveButton("OK") { dialog, _ ->
+                   activity.finish()
+                   dialog.dismiss()
+               }.setNegativeButton("Cancel") { dialog, _ ->
+                   dialog.dismiss()
+               }.show()
+       }
+   }
+   ```
 
 6.  The **`FlowActionHandler`** provides a method for the client code to add custom steps for the onboarding flow. The client code can add its own steps to the supported insert points.
 
@@ -329,43 +329,43 @@ This section provides some sample implementations for the methods in the **`Flow
 
     Currently, the following insertion points are supported：
 
-    ```Kotlin
-    sealed class CustomStepInsertionPoint {
-        object BeforeEula : CustomStepInsertionPoint()
-        object BeforeActivation : CustomStepInsertionPoint()
-        object BeforeAuthentication : CustomStepInsertionPoint()
-        object BeforeSetPasscode : CustomStepInsertionPoint()
-        object BeforeConsents : CustomStepInsertionPoint()
-        object BeforeOnboardingFinish : CustomStepInsertionPoint()
-    }
-    ```
+   ```Kotlin
+   sealed class CustomStepInsertionPoint {
+       object BeforeEula : CustomStepInsertionPoint()
+       object BeforeActivation : CustomStepInsertionPoint()
+       object BeforeAuthentication : CustomStepInsertionPoint()
+       object BeforeSetPasscode : CustomStepInsertionPoint()
+       object BeforeConsents : CustomStepInsertionPoint()
+       object BeforeOnboardingFinish : CustomStepInsertionPoint()
+   }
+   ```
 
-    The following sample code adds a welcome step before the EULA step for the onboarding flow：
+   The following sample code adds a welcome step before the EULA step for the onboarding flow：
 
-    ```Kotlin
-    override fun getFlowCustomizationSteps(
-        flow: BaseFlow,
-        insertionPoint: CustomStepInsertionPoint
-    ) {
-        if (flow.flowName == FlowType.Onboarding.name) {
-            when (insertionPoint) {
-                CustomStepInsertionPoint.BeforeEula -> {
-                    flow.addSingleStep(step_welcome, secure = false) {
-                        LaunchScreen(
-                            primaryViewClickListener = {
-                                flow.flowDone(step_welcome)
-                            },
-                            secondaryViewClickListener = {
-                                flow.terminateFlow(Activity.RESULT_OK)
-                            }
-                        )
-                    }
-                }
-                else -> Unit
-            }
-        }
-    }
-    ```
+   ```Kotlin
+   override fun getFlowCustomizationSteps(
+       flow: BaseFlow,
+       insertionPoint: CustomStepInsertionPoint
+   ) {
+       if (flow.flowName == FlowType.Onboarding.name) {
+           when (insertionPoint) {
+               CustomStepInsertionPoint.BeforeEula -> {
+                   flow.addSingleStep(step_welcome, secure = false) {
+                       LaunchScreen(
+                           primaryViewClickListener = {
+                               flow.flowDone(step_welcome)
+                           },
+                           secondaryViewClickListener = {
+                               flow.terminateFlow(Activity.RESULT_OK)
+                           }
+                       )
+                   }
+               }
+               else -> Unit
+           }
+       }
+   }
+   ```
 
 Congratulations! You have learned how to customize a Jetpack Compose onboarding flow!
 

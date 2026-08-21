@@ -73,24 +73,24 @@ To protect the data in offline store, you must enable offline store encryption b
 
 2.  On Windows, press **`Ctrl+F12`**, or on a Mac, press **`command+F12`**, and type **`initializeOffline`**, to move to the `initializeOffline` method. Call the setter of `storeEncryptionKey` method of the `OfflineODataParameters` instance to encrypt the offline store. In single user mode, before you can get the encryption key using `UserSecureStoreDelegate`, you must generate and save an encryption key to `UserSecureStore` first.
 
-    ```Kotlin
-    val encryptionKey = if (runtimeMultipleUserMode) {
-        UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
-    } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
-        if (UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY) == null) {
-            val bytes = ByteArray(32)
-            val random = SecureRandom()
-            random.nextBytes(bytes)
-            val key = Base64.encodeToString(bytes, Base64.NO_WRAP)
-            UserSecureStoreDelegate.getInstance().saveData(OFFLINE_DATASTORE_ENCRYPTION_KEY, key)
-            Arrays.fill(bytes, 0.toByte())
-            key
-        } else {
-            UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY)
-        }
-    }
-    storeEncryptionKey = encryptionKey
-    ```
+   ```Kotlin
+   val encryptionKey = if (runtimeMultipleUserMode) {
+       UserSecureStoreDelegate.getInstance().getOfflineEncryptionKey()
+   } else { //If is single user mode, create and save a key into user secure store for accessing offline DB
+       if (UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY) == null) {
+           val bytes = ByteArray(32)
+           val random = SecureRandom()
+           random.nextBytes(bytes)
+           val key = Base64.encodeToString(bytes, Base64.NO_WRAP)
+           UserSecureStoreDelegate.getInstance().saveData(OFFLINE_DATASTORE_ENCRYPTION_KEY, key)
+           Arrays.fill(bytes, 0.toByte())
+           key
+       } else {
+           UserSecureStoreDelegate.getInstance().getData<String>(OFFLINE_DATASTORE_ENCRYPTION_KEY)
+       }
+   }
+   storeEncryptionKey = encryptionKey
+   ```
 
 >For additional information about multiple user mode, see [Enable Multi-User Mode for Your Android Application](sdk-android-wizard-app-multiuser).
 
@@ -129,103 +129,103 @@ The application allows users to make changes against a local offline store and s
 
 1.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineOpenWorker`** to open `OfflineOpenWorker.kt` and examine the `open` method.
 
-    ```Kotlin
-    override suspend fun doWork(): Result = withContext(IO) {
-        ... ...
-        try {
-            result = suspendOpen()
-            ... ...
-        } finally {
-            ... ...
-        }
-        ... ...
-    }
+   ```Kotlin
+   override suspend fun doWork(): Result = withContext(IO) {
+       ... ...
+       try {
+           result = suspendOpen()
+           ... ...
+       } finally {
+           ... ...
+       }
+       ... ...
+   }
 
-    private suspend fun suspendOpen(): Result {
-        try {
-            OfflineWorkerUtil.offlineODataProvider?.open()
-            return Result.success()
-        } catch (exception: OfflineODataException) {
-            ... ...
-        }
-    }
-    ```
+   private suspend fun suspendOpen(): Result {
+       try {
+           OfflineWorkerUtil.offlineODataProvider?.open()
+           return Result.success()
+       } catch (exception: OfflineODataException) {
+           ... ...
+       }
+   }
+   ```
 
-    The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
+   The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
 
-    The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `OfflineOpenViewModel` when the user logs in to the application.
+   The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `OfflineOpenViewModel` when the user logs in to the application.
 
-    ```Kotlin
-    // In OfflineWorkerUtil.kt
-    fun open(context: Context): UUID {
-        ... ...
-        val openRequest = OneTimeWorkRequestBuilder<OfflineOpenWorker>()
-            .setConstraints(constraints)
-            .build()
-        ... ...
-    }
-    ```
+   ```Kotlin
+   // In OfflineWorkerUtil.kt
+   fun open(context: Context): UUID {
+       ... ...
+       val openRequest = OneTimeWorkRequestBuilder<OfflineOpenWorker>()
+           .setConstraints(constraints)
+           .build()
+       ... ...
+   }
+   ```
 
-    ```Kotlin
-    // In OfflineOpenViewModel.kt
-    fun startOpenOffline() {
-        OfflineWorkerUtil.addProgressListener(progressListener)
-        _uiState.update { SyncUIState() } //reset ui state for relaunch
-        val openRequestId = OfflineWorkerUtil.open(getApplication())
-        ... ...
-    }
-    ```
+   ```Kotlin
+   // In OfflineOpenViewModel.kt
+   fun startOpenOffline() {
+       OfflineWorkerUtil.addProgressListener(progressListener)
+       _uiState.update { SyncUIState() } //reset ui state for relaunch
+       val openRequestId = OfflineWorkerUtil.open(getApplication())
+       ... ...
+   }
+   ```
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineSyncWorker`** to open `OfflineSyncWorker.kt` and examine the `download` and `upload` methods.
 
-    ```Kotlin
-    override suspend fun doWork(): Result = withContext(IO) {
-        ... ...
+   ```Kotlin
+   override suspend fun doWork(): Result = withContext(IO) {
+       ... ...
 
-        OfflineWorkerUtil.offlineODataProvider?.let { provider ->
-            ... ...
-            try {
-                OfflineWorkerUtil.addProgressListener(progressListener)
-                logger.info("Start uploading data...")
-                provider.upload()
-                logger.info("Start downloading data...")
-                startPointForSync = progressListener.totalStepsForTwoProgresses / 2
-                provider.download()
-            } catch (exception: OfflineODataException) {
-                ... ...
-            } finally {
-                ... ...
-            }
-        }
+       OfflineWorkerUtil.offlineODataProvider?.let { provider ->
+           ... ...
+           try {
+               OfflineWorkerUtil.addProgressListener(progressListener)
+               logger.info("Start uploading data...")
+               provider.upload()
+               logger.info("Start downloading data...")
+               startPointForSync = progressListener.totalStepsForTwoProgresses / 2
+               provider.download()
+           } catch (exception: OfflineODataException) {
+               ... ...
+           } finally {
+               ... ...
+           }
+       }
 
-        ... ...
-    }
-    ```
+       ... ...
+   }
+   ```
 
-    The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation.
+   The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation.
 
-    The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetViewModel` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
+   The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetViewModel` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
 
-    ```Kotlin
-    // In OfflineWorkerUtil.kt
-    fun sync(context: Context): UUID {
-        ... ...
+   ```Kotlin
+   // In OfflineWorkerUtil.kt
+   fun sync(context: Context): UUID {
+       ... ...
 
-        val syncRequest = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
-            .setConstraints(constraints)
-            .build()
+       val syncRequest = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
+           .setConstraints(constraints)
+           .build()
 
-        ... ...
-    }
-    ```
+       ... ...
+   }
+   ```
 
-    ```Kotlin
-    // In EntitySetViewModel.kt
-    fun startSync() {
-        val requestId = OfflineWorkerUtil.sync(getApplication())
-        ... ...
-    }
-    ```
+   ```Kotlin
+   // In EntitySetViewModel.kt
+   fun startSync() {
+       val requestId = OfflineWorkerUtil.sync(getApplication())
+       ... ...
+   }
+   ```
 
 [OPTION END]
 
@@ -233,99 +233,99 @@ The application allows users to make changes against a local offline store and s
 
 1.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineOpenWorker`** to open `OfflineOpenWorker.kt` and examine the `open` method.
 
-    ```Kotlin
-    override suspend fun doWork(): Result = withContext(IO) {
-        ... ...
-        OfflineWorkerUtil.offlineODataProvider?.also { provider ->
-            provider.open({
-                ... ...
-            }, { exception ->
-                ... ...
-            })
-        }
-        ... ...
-    }
-    ```
+   ```Kotlin
+   override suspend fun doWork(): Result = withContext(IO) {
+       ... ...
+       OfflineWorkerUtil.offlineODataProvider?.also { provider ->
+           provider.open({
+               ... ...
+           }, { exception ->
+               ... ...
+           })
+       }
+       ... ...
+   }
+   ```
 
-    The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
+   The worker's work is to call the `open` method of the `OfflineODataProvider` class to perform the open operation and pass the given callbacks through.
 
-    The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `MainBusinessActivity` when the user logs in to the application.
+   The `OfflineOpenWorker` class is called by the `open` method in `OfflineWorkerUtil.kt`, which is called by `MainBusinessActivity` when the user logs in to the application.
 
-    ```Kotlin
-    // In OfflineWorkerUtil.kt
-    @JvmStatic
-    fun open(context: Context) {
-        ... ...
-        openRequest = OneTimeWorkRequestBuilder<OfflineOpenWorker>()
-            .setConstraints(constraints)
-            .build()
-        ... ...
-    }
-    ```
+   ```Kotlin
+   // In OfflineWorkerUtil.kt
+   @JvmStatic
+   fun open(context: Context) {
+       ... ...
+       openRequest = OneTimeWorkRequestBuilder<OfflineOpenWorker>()
+           .setConstraints(constraints)
+           .build()
+       ... ...
+   }
+   ```
 
-    ```Kotlin
-    // In MainBusinessActivity.kt
-    override fun onResume() {
-        ... ...
-        spforLockAndWipe.getString(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG, null)?.let {
-            ... ...
-        } ?: run {
-            ... ...
-            OfflineWorkerUtil.open(application)
-            ... ...
-        }
-    }
-    ```
+   ```Kotlin
+   // In MainBusinessActivity.kt
+   override fun onResume() {
+       ... ...
+       spforLockAndWipe.getString(SAPWizardApplication.LOCK_WIPE_INVOKING_FLAG, null)?.let {
+           ... ...
+       } ?: run {
+           ... ...
+           OfflineWorkerUtil.open(application)
+           ... ...
+       }
+   }
+   ```
 
 2.  In Android Studio, on Windows, press **`Ctrl+N`**, or on a Mac, press **`command+O`**, and type **`OfflineSyncWorker`** to open `OfflineSyncWorker.kt` and examine the `download` and `upload` methods.
 
-    ```Kotlin
-    override suspend fun doWork(): Result = withContext(IO) {
-        ... ...
+   ```Kotlin
+   override suspend fun doWork(): Result = withContext(IO) {
+       ... ...
 
-        OfflineWorkerUtil.offlineODataProvider?.also { provider ->
-            ... ...
-            provider.upload({
-                ... ...
-                provider.download({
-                    ... ...
-                }, {
-                    ... ...
-                })
-            }, {
-                ... ...
-            })
-        }
+       OfflineWorkerUtil.offlineODataProvider?.also { provider ->
+           ... ...
+           provider.upload({
+               ... ...
+               provider.download({
+                   ... ...
+               }, {
+                   ... ...
+               })
+           }, {
+               ... ...
+           })
+       }
 
-        ... ...
-    }
-    ```
+       ... ...
+   }
+   ```
 
-    The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation and pass the given callbacks through.
+   The worker's work is to call the `download` and `upload` method of the `OfflineODataProvider` class to perform the sync operation and pass the given callbacks through.
 
-    The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetListActivity` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
+   The `OfflineSyncWorker` class is called by the `sync` method in `OfflineWorkerUtil.kt`, which is called by `EntitySetListActivity` when the user wants to perform a sync. When an entity is created locally in the offline store, its primary key is left unset. This is because when the user performs an `upload`, the server will set the primary key for the client. An `upload` and a `download` are normally performed together because the `download` may return updated values from the server, such as a newly-created primary key.
 
-    ```Kotlin
-    // In OfflineWorkerUtil.kt
-    @JvmStatic
-    fun sync(context: Context) {
-        ... ...
+   ```Kotlin
+   // In OfflineWorkerUtil.kt
+   @JvmStatic
+   fun sync(context: Context) {
+       ... ...
 
-        syncRequest = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
-            .setConstraints(constraints)
-            .build()
+       syncRequest = OneTimeWorkRequestBuilder<OfflineSyncWorker>()
+           .setConstraints(constraints)
+           .build()
 
-        ... ...
-    }
-    ```
+       ... ...
+   }
+   ```
 
-    ```Kotlin
-    // In EntitySetListActivity.kt
-    private fun synchronize() {
-        OfflineWorkerUtil.sync(application)
-        ... ...
-    }
-    ```
+   ```Kotlin
+   // In EntitySetListActivity.kt
+   private fun synchronize() {
+       OfflineWorkerUtil.sync(application)
+       ... ...
+   }
+   ```
 
 [OPTION END]
 
@@ -389,14 +389,14 @@ In this section we will create an **Error Information** screen that displays the
 
 2.  Add the following values.
 
-    ```XML
-    <string name="error_header">Error Information</string>
-    <string name="request_method">Request Method</string>
-    <string name="request_status">Request Status</string>
-    <string name="request_message">Request Message</string>
-    <string name="request_body">Request Body</string>
-    <string name="request_url">Request URL</string>
-    ```
+   ```XML
+   <string name="error_header">Error Information</string>
+   <string name="request_method">Request Method</string>
+   <string name="request_status">Request Status</string>
+   <string name="request_message">Request Message</string>
+   <string name="request_body">Request Body</string>
+   <string name="request_url">Request URL</string>
+   ```
 
 3.  Create a new screen in the `app/kotlin+java/com.sap.wizapp/ui/odata/screens` folder by right-clicking, then selecting **New** > **Kotlin Class/File** > **File**. Name the new file **`ErrorScreen`**.
 
@@ -404,301 +404,301 @@ In this section we will create an **Error Information** screen that displays the
 
     In the package statement and the import, if needed, replace `com.sap.wizapp` with the package name of your project.
 
-    ```Kotlin
-    package com.sap.wizapp.ui.odata.screens
+   ```Kotlin
+   package com.sap.wizapp.ui.odata.screens
 
-    import androidx.compose.foundation.layout.padding
-    import androidx.compose.foundation.lazy.LazyColumn
-    import androidx.compose.material3.Text
-    import androidx.compose.runtime.Composable
-    import androidx.compose.ui.Modifier
-    import androidx.compose.ui.res.stringResource
-    import androidx.compose.ui.unit.dp
-    import androidx.lifecycle.viewmodel.compose.viewModel
-    import com.sap.cloud.mobile.fiori.compose.common.FioriDivider
-    import com.sap.cloud.mobile.fiori.compose.navigation.ui.HeadlineText
-    import com.sap.cloud.mobile.fiori.compose.theme.FioriTextStyleOverline
-    import com.sap.cloud.mobile.fiori.compose.theme.TextAppearanceFioriSubtitle1
-    import com.sap.wizapp.R
-    import org.json.JSONObject
+   import androidx.compose.foundation.layout.padding
+   import androidx.compose.foundation.lazy.LazyColumn
+   import androidx.compose.material3.Text
+   import androidx.compose.runtime.Composable
+   import androidx.compose.ui.Modifier
+   import androidx.compose.ui.res.stringResource
+   import androidx.compose.ui.unit.dp
+   import androidx.lifecycle.viewmodel.compose.viewModel
+   import com.sap.cloud.mobile.fiori.compose.common.FioriDivider
+   import com.sap.cloud.mobile.fiori.compose.navigation.ui.HeadlineText
+   import com.sap.cloud.mobile.fiori.compose.theme.FioriTextStyleOverline
+   import com.sap.cloud.mobile.fiori.compose.theme.TextAppearanceFioriSubtitle1
+   import com.sap.wizapp.R
+   import org.json.JSONObject
 
-    const val ERROR_URL = "requestURL"
-    const val ERROR_CODE = "statusCode"
-    const val ERROR_METHOD = "method"
-    const val ERROR_BODY = "body"
-    const val ERROR_MESSAGE = "message"
+   const val ERROR_URL = "requestURL"
+   const val ERROR_CODE = "statusCode"
+   const val ERROR_METHOD = "method"
+   const val ERROR_BODY = "body"
+   const val ERROR_MESSAGE = "message"
 
-    @Composable
-    fun ErrorScreen(navigateUp: () -> Unit, errorInfo: String?) {
-        // Display the error information
+   @Composable
+   fun ErrorScreen(navigateUp: () -> Unit, errorInfo: String?) {
+       // Display the error information
 
-        val errorInfoJson = errorInfo?.let{ JSONObject(errorInfo) }
-        val errorUrl = errorInfoJson?.getString(ERROR_URL)
-        val errorCode = errorInfoJson?.getInt(ERROR_CODE)
-        val errorMethod = errorInfoJson?.getString(ERROR_METHOD)
-        val errorBody = errorInfoJson?.getString(ERROR_BODY)
-        val errorMessage = errorInfoJson?.getString(ERROR_MESSAGE)
+       val errorInfoJson = errorInfo?.let{ JSONObject(errorInfo) }
+       val errorUrl = errorInfoJson?.getString(ERROR_URL)
+       val errorCode = errorInfoJson?.getInt(ERROR_CODE)
+       val errorMethod = errorInfoJson?.getString(ERROR_METHOD)
+       val errorBody = errorInfoJson?.getString(ERROR_BODY)
+       val errorMessage = errorInfoJson?.getString(ERROR_MESSAGE)
 
-        OperationScreen(
-            screenSettings = OperationScreenSettings(
-                title = stringResource(id = R.string.application_name),
-                navigateUp = navigateUp,
-            ),
-            modifier = Modifier,
-            viewModel = viewModel()
-        ) {
-            LazyColumn {
-                item {
-                    HeadlineText(
-                        text = stringResource(id = R.string.error_header),
-                        modifier = Modifier.padding(16.dp)
-                    )
-                    FioriDivider()
-                    Text(
-                        text = stringResource(id = R.string.request_message).uppercase(),
-                        modifier = Modifier.padding(16.dp),
-                        style = FioriTextStyleOverline
-                    )
-                    Text(
-                        text = errorMessage ?: stringResource(id = R.string.request_message),
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        style = TextAppearanceFioriSubtitle1
-                    )
-                    FioriDivider()
-                    Text(
-                        text = stringResource(id = R.string.request_body).uppercase(),
-                        modifier = Modifier.padding(16.dp),
-                        style = FioriTextStyleOverline
-                    )
-                    Text(
-                        text = errorBody ?: stringResource(id = R.string.request_body),
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        style = TextAppearanceFioriSubtitle1
-                    )
-                    FioriDivider()
-                    Text(
-                        text = stringResource(id = R.string.request_url).uppercase(),
-                        modifier = Modifier.padding(16.dp),
-                        style = FioriTextStyleOverline
-                    )
-                    Text(
-                        text = errorUrl ?: stringResource(id = R.string.request_url),
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        style = TextAppearanceFioriSubtitle1
-                    )
-                    FioriDivider()
-                    Text(
-                        text = stringResource(id = R.string.request_status).uppercase(),
-                        modifier = Modifier.padding(16.dp),
-                        style = FioriTextStyleOverline
-                    )
-                    Text(
-                        text = (errorCode ?: 0).toString(),
-                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                        style = TextAppearanceFioriSubtitle1
-                    )
-                    FioriDivider()
-                    Text(
-                        text = stringResource(id = R.string.request_method).uppercase(),
-                        modifier = Modifier.padding(16.dp),
-                        style = FioriTextStyleOverline
-                    )
-                    Text(
-                        text = errorMethod ?: stringResource(id = R.string.request_method),
-                        modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
-                        style = TextAppearanceFioriSubtitle1
-                    )
-                    FioriDivider()
-                }
-            }
-        }
-    }
-    ```
+       OperationScreen(
+           screenSettings = OperationScreenSettings(
+               title = stringResource(id = R.string.application_name),
+               navigateUp = navigateUp,
+           ),
+           modifier = Modifier,
+           viewModel = viewModel()
+       ) {
+           LazyColumn {
+               item {
+                   HeadlineText(
+                       text = stringResource(id = R.string.error_header),
+                       modifier = Modifier.padding(16.dp)
+                   )
+                   FioriDivider()
+                   Text(
+                       text = stringResource(id = R.string.request_message).uppercase(),
+                       modifier = Modifier.padding(16.dp),
+                       style = FioriTextStyleOverline
+                   )
+                   Text(
+                       text = errorMessage ?: stringResource(id = R.string.request_message),
+                       modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                       style = TextAppearanceFioriSubtitle1
+                   )
+                   FioriDivider()
+                   Text(
+                       text = stringResource(id = R.string.request_body).uppercase(),
+                       modifier = Modifier.padding(16.dp),
+                       style = FioriTextStyleOverline
+                   )
+                   Text(
+                       text = errorBody ?: stringResource(id = R.string.request_body),
+                       modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                       style = TextAppearanceFioriSubtitle1
+                   )
+                   FioriDivider()
+                   Text(
+                       text = stringResource(id = R.string.request_url).uppercase(),
+                       modifier = Modifier.padding(16.dp),
+                       style = FioriTextStyleOverline
+                   )
+                   Text(
+                       text = errorUrl ?: stringResource(id = R.string.request_url),
+                       modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                       style = TextAppearanceFioriSubtitle1
+                   )
+                   FioriDivider()
+                   Text(
+                       text = stringResource(id = R.string.request_status).uppercase(),
+                       modifier = Modifier.padding(16.dp),
+                       style = FioriTextStyleOverline
+                   )
+                   Text(
+                       text = (errorCode ?: 0).toString(),
+                       modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                       style = TextAppearanceFioriSubtitle1
+                   )
+                   FioriDivider()
+                   Text(
+                       text = stringResource(id = R.string.request_method).uppercase(),
+                       modifier = Modifier.padding(16.dp),
+                       style = FioriTextStyleOverline
+                   )
+                   Text(
+                       text = errorMethod ?: stringResource(id = R.string.request_method),
+                       modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                       style = TextAppearanceFioriSubtitle1
+                   )
+                   FioriDivider()
+               }
+           }
+       }
+   }
+   ```
 
 5.  On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`EntitySetsScreen`** to open `EntitySetsScreen.kt`.
 
 6.  Add a parameter after `navigateToSettings` in the `EntitySetScreen` function:
 
-    ```Kotlin
-    @Composable
-    fun EntitySetScreen(
-        list: List<EntityScreenInfo>,
-        onRowClick: (EntityType) -> Unit,
-        modifier: Modifier = Modifier,
-        navigateToSettings: () -> Unit,
-        navigateToErrorScreen: (String) -> Unit
-    ) {
-    ```
+   ```Kotlin
+   @Composable
+   fun EntitySetScreen(
+       list: List<EntityScreenInfo>,
+       onRowClick: (EntityType) -> Unit,
+       modifier: Modifier = Modifier,
+       navigateToSettings: () -> Unit,
+       navigateToErrorScreen: (String) -> Unit
+   ) {
+   ```
 
 7.  Add the following imports:
 
-    ```Kotlin
-    import android.util.Log
-    import com.sap.cloud.mobile.kotlin.odata.offline.OfflineODataException
-    import org.json.JSONException
-    import org.json.JSONObject
-    ```
+   ```Kotlin
+   import android.util.Log
+   import com.sap.cloud.mobile.kotlin.odata.offline.OfflineODataException
+   import org.json.JSONException
+   import org.json.JSONObject
+   ```
 
 8.  Modify the `EntitySetScreen` in the `EntitySetScreenPreview` function correspondingly.
 
-    ```Kotlin
-    @Preview
-    @Composable
-    fun EntitySetScreenPreview() {
-        val entityTypeNames = EntityScreenInfo.entries
-        EntitySetScreen(entityTypeNames, { println("click $it row") }, navigateToSettings = {}, navigateToErrorScreen = {})
-    }
-    ```
+   ```Kotlin
+   @Preview
+   @Composable
+   fun EntitySetScreenPreview() {
+       val entityTypeNames = EntityScreenInfo.entries
+       EntitySetScreen(entityTypeNames, { println("click $it row") }, navigateToSettings = {}, navigateToErrorScreen = {})
+   }
+   ```
 
 9.  In the action tiems list of the `OperationScreen`, modify the action of `ActionItem` `synchronize` from `viewModel::startSync` to the following, which queries the error archive and displays information to the user about the first error encountered after sync finished:
 
-    ```Kotlin
-    viewModel.startSync()
-    val provider = OfflineWorkerUtil.offlineODataProvider
+   ```Kotlin
+   viewModel.startSync()
+   val provider = OfflineWorkerUtil.offlineODataProvider
 
-    try {
-        val errorArchive = provider!!.getErrorArchive()
+   try {
+       val errorArchive = provider!!.getErrorArchive()
 
-        for (errorEntity in errorArchive) {
-            val requestURL = errorEntity.requestURL
-            val method = errorEntity.requestMethod
-            val message = errorEntity.message
-            val statusCode = errorEntity.httpStatusCode ?: 0
-            val body = errorEntity.requestBody
+       for (errorEntity in errorArchive) {
+           val requestURL = errorEntity.requestURL
+           val method = errorEntity.requestMethod
+           val message = errorEntity.message
+           val statusCode = errorEntity.httpStatusCode ?: 0
+           val body = errorEntity.requestBody
 
-            Log.e("ErrorArchive", "RequestURL: $requestURL")
-            Log.e("ErrorArchive", "HTTP Status Code: $statusCode")
-            Log.e("ErrorArchive", "Method: $method")
-            Log.e("ErrorArchive", "Message: $message")
-            Log.e("ErrorArchive", "Body: $body")
+           Log.e("ErrorArchive", "RequestURL: $requestURL")
+           Log.e("ErrorArchive", "HTTP Status Code: $statusCode")
+           Log.e("ErrorArchive", "Method: $method")
+           Log.e("ErrorArchive", "Message: $message")
+           Log.e("ErrorArchive", "Body: $body")
 
-            val finalMessage = try {
-                val jsonObj = message?.let { JSONObject(it) }
-                jsonObj?.let {
-                    jsonObj.getJSONObject("error").getString("message")
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-                message
-            }
+           val finalMessage = try {
+               val jsonObj = message?.let { JSONObject(it) }
+               jsonObj?.let {
+                   jsonObj.getJSONObject("error").getString("message")
+               }
+           } catch (e: JSONException) {
+               e.printStackTrace()
+               message
+           }
 
-            val errorInfo = JSONObject().apply {
-                                put(ERROR_URL, requestURL)
-                                put(ERROR_METHOD, method)
-                                put(ERROR_MESSAGE, finalMessage)
-                                put(ERROR_CODE, statusCode)
-                                put(ERROR_BODY, body)
-                            }
+           val errorInfo = JSONObject().apply {
+                               put(ERROR_URL, requestURL)
+                               put(ERROR_METHOD, method)
+                               put(ERROR_MESSAGE, finalMessage)
+                               put(ERROR_CODE, statusCode)
+                               put(ERROR_BODY, body)
+                           }
 
-            // Reverts all failing entities to the previous state or set
-            // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
-            // to cause the deleteEntity call to only revert the specified entity
-            // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
-            // provider.deleteEntity(errorEntity, null, null);
-            navigateToErrorScreen(errorInfo.toString())
-            break //For simplicity, only show the first error encountered
-        }
-    } catch (e: OfflineODataException) {
-        e.printStackTrace()
-    }
-    ```
+           // Reverts all failing entities to the previous state or set
+           // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
+           // to cause the deleteEntity call to only revert the specified entity
+           // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
+           // provider.deleteEntity(errorEntity, null, null);
+           navigateToErrorScreen(errorInfo.toString())
+           break //For simplicity, only show the first error encountered
+       }
+   } catch (e: OfflineODataException) {
+       e.printStackTrace()
+   }
+   ```
 
-    After modification, the `ActionItem` of `synchronize` should look like this:
+   After modification, the `ActionItem` of `synchronize` should look like this:
 
-    ```Kotlin
-    ActionItem(
-        nameRes = R.string.synchronize_action,
-        overflowMode = OverflowMode.ALWAYS_OVERFLOW,
-        doAction = {
-            viewModel.startSync()
-            val provider = OfflineWorkerUtil.offlineODataProvider
+   ```Kotlin
+   ActionItem(
+       nameRes = R.string.synchronize_action,
+       overflowMode = OverflowMode.ALWAYS_OVERFLOW,
+       doAction = {
+           viewModel.startSync()
+           val provider = OfflineWorkerUtil.offlineODataProvider
 
-            try {
-                val errorArchive = provider!!.getErrorArchive()
+           try {
+               val errorArchive = provider!!.getErrorArchive()
 
-                for (errorEntity in errorArchive) {
-                    val requestURL = errorEntity.requestURL
-                    val method = errorEntity.requestMethod
-                    val message = errorEntity.message
-                    val statusCode = errorEntity.httpStatusCode ?: 0
-                    val body = errorEntity.requestBody
+               for (errorEntity in errorArchive) {
+                   val requestURL = errorEntity.requestURL
+                   val method = errorEntity.requestMethod
+                   val message = errorEntity.message
+                   val statusCode = errorEntity.httpStatusCode ?: 0
+                   val body = errorEntity.requestBody
 
-                    Log.e("ErrorArchive", "RequestURL: $requestURL")
-                    Log.e("ErrorArchive", "HTTP Status Code: $statusCode")
-                    Log.e("ErrorArchive", "Method: $method")
-                    Log.e("ErrorArchive", "Message: $message")
-                    Log.e("ErrorArchive", "Body: $body")
+                   Log.e("ErrorArchive", "RequestURL: $requestURL")
+                   Log.e("ErrorArchive", "HTTP Status Code: $statusCode")
+                   Log.e("ErrorArchive", "Method: $method")
+                   Log.e("ErrorArchive", "Message: $message")
+                   Log.e("ErrorArchive", "Body: $body")
 
-                    val finalMessage = try {
-                        val jsonObj = message?.let { JSONObject(it) }
-                        jsonObj?.let {
-                            jsonObj.getJSONObject("error").getString("message")
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                        message
-                    }
+                   val finalMessage = try {
+                       val jsonObj = message?.let { JSONObject(it) }
+                       jsonObj?.let {
+                           jsonObj.getJSONObject("error").getString("message")
+                       }
+                   } catch (e: JSONException) {
+                       e.printStackTrace()
+                       message
+                   }
 
-                    val errorInfo = JSONObject().apply {
-                                        put(ERROR_URL, requestURL)
-                                        put(ERROR_METHOD, method)
-                                        put(ERROR_MESSAGE, finalMessage)
-                                        put(ERROR_CODE, statusCode)
-                                        put(ERROR_BODY, body)
-                                    }
+                   val errorInfo = JSONObject().apply {
+                                       put(ERROR_URL, requestURL)
+                                       put(ERROR_METHOD, method)
+                                       put(ERROR_MESSAGE, finalMessage)
+                                       put(ERROR_CODE, statusCode)
+                                       put(ERROR_BODY, body)
+                                   }
 
-                    // Reverts all failing entities to the previous state or set
-                    // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
-                    // to cause the deleteEntity call to only revert the specified entity
-                    // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
-                    // provider.deleteEntity(errorEntity, null, null);
-                    navigateToErrorScreen(errorInfo.toString())
-                    break //For simplicity, only show the first error encountered
-                }
-            } catch (e: OfflineODataException) {
-                e.printStackTrace()
-            }
-        }
-    ),
-    ```
+                   // Reverts all failing entities to the previous state or set
+                   // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
+                   // to cause the deleteEntity call to only revert the specified entity
+                   // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
+                   // provider.deleteEntity(errorEntity, null, null);
+                   navigateToErrorScreen(errorInfo.toString())
+                   break //For simplicity, only show the first error encountered
+               }
+           } catch (e: OfflineODataException) {
+               e.printStackTrace()
+           }
+       }
+   ),
+   ```
 
 10. On Windows, press **`Ctrl+Shift+N`**, or on a Mac, press **`command+shift+O`**, and type **`ODataNavHost`** to open `ODataNavHost.kt`.
 
 11. Add the following imports:
 
-    ```Kotlin
-    import androidx.navigation.NavType
-    import androidx.navigation.navArgument
-    ```
+   ```Kotlin
+   import androidx.navigation.NavType
+   import androidx.navigation.navArgument
+   ```
 
 12. Add a composable component right after `composable(route = EntitySetsDest.route) {}` block:
 
-    ```Kotlin
-    composable(
-        route = "error/{errorInfo}",
-        arguments = listOf(
-            navArgument("errorInfo") { type = NavType.StringType }
-        )
-    ) { backStackEntry ->
-        val errorInfo = backStackEntry.arguments?.getString("errorInfo")
-        ErrorScreen(navController::navigateUp, errorInfo)
-    }
-    ```
+   ```Kotlin
+   composable(
+       route = "error/{errorInfo}",
+       arguments = listOf(
+           navArgument("errorInfo") { type = NavType.StringType }
+       )
+   ) { backStackEntry ->
+       val errorInfo = backStackEntry.arguments?.getString("errorInfo")
+       ErrorScreen(navController::navigateUp, errorInfo)
+   }
+   ```
 
 13. Replace the `composable(route = EntitySetsDest.route) {}` block with the following:
 
-    ```Kotlin
-    composable(route = EntitySetsDest.route) {
-        EntitySetScreen(
-            getEntitySetScreenInfoList(),
-            navController::navigateToEntityList,
-            navigateToSettings = { navController.navigate(SETTINGS_SCREEN_ROUTE) },
-            navigateToErrorScreen = { errorInfo ->
-                navController.navigate("error/${errorInfo}")
-            }
-        )
-    }
-    ```
+   ```Kotlin
+   composable(route = EntitySetsDest.route) {
+       EntitySetScreen(
+           getEntitySetScreenInfoList(),
+           navController::navigateToEntityList,
+           navigateToSettings = { navController.navigate(SETTINGS_SCREEN_ROUTE) },
+           navigateToErrorScreen = { errorInfo ->
+               navController.navigate("error/${errorInfo}")
+           }
+       )
+   }
+   ```
 
 14. Run the app again, and re-attempt the sync. When the sync fails, you should see the following error screen.
 
@@ -714,14 +714,14 @@ In this section we will create an **Error Information** screen that displays the
 
 2.  Add the following values.
 
-    ```XML
-    <string name="error_header">Error Information</string>
-    <string name="request_method">Request Method</string>
-    <string name="request_status">Request Status</string>
-    <string name="request_message">Request Message</string>
-    <string name="request_body">Request Body</string>
-    <string name="request_url">Request URL</string>
-    ```
+   ```XML
+   <string name="error_header">Error Information</string>
+   <string name="request_method">Request Method</string>
+   <string name="request_status">Request Status</string>
+   <string name="request_message">Request Message</string>
+   <string name="request_body">Request Body</string>
+   <string name="request_url">Request URL</string>
+   ```
 
 3.  Create a new activity in the `app/kotlin+java/com.sap.wizapp/mdui` folder by right-clicking, then selecting **New** > **Activity** > **Empty Views Activity**. Name the new activity **`ErrorActivity`**.
 
@@ -729,328 +729,328 @@ In this section we will create an **Error Information** screen that displays the
 
 5.  Replace its contents with the following XML.
 
-    ```XML
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context=".mdui.ErrorActivity"
-        android:orientation="vertical">
+   ```XML
+   <?xml version="1.0" encoding="utf-8"?>
+   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:fitsSystemWindows="true"
+       tools:context=".mdui.ErrorActivity"
+       android:orientation="vertical">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+       <com.google.android.material.appbar.AppBarLayout
+           android:id="@+id/app_bar"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="@color/colorBlack" />
+           <androidx.appcompat.widget.Toolbar
+               android:id="@+id/toolbar"
+               android:layout_width="match_parent"
+               android:layout_height="?attr/actionBarSize"
+               app:popupTheme="@style/AppTheme.PopupOverlay"
+               app:titleTextColor="@color/colorBlack" />
 
-        </com.google.android.material.appbar.AppBarLayout>
+       </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+       <ScrollView
+           android:layout_height="wrap_content"
+           android:layout_width="match_parent">
 
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="vertical">
+           <LinearLayout
+               android:layout_height="wrap_content"
+               android:layout_width="match_parent"
+               android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/Test.ObjectCell.Headline"
-                    android:text="@string/error_header"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/Test.ObjectCell.Headline"
+                   android:text="@string/error_header"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/FioriTextStyle.OVERLINE"
-                    android:text="@string/request_message"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/FioriTextStyle.OVERLINE"
+                   android:text="@string/request_message"/>
 
-                <TextView
-                    android:id="@+id/requestMessageTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/key_line_16dp"
-                    android:paddingRight="@dimen/key_line_16dp"
-                    style="@style/TextAppearance.Fiori.Subtitle1"
-                    android:singleLine="false"
-                    android:text="@string/request_message"/>
+               <TextView
+                   android:id="@+id/requestMessageTextView"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/key_line_16dp"
+                   android:paddingRight="@dimen/key_line_16dp"
+                   style="@style/TextAppearance.Fiori.Subtitle1"
+                   android:singleLine="false"
+                   android:text="@string/request_message"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/FioriTextStyle.OVERLINE"
-                    android:text="@string/request_body"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/FioriTextStyle.OVERLINE"
+                   android:text="@string/request_body"/>
 
-                <TextView
-                    android:id="@+id/requestBodyTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/key_line_16dp"
-                    android:paddingRight="@dimen/key_line_16dp"
-                    style="@style/TextAppearance.Fiori.Subtitle1"
-                    android:singleLine="false"
-                    android:text="@string/request_body"/>
+               <TextView
+                   android:id="@+id/requestBodyTextView"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/key_line_16dp"
+                   android:paddingRight="@dimen/key_line_16dp"
+                   style="@style/TextAppearance.Fiori.Subtitle1"
+                   android:singleLine="false"
+                   android:text="@string/request_body"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/FioriTextStyle.OVERLINE"
-                    android:text="@string/request_url"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/FioriTextStyle.OVERLINE"
+                   android:text="@string/request_url"/>
 
-                <TextView
-                    android:id="@+id/requestURLTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/key_line_16dp"
-                    android:paddingRight="@dimen/key_line_16dp"
-                    style="@style/TextAppearance.Fiori.Subtitle1"
-                    android:singleLine="false"
-                    android:text="@string/request_url"/>
+               <TextView
+                   android:id="@+id/requestURLTextView"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/key_line_16dp"
+                   android:paddingRight="@dimen/key_line_16dp"
+                   style="@style/TextAppearance.Fiori.Subtitle1"
+                   android:singleLine="false"
+                   android:text="@string/request_url"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/FioriTextStyle.OVERLINE"
-                    android:text="@string/request_status"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/FioriTextStyle.OVERLINE"
+                   android:text="@string/request_status"/>
 
-                <TextView
-                    android:id="@+id/requestStatusTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/key_line_16dp"
-                    style="@style/TextAppearance.Fiori.Subtitle1"
-                    android:text="@string/request_status"/>
+               <TextView
+                   android:id="@+id/requestStatusTextView"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/key_line_16dp"
+                   style="@style/TextAppearance.Fiori.Subtitle1"
+                   android:text="@string/request_status"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/key_line_16dp"
-                    style="@style/FioriTextStyle.OVERLINE"
-                    android:text="@string/request_method"/>
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:padding="@dimen/key_line_16dp"
+                   style="@style/FioriTextStyle.OVERLINE"
+                   android:text="@string/request_method"/>
 
-                <TextView
-                    android:id="@+id/requestMethodTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/key_line_16dp"
-                    style="@style/TextAppearance.Fiori.Subtitle1"
-                    android:text="@string/request_method"/>
+               <TextView
+                   android:id="@+id/requestMethodTextView"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:paddingLeft="@dimen/key_line_16dp"
+                   style="@style/TextAppearance.Fiori.Subtitle1"
+                   android:text="@string/request_method"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="@dimen/key_line_16dp"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-    ```
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_marginTop="@dimen/key_line_16dp"
+                   android:layout_height="1dp"
+                   android:background="?android:attr/listDivider" />
+           </LinearLayout>
+       </ScrollView>
+   </LinearLayout>
+   ```
 
 6.  Replace the `ErrorActivity.kt` generated activity code with the following code.
 
     In the package statement and the import, if needed, replace `com.sap.wizapp` with the package name of your project.
 
-    ```Kotlin
-    package com.sap.wizapp.mdui
+   ```Kotlin
+   package com.sap.wizapp.mdui
 
-    import androidx.appcompat.app.AppCompatActivity
-    import android.os.Bundle
-    import android.view.MenuItem
-    import android.view.View
-    import android.widget.TextView
+   import androidx.appcompat.app.AppCompatActivity
+   import android.os.Bundle
+   import android.view.MenuItem
+   import android.view.View
+   import android.widget.TextView
 
-    import com.sap.wizapp.R
+   import com.sap.wizapp.R
 
-    class ErrorActivity : AppCompatActivity() {
+   class ErrorActivity : AppCompatActivity() {
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_error)
-            setSupportActionBar(findViewById(R.id.toolbar))
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            val errorCode = intent.getIntExtra("ERROR_CODE", 0)
-            val errorMethod = intent.getStringExtra("ERROR_METHOD")
-            val requestURL = intent.getStringExtra("ERROR_URL")
-            val errorMessage = intent.getStringExtra("ERROR_MESSAGE")
-            val body = intent.getStringExtra("ERROR_BODY")
-            (findViewById<View>(R.id.requestStatusTextView) as TextView).text = "".plus(errorCode)
+       override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           setContentView(R.layout.activity_error)
+           setSupportActionBar(findViewById(R.id.toolbar))
+           supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+           val errorCode = intent.getIntExtra("ERROR_CODE", 0)
+           val errorMethod = intent.getStringExtra("ERROR_METHOD")
+           val requestURL = intent.getStringExtra("ERROR_URL")
+           val errorMessage = intent.getStringExtra("ERROR_MESSAGE")
+           val body = intent.getStringExtra("ERROR_BODY")
+           (findViewById<View>(R.id.requestStatusTextView) as TextView).text = "".plus(errorCode)
 
-            errorMethod?.let {
-                (findViewById<View>(R.id.requestMethodTextView) as TextView).text = it
-            }
-            requestURL?.let {
-                (findViewById<View>(R.id.requestURLTextView) as TextView).text = it
-            }
-            errorMessage?.let {
-                (findViewById<View>(R.id.requestMessageTextView) as TextView).text = it
-            }
-            body?.let {
-                (findViewById<View>(R.id.requestBodyTextView) as TextView).text = it
-            }
-        }
+           errorMethod?.let {
+               (findViewById<View>(R.id.requestMethodTextView) as TextView).text = it
+           }
+           requestURL?.let {
+               (findViewById<View>(R.id.requestURLTextView) as TextView).text = it
+           }
+           errorMessage?.let {
+               (findViewById<View>(R.id.requestMessageTextView) as TextView).text = it
+           }
+           body?.let {
+               (findViewById<View>(R.id.requestBodyTextView) as TextView).text = it
+           }
+       }
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            finish()
-            return super.onOptionsItemSelected(item)
-        }
-    }
-    ```
+       override fun onOptionsItemSelected(item: MenuItem): Boolean {
+           finish()
+           return super.onOptionsItemSelected(item)
+       }
+   }
+   ```
 
 7.  On Windows, press **`Ctrl+N`**, or, on a Mac, press **`command+O`**, and type **`EntitySetListActivity`** to open `EntitySetListActivity.kt`.
 
 8.  In the `updateProgressForSync` method, in the `WorkInfo.State.SUCCEEDED` block, add the following code, which queries the error archive and displays information to the user about the first error encountered:
 
-    ```Kotlin
-    val provider = OfflineWorkerUtil.offlineODataProvider
+   ```Kotlin
+   val provider = OfflineWorkerUtil.offlineODataProvider
 
-    try {
-        val errorArchive = provider!!.errorArchive
+   try {
+       val errorArchive = provider!!.errorArchive
 
-        for (errorEntity in errorArchive) {
-            val requestURL = errorEntity.requestURL
-            val method = errorEntity.requestMethod
-            val message = errorEntity.message
-            val statusCode = errorEntity.httpStatusCode ?: 0
-            val body = errorEntity.requestBody
+       for (errorEntity in errorArchive) {
+           val requestURL = errorEntity.requestURL
+           val method = errorEntity.requestMethod
+           val message = errorEntity.message
+           val statusCode = errorEntity.httpStatusCode ?: 0
+           val body = errorEntity.requestBody
 
-            LOGGER.error("RequestURL: $requestURL")
-            LOGGER.error("HTTP Status Code: $statusCode")
-            LOGGER.error("Method: $method")
-            LOGGER.error("Message: $message")
-            LOGGER.error("Body: $body")
+           LOGGER.error("RequestURL: $requestURL")
+           LOGGER.error("HTTP Status Code: $statusCode")
+           LOGGER.error("Method: $method")
+           LOGGER.error("Message: $message")
+           LOGGER.error("Body: $body")
 
-            val errorIntent = Intent(this@EntitySetListActivity, ErrorActivity::class.java)
+           val errorIntent = Intent(this@EntitySetListActivity, ErrorActivity::class.java)
 
-            errorIntent.putExtra("ERROR_URL", requestURL)
-            errorIntent.putExtra("ERROR_CODE", statusCode)
-            errorIntent.putExtra("ERROR_METHOD", method)
-            errorIntent.putExtra("ERROR_BODY", body)
+           errorIntent.putExtra("ERROR_URL", requestURL)
+           errorIntent.putExtra("ERROR_CODE", statusCode)
+           errorIntent.putExtra("ERROR_METHOD", method)
+           errorIntent.putExtra("ERROR_BODY", body)
 
-            try {
-                val jsonObj = message?.let { JSONObject(it) }
-                jsonObj?.let {
-                    errorIntent.putExtra(
-                        "ERROR_MESSAGE",
-                        jsonObj.getJSONObject("error").getString("message")
-                    )
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
+           try {
+               val jsonObj = message?.let { JSONObject(it) }
+               jsonObj?.let {
+                   errorIntent.putExtra(
+                       "ERROR_MESSAGE",
+                       jsonObj.getJSONObject("error").getString("message")
+                   )
+               }
+           } catch (e: JSONException) {
+               e.printStackTrace()
+           }
 
-            // Reverts all failing entities to the previous state or set
-            // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
-            // to cause the deleteEntity call to only revert the specified entity
-            // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
-            // provider.deleteEntity(errorEntity, null, null);
-            startActivity(errorIntent)
-            break //For simplicity, only show the first error encountered
-        }
-    } catch (e: OfflineODataException) {
-        e.printStackTrace()
-    }
-    ```
+           // Reverts all failing entities to the previous state or set
+           // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
+           // to cause the deleteEntity call to only revert the specified entity
+           // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
+           // provider.deleteEntity(errorEntity, null, null);
+           startActivity(errorIntent)
+           break //For simplicity, only show the first error encountered
+       }
+   } catch (e: OfflineODataException) {
+       e.printStackTrace()
+   }
+   ```
 
-    After modification, the `WorkInfo.State.SUCCEEDED` block should look like this:
+   After modification, the `WorkInfo.State.SUCCEEDED` block should look like this:
 
-    ```Kotlin
-    WorkInfo.State.SUCCEEDED -> {
-        LOGGER.info("Offline sync done.")
-        val provider = OfflineWorkerUtil.offlineODataProvider
+   ```Kotlin
+   WorkInfo.State.SUCCEEDED -> {
+       LOGGER.info("Offline sync done.")
+       val provider = OfflineWorkerUtil.offlineODataProvider
 
-        try {
-            val errorArchive = provider!!.errorArchive
+       try {
+           val errorArchive = provider!!.errorArchive
 
-            for (errorEntity in errorArchive) {
-                val requestURL = errorEntity.requestURL
-                val method = errorEntity.requestMethod
-                val message = errorEntity.message
-                val statusCode = errorEntity.httpStatusCode ?: 0
-                val body = errorEntity.requestBody
+           for (errorEntity in errorArchive) {
+               val requestURL = errorEntity.requestURL
+               val method = errorEntity.requestMethod
+               val message = errorEntity.message
+               val statusCode = errorEntity.httpStatusCode ?: 0
+               val body = errorEntity.requestBody
 
-                LOGGER.error("RequestURL: $requestURL")
-                LOGGER.error("HTTP Status Code: $statusCode")
-                LOGGER.error("Method: $method")
-                LOGGER.error("Message: $message")
-                LOGGER.error("Body: $body")
+               LOGGER.error("RequestURL: $requestURL")
+               LOGGER.error("HTTP Status Code: $statusCode")
+               LOGGER.error("Method: $method")
+               LOGGER.error("Message: $message")
+               LOGGER.error("Body: $body")
 
-                val errorIntent = Intent(this@EntitySetListActivity, ErrorActivity::class.java)
+               val errorIntent = Intent(this@EntitySetListActivity, ErrorActivity::class.java)
 
-                errorIntent.putExtra("ERROR_URL", requestURL)
-                errorIntent.putExtra("ERROR_CODE", statusCode)
-                errorIntent.putExtra("ERROR_METHOD", method)
-                errorIntent.putExtra("ERROR_BODY", body)
+               errorIntent.putExtra("ERROR_URL", requestURL)
+               errorIntent.putExtra("ERROR_CODE", statusCode)
+               errorIntent.putExtra("ERROR_METHOD", method)
+               errorIntent.putExtra("ERROR_BODY", body)
 
-                try {
-                    val jsonObj = message?.let { JSONObject(it) }
-                    jsonObj?.let {
-                        errorIntent.putExtra(
-                            "ERROR_MESSAGE",
-                            jsonObj.getJSONObject("error").getString("message")
-                        )
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
+               try {
+                   val jsonObj = message?.let { JSONObject(it) }
+                   jsonObj?.let {
+                       errorIntent.putExtra(
+                           "ERROR_MESSAGE",
+                           jsonObj.getJSONObject("error").getString("message")
+                       )
+                   }
+               } catch (e: JSONException) {
+                   e.printStackTrace()
+               }
 
-                // Reverts all failing entities to the previous state or set
-                // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
-                // to cause the deleteEntity call to only revert the specified entity
-                // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
-                // provider.deleteEntity(errorEntity, null, null);
-                startActivity(errorIntent)
-                break //For simplicity, only show the first error encountered
-            }
-        } catch (e: OfflineODataException) {
-            e.printStackTrace()
-        }
-    }
-    ```
+               // Reverts all failing entities to the previous state or set
+               // offlineODataParameters.setEnableIndividualErrorArchiveDeletion(true);
+               // to cause the deleteEntity call to only revert the specified entity
+               // https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/features/offline/common/handling-failed-requests/reverting-error-state.html
+               // provider.deleteEntity(errorEntity, null, null);
+               startActivity(errorIntent)
+               break //For simplicity, only show the first error encountered
+           }
+       } catch (e: OfflineODataException) {
+           e.printStackTrace()
+       }
+   }
+   ```
 
 
 9.  Run the app again, and re-attempt the sync. When the sync fails, you should see the following error screen.
